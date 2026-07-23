@@ -1,0 +1,43 @@
+# Maintainer: Seined Koda <seinedk@gmail.com>
+pkgname=kisel
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="Efficient launch of Windows programs"
+arch=('x86_64')
+url="https://github.com/seinedkoda/kisel"
+license=('GPL-3.0-or-later')
+
+options=('!debug' 'strip')
+
+depends=(
+  'qt6-base'
+  'umu-launcher'
+  'icoutils'
+)
+
+optdepends=(
+  'mangohud: Overlay for monitoring FPS, temperature, CPU/GPU load'
+  'lib32-mangohud: 32-bit overlay support for older 32-bit games'
+)
+
+makedepends=(
+  'cmake'
+  'ninja'
+  'qt6-tools'
+)
+
+source=("${pkgname}-${pkgver}.tar.gz::${url}/archive/v${pkgver}.tar.gz")
+sha256sums=('efc5717a9d46708c96ff9e657ae8cd741e428f3d0de1c42ccea7179cebd0bc54')
+
+build() {
+  cmake -B build -S "${pkgname}-${pkgver}" \
+    -G Ninja \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=/usr
+
+  cmake --build build
+}
+
+package() {
+  DESTDIR="${pkgdir}" cmake --install build
+}

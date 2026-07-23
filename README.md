@@ -32,6 +32,13 @@ Efficient launch of Windows programs
 
 ## Installation
 
+### Arch Linux
+[> Download the latest version of pkg.tar.zst](https://github.com/seinedkoda/kisel/releases/latest)
+
+```bash
+sudo pacman -U kisel-*.pkg.tar.zst
+```
+
 ### Build from source using CMake
 
 *Qt6 LinguistTools(qt6-tools) required*
