@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Name=Kisel
+Name[ru_RU]=Кисель
+Comment=Efficient launch of Windows programs
+Comment[ru_RU]=Эффективный запуск Windows программ
+Exec=kisel %f
+Icon=kisel
+Categories=Utility;
+MimeType=application/x-ms-dos-executable;application/x-msi;application/x-bat
+StartupNotify=true
+NoDisplay=false
+Terminal=false
