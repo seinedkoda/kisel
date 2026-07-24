@@ -240,102 +240,170 @@
 <context>
     <name>kisel::MainWindow</name>
     <message>
-        <location filename="../src/main_window.cpp" line="46"/>
+        <location filename="../src/main_window.cpp" line="44"/>
         <source>Kisel</source>
         <translation>Кисель</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="30"/>
-        <location filename="../src/main_window.cpp" line="183"/>
+        <location filename="../src/main_window.cpp" line="34"/>
+        <location filename="../src/main_window.cpp" line="166"/>
         <source>The program is not selected</source>
         <translation>Программа не выбрана</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="29"/>
-        <location filename="../src/main_window.cpp" line="326"/>
+        <location filename="../src/main_window.cpp" line="35"/>
+        <location filename="../src/main_window.cpp" line="298"/>
         <source>Start</source>
         <translation>Запустить</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="76"/>
+        <location filename="../src/main_window.cpp" line="73"/>
         <source>Create shortcut</source>
         <translation>Создать ярлык</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="42"/>
-        <source>Enable Wayland driver</source>
-        <translation>Включить драйвер Wayland</translation>
+        <location filename="../src/main_window.cpp" line="79"/>
+        <source>Select executable file</source>
+        <translation>Выбрать исполняемый файл</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="43"/>
-        <source>Steam Simulation</source>
-        <translation>Имитация Steam</translation>
+        <location filename="../src/main_window.cpp" line="84"/>
+        <source>Environment</source>
+        <translation>Окружение</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="44"/>
-        <source>Enable WOW64</source>
-        <translation>Включить WOW64</translation>
-    </message>
-    <message>
-        <location filename="../src/main_window.cpp" line="89"/>
+        <location filename="../src/main_window.cpp" line="90"/>
         <source>Prefix</source>
         <translation>Префикс</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="99"/>
+        <location filename="../src/main_window.cpp" line="112"/>
+        <source>Open prefix menu</source>
+        <translation>Открыть меню префикса</translation>
+    </message>
+    <message>
+        <location filename="../src/main_window.cpp" line="98"/>
+        <source>Configure</source>
+        <translation>Настроить</translation>
+    </message>
+    <message>
+        <location filename="../src/main_window.cpp" line="104"/>
+        <source>Manage</source>
+        <translation>Управление</translation>
+    </message>
+    <message>
+        <location filename="../src/main_window.cpp" line="108"/>
+        <source>Open</source>
+        <translation>Открыть</translation>
+    </message>
+    <message>
+        <location filename="../src/main_window.cpp" line="119"/>
         <source>Compatibility tool</source>
         <translation>Средство совместимости</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="144"/>
-        <source>General</source>
-        <translation>Основные</translation>
+        <location filename="../src/main_window.cpp" line="125"/>
+        <source>Open the Compatibility Tools window</source>
+        <translation>Открыть окно управления средствами совместимости</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="145"/>
-        <source>Advanced</source>
-        <translation>Дополнительные</translation>
+        <location filename="../src/main_window.cpp" line="135"/>
+        <source>Application settings</source>
+        <translation>Настройки приложения</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="157"/>
+        <location filename="../src/main_window.cpp" line="140"/>
         <source>Version: %1</source>
         <translation>Версия: %1</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="275"/>
+        <location filename="../src/main_window.cpp" line="247"/>
         <source>Select the executable file</source>
         <translation>Выберите исполняемый файл</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="277"/>
+        <location filename="../src/main_window.cpp" line="249"/>
         <source>Executable files (*.exe);;All files (*.*)</source>
         <translation>Исполняемые файлы (*.exe);;Все файлы (*.*)</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="291"/>
-        <location filename="../src/main_window.cpp" line="300"/>
+        <location filename="../src/main_window.cpp" line="263"/>
+        <location filename="../src/main_window.cpp" line="272"/>
         <source>Launch error</source>
         <translation>Ошибка запуска</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="292"/>
+        <location filename="../src/main_window.cpp" line="264"/>
         <source>The required prefix is ​​missing, open window to manage?</source>
         <translation>Отсутствует необходимый префикс, открыть окно для управления?</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="301"/>
+        <location filename="../src/main_window.cpp" line="273"/>
         <source>The required compatibility tool is missing, open window to manage?</source>
         <translation>Отсутствует необходимое средство совместимости, открыть окно для управления?</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="319"/>
+        <location filename="../src/main_window.cpp" line="291"/>
         <source>Process error</source>
         <translation>Ошибка работы процесса</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="326"/>
+        <location filename="../src/main_window.cpp" line="298"/>
         <source>Stop</source>
         <translation>Остановить</translation>
+    </message>
+</context>
+<context>
+    <name>kisel::PrefixSettingsDialog</name>
+    <message>
+        <location filename="../src/prefix_settings_dialog.cpp" line="31"/>
+        <source>Enable Performance Monitor</source>
+        <translation>Включить монитор производительности</translation>
+    </message>
+    <message>
+        <location filename="../src/prefix_settings_dialog.cpp" line="39"/>
+        <source>Enable Vulkan app screen capture for OBS</source>
+        <translation>Включить захват экрана приложений на Vulkan для OBS</translation>
+    </message>
+    <message>
+        <location filename="../src/prefix_settings_dialog.cpp" line="47"/>
+        <source>Enable accessibility controls, such as controlling the application interface with a gamepad</source>
+        <translation>Включить специальные возможности управления, такие как управление интерфейсом с помощью геймпада</translation>
+    </message>
+    <message>
+        <location filename="../src/prefix_settings_dialog.cpp" line="54"/>
+        <source>Enable Wayland driver</source>
+        <translation>Включить драйвер Wayland</translation>
+    </message>
+    <message>
+        <location filename="../src/prefix_settings_dialog.cpp" line="61"/>
+        <source>Steam Environment</source>
+        <translation>Окружение Steam</translation>
+    </message>
+    <message>
+        <location filename="../src/prefix_settings_dialog.cpp" line="62"/>
+        <source>Using the Steam environment for better compatibility with some games</source>
+        <translation>Использование окружения Steam для лучшей совместимости с некоторыми играми</translation>
+    </message>
+    <message>
+        <location filename="../src/prefix_settings_dialog.cpp" line="69"/>
+        <source>Enable WOW64</source>
+        <translation>Включить WOW64</translation>
+    </message>
+    <message>
+        <location filename="../src/prefix_settings_dialog.cpp" line="13"/>
+        <source>Kisel — Prefix Settings</source>
+        <translation>Кисель — Настройки префикса</translation>
+    </message>
+    <message>
+        <location filename="../src/prefix_settings_dialog.cpp" line="19"/>
+        <source>&lt;h3&gt;Settings for &quot;%1&quot;&lt;/h3&gt;</source>
+        <translation>&lt;h3&gt;Настройки для &quot;%1&quot;&lt;/h3&gt;</translation>
+    </message>
+    <message>
+        <location filename="../src/prefix_settings_dialog.cpp" line="27"/>
+        <source>General</source>
+        <translation>Основное</translation>
     </message>
 </context>
 <context>

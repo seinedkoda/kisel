@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.19)
-project(Kisel VERSION 1.0.0 LANGUAGES CXX)
+project(Kisel VERSION 1.1.0 LANGUAGES CXX)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
@@ -23,6 +23,7 @@ qt_add_executable(kisel
     src/app_settings.hpp src/app_settings.cpp
     src/shortcut_dialog.hpp src/shortcut_dialog.cpp
     src/prefix_settings.hpp src/prefix_settings.cpp
+    src/prefix_settings_dialog.hpp src/prefix_settings_dialog.cpp
     src/process_manager.hpp src/process_manager.cpp
     src/tray_icon.hpp src/tray_icon.cpp
 )
