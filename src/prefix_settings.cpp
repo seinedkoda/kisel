@@ -57,16 +57,6 @@ bool PrefixSettings::waylandEnabled() const
     return value("wayland", false).toBool();
 }
 
-void PrefixSettings::setSteamEnabled(bool enabled)
-{
-    setValue("steam", enabled);
-}
-
-bool PrefixSettings::steamEnabled() const
-{
-    return value("steam", true).toBool();
-}
-
 void PrefixSettings::setWow64Enabled(bool enabled)
 {
     setValue("wow64", enabled);
@@ -75,4 +65,32 @@ void PrefixSettings::setWow64Enabled(bool enabled)
 bool PrefixSettings::wow64Enabled() const
 {
     return value("wow64", false).toBool();
+}
+
+void PrefixSettings::setSteamEnabled(bool enabled)
+{
+    setValue("steam", enabled);
+}
+
+bool PrefixSettings::steamEnabled() const
+{
+    return value("steam", false).toBool();
+}
+
+void PrefixSettings::setSteamEnvEnabled(bool enabled) {
+    setValue("steamEnv", enabled);
+}
+
+bool PrefixSettings::steamEnvEnabled() const {
+    return value("steamEnv", true).toBool();
+}
+
+void PrefixSettings::setOnlineFixEnabled(bool enabled)
+{
+    setValue("onlineFix", enabled);
+}
+
+bool PrefixSettings::onlineFixEnabled() const
+{
+    return value("onlineFix", false).toBool();
 }

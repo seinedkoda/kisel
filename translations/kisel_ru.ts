@@ -356,52 +356,77 @@
 <context>
     <name>kisel::PrefixSettingsDialog</name>
     <message>
-        <location filename="../src/prefix_settings_dialog.cpp" line="31"/>
+        <location filename="../src/prefix_settings_dialog.cpp" line="36"/>
         <source>Enable Performance Monitor</source>
         <translation>Включить монитор производительности</translation>
     </message>
     <message>
-        <location filename="../src/prefix_settings_dialog.cpp" line="39"/>
+        <location filename="../src/prefix_settings_dialog.cpp" line="44"/>
         <source>Enable Vulkan app screen capture for OBS</source>
         <translation>Включить захват экрана приложений на Vulkan для OBS</translation>
     </message>
     <message>
-        <location filename="../src/prefix_settings_dialog.cpp" line="47"/>
+        <location filename="../src/prefix_settings_dialog.cpp" line="52"/>
         <source>Enable accessibility controls, such as controlling the application interface with a gamepad</source>
         <translation>Включить специальные возможности управления, такие как управление интерфейсом с помощью геймпада</translation>
     </message>
     <message>
-        <location filename="../src/prefix_settings_dialog.cpp" line="54"/>
+        <location filename="../src/prefix_settings_dialog.cpp" line="59"/>
+        <source>Compatibility</source>
+        <translation>Совместимость</translation>
+    </message>
+    <message>
+        <location filename="../src/prefix_settings_dialog.cpp" line="63"/>
         <source>Enable Wayland driver</source>
         <translation>Включить драйвер Wayland</translation>
     </message>
     <message>
-        <location filename="../src/prefix_settings_dialog.cpp" line="61"/>
+        <location filename="../src/prefix_settings_dialog.cpp" line="91"/>
+        <source>Use Steam</source>
+        <translation>Использовать Steam</translation>
+    </message>
+    <message>
+        <location filename="../src/prefix_settings_dialog.cpp" line="83"/>
         <source>Steam Environment</source>
         <translation>Окружение Steam</translation>
     </message>
     <message>
-        <location filename="../src/prefix_settings_dialog.cpp" line="62"/>
+        <location filename="../src/prefix_settings_dialog.cpp" line="84"/>
         <source>Using the Steam environment for better compatibility with some games</source>
         <translation>Использование окружения Steam для лучшей совместимости с некоторыми играми</translation>
     </message>
     <message>
-        <location filename="../src/prefix_settings_dialog.cpp" line="69"/>
+        <location filename="../src/prefix_settings_dialog.cpp" line="70"/>
         <source>Enable WOW64</source>
         <translation>Включить WOW64</translation>
     </message>
     <message>
-        <location filename="../src/prefix_settings_dialog.cpp" line="13"/>
+        <location filename="../src/prefix_settings_dialog.cpp" line="31"/>
+        <source>Services</source>
+        <translation>Сервисы</translation>
+    </message>
+    <message>
+        <location filename="../src/prefix_settings_dialog.cpp" line="77"/>
+        <source>Don&apos;t use Steam</source>
+        <translation>Не использовать Steam</translation>
+    </message>
+    <message>
+        <location filename="../src/prefix_settings_dialog.cpp" line="97"/>
+        <source>Enable OnlineFix</source>
+        <translation>Включить OnlineFix</translation>
+    </message>
+    <message>
+        <location filename="../src/prefix_settings_dialog.cpp" line="14"/>
         <source>Kisel — Prefix Settings</source>
         <translation>Кисель — Настройки префикса</translation>
     </message>
     <message>
-        <location filename="../src/prefix_settings_dialog.cpp" line="19"/>
+        <location filename="../src/prefix_settings_dialog.cpp" line="20"/>
         <source>&lt;h3&gt;Settings for &quot;%1&quot;&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;Настройки для &quot;%1&quot;&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../src/prefix_settings_dialog.cpp" line="27"/>
+        <location filename="../src/prefix_settings_dialog.cpp" line="28"/>
         <source>General</source>
         <translation>Основное</translation>
     </message>

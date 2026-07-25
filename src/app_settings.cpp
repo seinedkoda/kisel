@@ -59,7 +59,8 @@ QString AppSettings::defaultPrefixPath()
 
 QString AppSettings::defaultPrefixName()
 {
-    return QFileInfo(defaultPrefixPath(), "Default").fileName();
+    const QString defaultPrefixName = QFileInfo(defaultPrefixPath()).fileName();
+    return defaultPrefixName.isEmpty() ? "Default" : defaultPrefixName;
 }
 
 void AppSettings::setDefaultCtPath(const QString& ctPath)
