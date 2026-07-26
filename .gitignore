@@ -83,3 +83,7 @@ CMakeLists.txt.user*
 /build*/
 /.qtcreator/
 /.idea/
+
+# Misc
+misc/*
+!misc/PKGBUILD
