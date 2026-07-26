@@ -3,6 +3,7 @@
 #include <QMap>
 #include <QObject>
 #include <QTranslator>
+#include <QLocale>
 
 namespace kisel {
 #define TRANSLATOR Translator::instance()
@@ -15,8 +16,9 @@ public:
 
     void saveLanguage(const QString& languageName);
     void setLocaleFromSettings();
-    QString currentLanguageName();
-    QStringList languageList();
+    [[nodiscard]] QLocale currentLocale() const;
+    [[nodiscard]] QString currentLanguageName() const;
+    [[nodiscard]] QStringList languageList() const;
 
 private:
     explicit Translator(QObject* parent = nullptr);
@@ -25,6 +27,7 @@ private:
 
     QTranslator m_qtranslator;
     QMap<QString, QString> m_languageMap;
+    QLocale m_currentLocale;
     QString m_currentLanguageName;
 };
 }

@@ -26,9 +26,11 @@ Translator* Translator::instance()
 
 bool Translator::setLocale(const QString& localeName)
 {
-    if (m_qtranslator.load(QLocale(localeName), "kisel", "_", ":/i18n")) {
+    QLocale locale(localeName);
+    if (m_qtranslator.load(locale, "kisel", "_", ":/i18n")) {
         if (qApp->installTranslator(&m_qtranslator)) {
-            m_currentLanguageName = QLocale(localeName).nativeLanguageName();
+            m_currentLocale = locale;
+            m_currentLanguageName = locale.nativeLanguageName();
             return true;
         }
         return false;
@@ -54,12 +56,17 @@ void Translator::setLocaleFromSettings()
     setLocale(localeName);
 }
 
-QString Translator::currentLanguageName()
+QLocale Translator::currentLocale() const
+{
+    return m_currentLocale;
+}
+
+QString Translator::currentLanguageName() const
 {
     return m_currentLanguageName;
 }
 
-QStringList Translator::languageList()
+QStringList Translator::languageList() const
 {
     return m_languageMap.keys();
 }

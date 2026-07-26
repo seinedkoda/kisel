@@ -17,9 +17,13 @@ public:
     [[nodiscard]] bool xaliaEnabled() const;
     void setWaylandEnabled(bool enabled);
     [[nodiscard]] bool waylandEnabled() const;
-    void setSteamEnabled(bool enabled);
-    [[nodiscard]] bool steamEnabled() const;
     void setWow64Enabled(bool enabled);
     [[nodiscard]] bool wow64Enabled() const;
+    void setSteamEnabled(bool enabled);
+    [[nodiscard]] bool steamEnabled() const;
+    void setSteamEnvEnabled(bool enabled);
+    [[nodiscard]] bool steamEnvEnabled() const;
+    void setOnlineFixEnabled(bool enabled);
+    [[nodiscard]] bool onlineFixEnabled() const;
 };
 }

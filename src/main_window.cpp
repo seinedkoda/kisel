@@ -2,22 +2,27 @@
 
 #include <QCheckBox>
 #include <QComboBox>
+#include <QDesktopServices>
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QGridLayout>
+#include <QGroupBox>
 #include <QLabel>
+#include <QMenu>
 #include <QMessageBox>
 #include <QPushButton>
-#include <QToolBox>
+#include <QSizePolicy>
 #include <QToolButton>
 #include <QVBoxLayout>
-#include <qnamespace.h>
 
+#include "app_settings.hpp"
 #include "app_settings_window.hpp"
 #include "ct_model.hpp"
 #include "ct_window.hpp"
 #include "executable_file.hpp"
+#include "prefix_components_dialog.hpp"
 #include "prefix_model.hpp"
+#include "prefix_settings_dialog.hpp"
 #include "prefix_window.hpp"
 #include "shortcut_dialog.hpp"
 
@@ -26,22 +31,16 @@ using namespace kisel;
 MainWindow::MainWindow(ProcessManager& processManager, const QString& exePath)
     : QMainWindow(nullptr)
     , m_processManager(processManager)
-    , m_playStopButton(new QPushButton(tr("Start"), this))
+    , m_exeIconLabel(new QLabel(this))
     , m_exeNameLabel(new QLabel(tr("The program is not selected"), this))
-    , m_prefixWindowButton(new QToolButton(this))
+    , m_playStopButton(new QPushButton(tr("Start"), this))
+    , m_createExeShortcutButton(new QToolButton(this))
     , m_exeSelectionButton(new QToolButton(this))
     , m_prefixComboBox(new QComboBox(this))
+    , m_prefixMenuButton(new QToolButton(this))
     , m_ctComboBox(new QComboBox(this))
     , m_ctWindowButton(new QToolButton(this))
-    , m_settingsWindowButton(new QToolButton(this))
-    , m_exeIconLabel(new QLabel(this))
-    , m_createExeShortcutButton(new QToolButton(this))
-    , m_mangohudCheckBox(new QCheckBox("MangoHud", this))
-    , m_obsVkCaptureCheckBox(new QCheckBox("OBS Vulkan Capture", this))
-    , m_xaliaCheckBox(new QCheckBox("Xalia", this))
-    , m_waylandCheckBox(new QCheckBox(tr("Enable Wayland driver"), this))
-    , m_useSteamCheckBox(new QCheckBox(tr("Steam Simulation"), this))
-    , m_wow64CheckBox(new QCheckBox(tr("Enable WOW64")))
+    , m_appSettingsWindowButton(new QToolButton(this))
 {
     setWindowTitle(tr("Kisel"));
     setWindowIcon(QIcon(":/icons/kisel.svg"));
@@ -72,87 +71,84 @@ MainWindow::MainWindow(ProcessManager& processManager, const QString& exePath)
     connect(m_playStopButton, &QPushButton::clicked, this, &MainWindow::onPlayStopButtonClicked);
     exeActionsLayout->addWidget(m_playStopButton, Qt::AlignLeft);
 
-    m_createExeShortcutButton->setIcon(QIcon::fromTheme("link"));
     m_createExeShortcutButton->setToolTip(tr("Create shortcut"));
+    m_createExeShortcutButton->setIcon(QIcon::fromTheme("link"));
     m_createExeShortcutButton->setEnabled(false);
     connect(m_createExeShortcutButton, &QToolButton::clicked, this, &MainWindow::onCreateExeShortcutButtonClicked);
     exeActionsLayout->addWidget(m_createExeShortcutButton, Qt::AlignLeft);
 
+    m_exeSelectionButton->setToolTip(tr("Select executable file"));
     m_exeSelectionButton->setIcon(QIcon::fromTheme("search"));
     connect(m_exeSelectionButton, &QToolButton::clicked, this, &MainWindow::onExeSelectionClicked);
     exeActionsLayout->addWidget(m_exeSelectionButton, Qt::AlignLeft);
 
-    auto* generalTab = new QWidget(this);
-    auto* generalTabLayout = new QGridLayout(generalTab);
-    generalTabLayout->setAlignment(Qt::AlignTop);
+    auto* environmentBox = new QGroupBox(tr("Environment"), this);
+    environmentBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    layout->addWidget(environmentBox);
+    auto* environmentBoxLayout = new QGridLayout(environmentBox);
+    environmentBoxLayout->setAlignment(Qt::AlignTop);
 
     auto* prefixLabel = new QLabel(tr("Prefix"), this);
-    generalTabLayout->addWidget(prefixLabel, 0, 0);
+    environmentBoxLayout->addWidget(prefixLabel, 0, 0);
 
     m_prefixComboBox->setModel(PREFIX_MODEL);
-    generalTabLayout->addWidget(m_prefixComboBox, 1, 0);
+    environmentBoxLayout->addWidget(m_prefixComboBox, 1, 0);
 
-    m_prefixWindowButton->setIcon(QIcon::fromTheme("window"));
-    connect(m_prefixWindowButton, &QToolButton::clicked, this, []() { openPrefixWindow(); });
-    generalTabLayout->addWidget(m_prefixWindowButton, 1, 1);
+    auto* prefixMenu = new QMenu(this);
+
+    m_prefixSettingsAction = new QAction(QIcon::fromTheme("view-process-system"), tr("Configure"), prefixMenu);
+    connect(m_prefixSettingsAction, &QAction::triggered, this, [this]() {
+        auto* prefixSettingsDialog = new PrefixSettingsDialog(*m_exeFile->prefix(), this);
+        prefixSettingsDialog->exec(); });
+    prefixMenu->addAction(m_prefixSettingsAction);
+
+    m_prefixComponentsAction = new QAction(QIcon::fromTheme("plugins"), tr("Install components"), prefixMenu);
+    connect(m_prefixComponentsAction, &QAction::triggered, this, [this]() {
+        if (APP_SETTINGS->winetricksPath().isEmpty()) {
+            QMessageBox::critical(this, tr("Opening error"), tr("\"winetricks\" not found! Please install this package to open this window"));
+            return;
+        }
+
+        auto* prefixComponentsDialog = new PrefixComponentsDialog(*m_exeFile->prefix(), this);
+        prefixComponentsDialog->exec();
+    });
+    prefixMenu->addAction(m_prefixComponentsAction);
+
+    auto* prefixManageAction = new QAction(QIcon::fromTheme("view-list-text"), tr("Manage"), prefixMenu);
+    connect(prefixManageAction, &QAction::triggered, this, []() { openPrefixWindow(); });
+    prefixMenu->addAction(prefixManageAction);
+
+    m_prefixOpenAction = new QAction(QIcon::fromTheme("document-open-folder"), tr("Open"), prefixMenu);
+    connect(m_prefixOpenAction, &QAction::triggered, this, [this]() { QDesktopServices::openUrl(QUrl::fromLocalFile(m_exeFile->prefix()->path())); });
+    prefixMenu->addAction(m_prefixOpenAction);
+
+    m_prefixMenuButton->setToolTip(tr("Open prefix menu"));
+    m_prefixMenuButton->setIcon(QIcon::fromTheme("application-menu"));
+    connect(m_prefixMenuButton, &QToolButton::clicked, this, [this, prefixMenu]() {
+        prefixMenu->exec(QCursor::pos());
+    });
+    environmentBoxLayout->addWidget(m_prefixMenuButton, 1, 1);
 
     auto* ctLabel = new QLabel(tr("Compatibility tool"), this);
-    generalTabLayout->addWidget(ctLabel, 2, 0);
+    environmentBoxLayout->addWidget(ctLabel, 2, 0);
+
     m_ctComboBox->setModel(CT_MODEL);
+    environmentBoxLayout->addWidget(m_ctComboBox, 3, 0);
 
-    generalTabLayout->addWidget(m_ctComboBox, 3, 0);
-
+    m_ctWindowButton->setToolTip(tr("Open the Compatibility Tools window"));
     m_ctWindowButton->setIcon(QIcon::fromTheme("window"));
     connect(m_ctWindowButton, &QToolButton::clicked, this, [this]() { openCtWindow(); });
-    generalTabLayout->addWidget(m_ctWindowButton, 3, 1);
-
-    auto* advancedTab = new QWidget(this);
-    auto* advancedTabLayout = new QGridLayout(advancedTab);
-    advancedTabLayout->setAlignment(Qt::AlignTop);
-
-    connect(m_mangohudCheckBox, &QCheckBox::clicked, this, [this](bool checked) {
-        m_exeFile->prefix()->settings()->setMangoHudEnabled(checked);
-    });
-    advancedTabLayout->addWidget(m_mangohudCheckBox);
-
-    connect(m_obsVkCaptureCheckBox, &QCheckBox::clicked, this, [this](bool checked) {
-        m_exeFile->prefix()->settings()->setObsVkCaptureEnabled(checked);
-    });
-    advancedTabLayout->addWidget(m_obsVkCaptureCheckBox);
-
-    connect(m_xaliaCheckBox, &QCheckBox::clicked, this, [this](bool checked) {
-        m_exeFile->prefix()->settings()->setXaliaEnabled(checked);
-    });
-    advancedTabLayout->addWidget(m_xaliaCheckBox);
-
-    connect(m_waylandCheckBox, &QCheckBox::clicked, this, [this](bool checked) {
-        m_exeFile->prefix()->settings()->setWaylandEnabled(checked);
-    });
-    advancedTabLayout->addWidget(m_waylandCheckBox);
-
-    connect(m_useSteamCheckBox, &QCheckBox::clicked, this, [this](bool checked) {
-        m_exeFile->prefix()->settings()->setSteamEnabled(checked);
-    });
-    advancedTabLayout->addWidget(m_useSteamCheckBox);
-
-    connect(m_wow64CheckBox, &QCheckBox::clicked, this, [this](bool checked) {
-        m_exeFile->prefix()->settings()->setWow64Enabled(checked);
-    });
-    advancedTabLayout->addWidget(m_wow64CheckBox);
-
-    auto* toolBox = new QToolBox(this);
-    toolBox->addItem(generalTab, QIcon::fromTheme("user-home"), tr("General"));
-    toolBox->addItem(advancedTab, QIcon::fromTheme("view-process-system"), tr("Advanced"));
-    layout->addWidget(toolBox);
+    environmentBoxLayout->addWidget(m_ctWindowButton, 3, 1);
 
     auto* bottomWidget = new QWidget(this);
     auto* bottomLayout = new QHBoxLayout(bottomWidget);
     bottomLayout->setContentsMargins(0, 0, 0, 0);
     layout->addWidget(bottomWidget);
 
-    m_settingsWindowButton->setIcon(QIcon::fromTheme("configure"));
-    connect(m_settingsWindowButton, &QToolButton::clicked, this, []() { openAppSettingsWindow(); });
-    bottomLayout->addWidget(m_settingsWindowButton);
+    m_appSettingsWindowButton->setToolTip(tr("Application settings"));
+    m_appSettingsWindowButton->setIcon(QIcon::fromTheme("configure"));
+    connect(m_appSettingsWindowButton, &QToolButton::clicked, this, []() { openAppSettingsWindow(); });
+    bottomLayout->addWidget(m_appSettingsWindowButton);
 
     auto* versionLabel = new QLabel(tr("Version: %1").arg(APP_VERSION), this);
     versionLabel->setEnabled(false);
@@ -224,21 +220,11 @@ void MainWindow::setPrefix(Prefix* prefix)
         }
 
         PrefixSettings* prefixSettings = prefix->settings();
-
-        m_mangohudCheckBox->setChecked(prefixSettings->mangoHudEnabled());
-        m_obsVkCaptureCheckBox->setChecked(prefixSettings->obsVkCaptureEnabled());
-        m_xaliaCheckBox->setChecked(prefixSettings->xaliaEnabled());
-        m_waylandCheckBox->setChecked(prefixSettings->waylandEnabled());
-        m_useSteamCheckBox->setChecked(prefixSettings->steamEnabled());
-        m_wow64CheckBox->setChecked(prefixSettings->wow64Enabled());
     }
 
-    m_mangohudCheckBox->setEnabled(prefixExists);
-    m_obsVkCaptureCheckBox->setEnabled(prefixExists);
-    m_xaliaCheckBox->setEnabled(prefixExists);
-    m_waylandCheckBox->setEnabled(prefixExists);
-    m_useSteamCheckBox->setEnabled(prefixExists);
-    m_wow64CheckBox->setEnabled(prefixExists);
+    m_prefixSettingsAction->setEnabled(prefixExists);
+    m_prefixComponentsAction->setEnabled(prefixExists);
+    m_prefixOpenAction->setEnabled(prefixExists);
 }
 
 void MainWindow::onCurrentCtIndexChanged(int index)

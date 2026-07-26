@@ -2,6 +2,7 @@
 
 #include "app_settings.hpp"
 #include "executable_file.hpp"
+#include "translator.hpp"
 
 using namespace kisel;
 
@@ -23,23 +24,55 @@ void ProcessManager::run(const ExecutableFile& exeFile)
     const Prefix* prefix = exeFile.prefix();
     const PrefixSettings* settings = prefix->settings();
     const Ct* ct = prefix->ct();
+    bool useSteam = APP_SETTINGS->steamExists() && settings->steamEnabled();
 
     env.insert("WINEPREFIX", prefix->path());
-    env.insert("PROTONPATH", ct->path());
-    env.insert("UMU_RUNTIME_UPDATE", APP_SETTINGS->runtimeAutoUpdate() ? "1" : "0");
     env.insert("MANGOHUD", settings->mangoHudEnabled() ? "1" : "0");
     env.insert("OBS_VKCAPTURE", settings->obsVkCaptureEnabled() ? "1" : "0");
     env.insert("PROTON_USE_XALIA", settings->xaliaEnabled() ? "1" : "0");
     env.insert("PROTON_ENABLE_WAYLAND", settings->waylandEnabled() ? "1" : "0");
-    env.insert("UMU_USE_STEAM", settings->steamEnabled() ? "1" : "0");
     env.insert("PROTON_USE_WOW64", settings->wow64Enabled() ? "1" : "0");
 
-    m_process.setProcessEnvironment(env);
-    m_process.setProgram("umu-run");
-    m_process.setWorkingDirectory(exeFile.dirPath());
-    m_process.setArguments({ exeFile.path() });
 
-    qDebug() << "Launching:" << exeFile.name();
+    if (useSteam) {
+        // Launch using Steam
+        m_process.setProgram(ct->path() % "/proton");
+        m_process.setArguments({ "run", exeFile.path() });
+
+        // Set current language
+        QString protnLocaleName = TRANSLATOR->currentLocale().name() % ".UTF-8";
+        env.insert("HOST_LC_ALL", protnLocaleName);
+        env.insert("LANG", protnLocaleName);
+
+        // Set Steam system path
+        const QDir& steamDir = APP_SETTINGS->steamDir();
+        env.insert("STEAM_COMPAT_CLIENT_INSTALL_PATH", steamDir.absolutePath());
+        env.insert("STEAM_COMPAT_DATA_PATH", prefix->path());
+
+        // Enable Steam Overlay
+        const QString& steamOverlay32bit = steamDir.filePath("ubuntu12_32/gameoverlayrenderer.so");
+        const QString& steamOverlay64bit = steamDir.filePath("ubuntu12_64/gameoverlayrenderer.so");
+        env.insert("LD_PRELOAD", steamOverlay32bit % ":" % steamOverlay64bit);
+
+        if (settings->onlineFixEnabled()) {
+            // Redefining DLLs for OnlineFix
+            env.insert("WINEDLLOVERRIDES", "steam_api64=n;onlinefix64=n;winpixeventruntime=n,b");
+        }
+    } else {
+        // Launching without of Steam
+        m_process.setProgram("umu-run");
+        m_process.setArguments({ exeFile.path() });
+
+        env.insert("PROTONPATH", ct->path());
+        env.insert("UMU_RUNTIME_UPDATE", APP_SETTINGS->runtimeAutoUpdate() ? "1" : "0");
+        env.insert("UMU_USE_STEAM", settings->steamEnvEnabled() ? "1" : "0");
+    }
+
+    m_process.setProcessEnvironment(env);
+    m_process.setWorkingDirectory(exeFile.dirPath());
+
+    qDebug() << "Use Steam:" << useSteam;
+    qDebug() << "Executable:" << exeFile.name();
     qDebug() << "Prefix:" << prefix->name();
     qDebug() << "Compatibility tool:" << ct->name();
     qDebug() << "Runtime auto-update:" << APP_SETTINGS->runtimeAutoUpdate();

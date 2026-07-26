@@ -136,7 +136,7 @@ void CtModel::refreshList()
         // Add new ones
         for (const auto& fileInfo : entryInfoList) {
             QString ctPath = fileInfo.absoluteFilePath();
-            if (!containsPath(ctPath)) {
+            if (!containsPath(ctPath) && QFileInfo::exists(ctPath % "/proton")) {
                 add(ctPath);
             }
         }
@@ -209,7 +209,9 @@ void CtModel::cancelInstallation()
 
     if (m_tarProcess != nullptr) {
         m_tarProcess->terminate();
-        m_tarProcess->waitForFinished();
+        if (!m_tarProcess->waitForFinished()) {
+            m_tarProcess->kill();
+        }
         m_tarProcess->deleteLater();
     }
 

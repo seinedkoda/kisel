@@ -37,7 +37,18 @@ PrefixSettings* Prefix::settings() const
 
 bool Prefix::makePath()
 {
-    return m_dir.mkpath(".");
+    if (!m_dir.mkpath(".")) {
+        return false;
+    }
+
+    QFile file(m_dir.filePath("pfx.lock"));
+    if (file.open(QIODevice::WriteOnly)) {
+        file.close();
+        return true;
+    }
+
+    qDebug() << "Failed to create pfx.lock";
+    return false;
 }
 
 void Prefix::setCt(Ct* ct)

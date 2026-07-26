@@ -16,8 +16,10 @@ depends=(
 )
 
 optdepends=(
+  'winetricks: Additional scripts for working with Wine prefix'
   'mangohud: Overlay for monitoring FPS, temperature, CPU/GPU load'
   'lib32-mangohud: 32-bit overlay support for older 32-bit games'
+  'obs-vkcapture: Vulkan game capture plugin for OBS'
 )
 
 makedepends=(
