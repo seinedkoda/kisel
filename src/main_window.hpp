@@ -45,6 +45,7 @@ private:
     QToolButton* m_exeSelectionButton;
     QComboBox* m_prefixComboBox;
     QAction* m_prefixSettingsAction;
+    QAction* m_prefixComponentsAction;
     QAction* m_prefixOpenAction;
     QToolButton* m_prefixMenuButton;
     QComboBox* m_ctComboBox;

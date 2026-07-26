@@ -6,20 +6,21 @@
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QGridLayout>
+#include <QGroupBox>
 #include <QLabel>
 #include <QMenu>
 #include <QMessageBox>
 #include <QPushButton>
-#include <QToolBox>
+#include <QSizePolicy>
 #include <QToolButton>
 #include <QVBoxLayout>
-#include <QGroupBox>
-#include <QSizePolicy>
 
+#include "app_settings.hpp"
 #include "app_settings_window.hpp"
 #include "ct_model.hpp"
 #include "ct_window.hpp"
 #include "executable_file.hpp"
+#include "prefix_components_dialog.hpp"
 #include "prefix_model.hpp"
 #include "prefix_settings_dialog.hpp"
 #include "prefix_window.hpp"
@@ -100,6 +101,18 @@ MainWindow::MainWindow(ProcessManager& processManager, const QString& exePath)
         auto* prefixSettingsDialog = new PrefixSettingsDialog(*m_exeFile->prefix(), this);
         prefixSettingsDialog->exec(); });
     prefixMenu->addAction(m_prefixSettingsAction);
+
+    m_prefixComponentsAction = new QAction(QIcon::fromTheme("plugins"), tr("Install components"), prefixMenu);
+    connect(m_prefixComponentsAction, &QAction::triggered, this, [this]() {
+        if (APP_SETTINGS->winetricksPath().isEmpty()) {
+            QMessageBox::critical(this, tr("Opening error"), tr("\"winetricks\" not found! Please install this package to open this window"));
+            return;
+        }
+
+        auto* prefixComponentsDialog = new PrefixComponentsDialog(*m_exeFile->prefix(), this);
+        prefixComponentsDialog->exec();
+    });
+    prefixMenu->addAction(m_prefixComponentsAction);
 
     auto* prefixManageAction = new QAction(QIcon::fromTheme("view-list-text"), tr("Manage"), prefixMenu);
     connect(prefixManageAction, &QAction::triggered, this, []() { openPrefixWindow(); });
@@ -210,6 +223,7 @@ void MainWindow::setPrefix(Prefix* prefix)
     }
 
     m_prefixSettingsAction->setEnabled(prefixExists);
+    m_prefixComponentsAction->setEnabled(prefixExists);
     m_prefixOpenAction->setEnabled(prefixExists);
 }
 

@@ -24,6 +24,7 @@ void ProcessManager::run(const ExecutableFile& exeFile)
     const Prefix* prefix = exeFile.prefix();
     const PrefixSettings* settings = prefix->settings();
     const Ct* ct = prefix->ct();
+    bool useSteam = APP_SETTINGS->steamExists() && settings->steamEnabled();
 
     env.insert("WINEPREFIX", prefix->path());
     env.insert("MANGOHUD", settings->mangoHudEnabled() ? "1" : "0");
@@ -32,7 +33,8 @@ void ProcessManager::run(const ExecutableFile& exeFile)
     env.insert("PROTON_ENABLE_WAYLAND", settings->waylandEnabled() ? "1" : "0");
     env.insert("PROTON_USE_WOW64", settings->wow64Enabled() ? "1" : "0");
 
-    if (settings->steamEnabled()) {
+
+    if (useSteam) {
         // Launch using Steam
         m_process.setProgram(ct->path() % "/proton");
         m_process.setArguments({ "run", exeFile.path() });
@@ -43,7 +45,7 @@ void ProcessManager::run(const ExecutableFile& exeFile)
         env.insert("LANG", protnLocaleName);
 
         // Set Steam system path
-        const QDir steamDir(QDir::homePath() % "/.local/share/Steam");
+        const QDir& steamDir = APP_SETTINGS->steamDir();
         env.insert("STEAM_COMPAT_CLIENT_INSTALL_PATH", steamDir.absolutePath());
         env.insert("STEAM_COMPAT_DATA_PATH", prefix->path());
 
@@ -69,7 +71,7 @@ void ProcessManager::run(const ExecutableFile& exeFile)
     m_process.setProcessEnvironment(env);
     m_process.setWorkingDirectory(exeFile.dirPath());
 
-    qDebug() << "Use Steam:" << prefix->settings()->steamEnabled();
+    qDebug() << "Use Steam:" << useSteam;
     qDebug() << "Executable:" << exeFile.name();
     qDebug() << "Prefix:" << prefix->name();
     qDebug() << "Compatibility tool:" << ct->name();

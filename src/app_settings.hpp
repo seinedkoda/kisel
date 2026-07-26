@@ -32,6 +32,11 @@ public:
     void setRuntimeAutoUpdate(bool enable);
     bool runtimeAutoUpdate();
 
+    static const QDir& steamDir();
+    static bool steamExists();
+
+    static const QString& winetricksPath();
+
 private:
     explicit AppSettings(QObject* parent = nullptr);
 };

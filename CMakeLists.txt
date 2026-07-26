@@ -26,6 +26,7 @@ qt_add_executable(kisel
     src/prefix_settings_dialog.hpp src/prefix_settings_dialog.cpp
     src/process_manager.hpp src/process_manager.cpp
     src/tray_icon.hpp src/tray_icon.cpp
+    src/prefix_components_dialog.hpp src/prefix_components_dialog.cpp
 )
 
 qt_add_resources(kisel "resources"

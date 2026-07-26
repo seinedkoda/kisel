@@ -1,6 +1,7 @@
 #include "app_settings.hpp"
 
 #include <QFileInfo>
+#include <QStandardPaths>
 
 using namespace kisel;
 
@@ -81,4 +82,19 @@ void AppSettings::setRuntimeAutoUpdate(bool enable)
 bool AppSettings::runtimeAutoUpdate()
 {
     return value("runtimeAutoUpdate", true).toBool();
+}
+
+const QDir& AppSettings::steamDir() {
+    static QDir steamDir(QDir::homePath() % "/.local/share/Steam");
+    return steamDir;
+}
+
+bool AppSettings::steamExists() {
+    static bool steamExists = steamDir().exists();
+    return steamExists;
+}
+
+const QString& AppSettings::winetricksPath() {
+    static QString winetricksPath = QStandardPaths::findExecutable("winetricks");
+    return winetricksPath;
 }

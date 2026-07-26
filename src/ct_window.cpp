@@ -11,6 +11,7 @@
 #include <QPushButton>
 #include <QStatusBar>
 #include <QToolButton>
+#include <QCloseEvent>
 #include <QVBoxLayout>
 
 #include "app_settings.hpp"
@@ -216,9 +217,13 @@ void CtWindow::closeEvent(QCloseEvent* event)
         auto answer = QMessageBox::question(this, tr("Confirmation"), tr("Cancel the installation process and close the window?"));
         if (answer == QMessageBox::Yes) {
             CT_MODEL->cancelInstallation();
+        } else {
+            event->ignore();
+            return;
         }
     }
 
+    event->accept();
     QMainWindow::closeEvent(event);
 }
 

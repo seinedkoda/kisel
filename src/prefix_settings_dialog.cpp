@@ -4,6 +4,9 @@
 #include <QTabWidget>
 #include <QVBoxLayout>
 #include <QGroupBox>
+#include <QStandardPaths>
+
+#include "app_settings.hpp"
 
 using namespace kisel;
 
@@ -16,24 +19,18 @@ PrefixSettingsDialog::PrefixSettingsDialog(Prefix& prefix, QWidget* parent)
     setWindowModality(Qt::ApplicationModal);
 
     auto* layout = new QVBoxLayout(this);
+    layout->setAlignment(Qt::AlignTop);
 
     auto* prefixTitleLabel = new QLabel(tr("<h3>Settings for \"%1\"</h3>").arg(prefix.name()));
     layout->addWidget(prefixTitleLabel);
 
-    auto* generalTab = new QWidget(this);
-    auto* generalTabLayout = new QGridLayout(generalTab);
-    generalTabLayout->setAlignment(Qt::AlignTop);
-
-    auto* tabWidget = new QTabWidget(this);
-    tabWidget->addTab(generalTab, QIcon::fromTheme("user-home"), tr("General"));
-    layout->addWidget(tabWidget);
-
     auto* serviceBox = new QGroupBox(tr("Services"), this);
     auto* serviceBoxLayout = new QVBoxLayout(serviceBox);
-    generalTabLayout->addWidget(serviceBox);
+    layout->addWidget(serviceBox);
 
     auto* mangohudCheckBox = new QCheckBox("MangoHud", this);
-    mangohudCheckBox->setToolTip(tr("Enable Performance Monitor"));
+    mangohudCheckBox->setEnabled(!QStandardPaths::findExecutable("mangohud").isEmpty());
+    mangohudCheckBox->setToolTip(tr("Enable Performance Monitor (requires mangohud to be installed)"));
     mangohudCheckBox->setChecked(m_prefix.settings()->mangoHudEnabled());
     connect(mangohudCheckBox, &QCheckBox::clicked, this, [this](bool checked) {
         m_prefix.settings()->setMangoHudEnabled(checked);
@@ -41,7 +38,8 @@ PrefixSettingsDialog::PrefixSettingsDialog(Prefix& prefix, QWidget* parent)
     serviceBoxLayout->addWidget(mangohudCheckBox);
 
     auto* obsVkCaptureCheckBox = new QCheckBox("OBS Vulkan Capture", this);
-    obsVkCaptureCheckBox->setToolTip(tr("Enable Vulkan app screen capture for OBS"));
+    obsVkCaptureCheckBox->setEnabled(!QStandardPaths::findExecutable("obs-vkcapture").isEmpty());
+    obsVkCaptureCheckBox->setToolTip(tr("Enable Vulkan app screen capture for OBS (requires obs-vkcapture to be installed)"));
     obsVkCaptureCheckBox->setChecked(m_prefix.settings()->obsVkCaptureEnabled());
     connect(obsVkCaptureCheckBox, &QCheckBox::clicked, this, [this](bool checked) {
         m_prefix.settings()->setObsVkCaptureEnabled(checked);
@@ -58,7 +56,7 @@ PrefixSettingsDialog::PrefixSettingsDialog(Prefix& prefix, QWidget* parent)
 
     auto* compatibilityBox = new QGroupBox(tr("Compatibility"), this);
     auto* compatibilityBoxLayout = new QVBoxLayout(compatibilityBox);
-    generalTabLayout->addWidget(compatibilityBox);
+    layout->addWidget(compatibilityBox);
 
     auto* waylandCheckBox = new QCheckBox(tr("Enable Wayland driver"), this);
     waylandCheckBox->setChecked(m_prefix.settings()->waylandEnabled());
@@ -78,7 +76,7 @@ PrefixSettingsDialog::PrefixSettingsDialog(Prefix& prefix, QWidget* parent)
     dontUseSteamBox->setCheckable(true);
     dontUseSteamBox->setChecked(!m_prefix.settings()->steamEnabled());
     auto* dontUseSteamBoxLayout = new QVBoxLayout(dontUseSteamBox);
-    generalTabLayout->addWidget(dontUseSteamBox);
+    layout->addWidget(dontUseSteamBox);
 
     auto* steamEnvCheckBox = new QCheckBox(tr("Steam Environment"), this);
     steamEnvCheckBox->setToolTip(tr("Using the Steam environment for better compatibility with some games"));
@@ -89,10 +87,11 @@ PrefixSettingsDialog::PrefixSettingsDialog(Prefix& prefix, QWidget* parent)
     dontUseSteamBoxLayout->addWidget(steamEnvCheckBox);
 
     auto* useSteamBox = new QGroupBox(tr("Use Steam"), this);
+    useSteamBox->setEnabled(APP_SETTINGS->steamExists());
     useSteamBox->setCheckable(true);
     useSteamBox->setChecked(m_prefix.settings()->steamEnabled());
     auto* useSteamBoxLayout = new QVBoxLayout(useSteamBox);
-    generalTabLayout->addWidget(useSteamBox);
+    layout->addWidget(useSteamBox);
 
     auto* onlineFixCheckBox = new QCheckBox(tr("Enable OnlineFix"));
     onlineFixCheckBox->setChecked(m_prefix.settings()->onlineFixEnabled());
