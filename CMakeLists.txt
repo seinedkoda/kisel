@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 3.19)
-project(Kisel VERSION 1.1.0 LANGUAGES CXX)
+project(Kisel VERSION 1.2.0 LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
@@ -40,8 +43,9 @@ qt_add_resources(kisel "resources"
 add_dependencies(kisel update_translations)
 
 qt_add_translations(kisel
-    TS_FILE_BASE kisel
-    TS_OUTPUT_DIRECTORY "translations/"
+    TS_FILES
+        translations/kisel_en.ts
+        translations/kisel_ru.ts
     PLURALS_TS_FILE "translations/kisel_en.ts"
     LUPDATE_OPTIONS -no-obsolete
 )

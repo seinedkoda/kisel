@@ -102,7 +102,9 @@ MainWindow::MainWindow(ProcessManager& processManager, const QString& exePath)
         prefixSettingsDialog->exec(); });
     prefixMenu->addAction(m_prefixSettingsAction);
 
-    m_prefixComponentsAction = new QAction(QIcon::fromTheme("plugins"), tr("Install components"), prefixMenu);
+    auto* toolsMenu = prefixMenu->addMenu(QIcon::fromTheme("tools"), tr("Tools"));
+
+    m_prefixComponentsAction = new QAction(QIcon::fromTheme("plugins"), tr("Install components"), toolsMenu);
     connect(m_prefixComponentsAction, &QAction::triggered, this, [this]() {
         if (APP_SETTINGS->winetricksPath().isEmpty()) {
             QMessageBox::critical(this, tr("Opening error"), tr("\"winetricks\" not found! Please install this package to open this window"));
@@ -112,7 +114,23 @@ MainWindow::MainWindow(ProcessManager& processManager, const QString& exePath)
         auto* prefixComponentsDialog = new PrefixComponentsDialog(*m_exeFile->prefix(), this);
         prefixComponentsDialog->exec();
     });
-    prefixMenu->addAction(m_prefixComponentsAction);
+    toolsMenu->addAction(m_prefixComponentsAction);
+
+    auto* winecfgAction = new QAction(QIcon::fromTheme("wine"), tr("Wine settings"), toolsMenu);
+    connect(winecfgAction, &QAction::triggered, this, [this]() { m_processManager.runWineCfg(m_exeFile->prefix()); });
+    toolsMenu->addAction(winecfgAction);
+
+    auto* explorerAction = new QAction(QIcon::fromTheme("document-open-folder"), tr("Explorer"), toolsMenu);
+    connect(explorerAction, &QAction::triggered, this, [this]() { m_processManager.runExplorer(m_exeFile->prefix()); });
+    toolsMenu->addAction(explorerAction);
+
+    auto* regeditAction = new QAction(QIcon::fromTheme("view-list-text"), tr("Registry"), toolsMenu);
+    connect(regeditAction, &QAction::triggered, this, [this]() { m_processManager.runRegedit(m_exeFile->prefix()); });
+    toolsMenu->addAction(regeditAction);
+
+    auto* uninstallerAction = new QAction(QIcon::fromTheme("trash-empty"), tr("Remove programs"), toolsMenu);
+    connect(uninstallerAction, &QAction::triggered, this, [this]() { m_processManager.runUninstaller(m_exeFile->prefix()); });
+    toolsMenu->addAction(uninstallerAction);
 
     auto* prefixManageAction = new QAction(QIcon::fromTheme("view-list-text"), tr("Manage"), prefixMenu);
     connect(prefixManageAction, &QAction::triggered, this, []() { openPrefixWindow(); });
@@ -154,7 +172,7 @@ MainWindow::MainWindow(ProcessManager& processManager, const QString& exePath)
     versionLabel->setEnabled(false);
     bottomLayout->addWidget(versionLabel);
 
-    connect(&m_processManager, &ProcessManager::processError, this, &MainWindow::onProcessError);
+    connect(&m_processManager, &ProcessManager::runningError, this, &MainWindow::onRunningError);
     connect(&m_processManager, &ProcessManager::runningChanged, this, &MainWindow::onRunningChanged);
 
     setExecutablePath(exePath);
@@ -300,9 +318,59 @@ void MainWindow::onCreateExeShortcutButtonClicked()
     shortcutDialog->show();
 }
 
-void MainWindow::onProcessError(const QString& errorText)
+void MainWindow::onRunningError(ProcessManager::RunningError error, const QString& errorText)
 {
-    QMessageBox::critical(this, tr("Process error"), errorText);
+    static QString errorTitle = tr("Running error");
+    switch (error) {
+    case ProcessManager::RunningError::AlreadyRunning:
+        QMessageBox::critical(this, errorTitle, tr("The executable file is currently running"));
+        break;
+    case ProcessManager::RunningError::InvalidExecutable:
+        QMessageBox::critical(this, errorTitle, tr("The executable file is not valid"));
+        break;
+    case ProcessManager::RunningError::InvalidPrefix: {
+        auto answer = QMessageBox::question(
+            this,
+            errorTitle,
+            tr("The required prefix is ​​missing, open window to manage?"));
+        if (answer == QMessageBox::Yes) {
+            openPrefixWindow();
+        }
+    } break;
+    case ProcessManager::RunningError::InvalidCt: {
+        auto answer = QMessageBox::question(
+            this,
+            errorTitle,
+            tr("The required compatibility tool is missing, open window to manage?"));
+        if (answer == QMessageBox::Yes) {
+            openCtWindow();
+        }
+    } break;
+    case ProcessManager::RunningError::NoUmu:
+        QMessageBox::critical(this, errorTitle, tr("\"umu-run\" not found"));
+        break;
+    case ProcessManager::RunningError::NoWinetricks:
+        QMessageBox::critical(this, errorTitle, tr("\"winetricks\" not found"));
+        break;
+    case ProcessManager::RunningError::FailedToStart:
+        QMessageBox::critical(this, errorTitle, tr("Failed to start process: %1").arg(errorText));
+        break;
+    case ProcessManager::RunningError::Crashed:
+        QMessageBox::critical(this, errorTitle, tr("Process error: %1").arg(errorText));
+        break;
+    case ProcessManager::RunningError::Timedout:
+        QMessageBox::critical(this, errorTitle, tr("Process timeout: %1").arg(errorText));
+        break;
+    case ProcessManager::RunningError::ReadError:
+        QMessageBox::critical(this, errorTitle, tr("Process read error: %1").arg(errorText));
+        break;
+    case ProcessManager::RunningError::WriteError:
+        QMessageBox::critical(this, errorTitle, tr("Process write error: %1").arg(errorText));
+        break;
+    default:
+        QMessageBox::critical(this, errorTitle, tr("Unknown error: %1").arg(errorText));
+        break;
+    }
 }
 
 void MainWindow::onRunningChanged(bool isRunning)

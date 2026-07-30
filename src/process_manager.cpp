@@ -1,5 +1,7 @@
 #include "process_manager.hpp"
 
+#include <QStandardPaths>
+
 #include "app_settings.hpp"
 #include "executable_file.hpp"
 #include "translator.hpp"
@@ -16,7 +18,7 @@ ProcessManager::ProcessManager(QObject* parent)
 
 void ProcessManager::run(const ExecutableFile& exeFile)
 {
-    if (!isReadyToRun(exeFile)) {
+    if (!isReadyToRunExecutable(exeFile)) {
         return;
     }
 
@@ -32,7 +34,10 @@ void ProcessManager::run(const ExecutableFile& exeFile)
     env.insert("PROTON_USE_XALIA", settings->xaliaEnabled() ? "1" : "0");
     env.insert("PROTON_ENABLE_WAYLAND", settings->waylandEnabled() ? "1" : "0");
     env.insert("PROTON_USE_WOW64", settings->wow64Enabled() ? "1" : "0");
-
+    env.insert("PROTON_ENABLE_HDR", settings->hdrEnabled() ? "1" : "0");
+    env.insert("PROTON_USE_WINED3D", settings->openglEnabled() ? "1" : "0");
+    env.insert("PROTON_ENABLE_NVAPI", settings->nvapiEnabled() ? "1" : "0");
+    env.insert("PROTON_USE_SDL", settings->sdlInputEnabled() ? "1" : "0");
 
     if (useSteam) {
         // Launch using Steam
@@ -80,31 +85,90 @@ void ProcessManager::run(const ExecutableFile& exeFile)
     m_process.start();
 }
 
-bool ProcessManager::isReadyToRun(const ExecutableFile& exeFile)
+void ProcessManager::runWineCfg(const Prefix* prefix)
+{
+    runWinetricksUtility("winecfg", prefix);
+}
+
+void ProcessManager::runExplorer(const Prefix* prefix)
+{
+    runWinetricksUtility("explorer", prefix);
+}
+
+void ProcessManager::runRegedit(const Prefix* prefix)
+{
+    runWinetricksUtility("regedit", prefix);
+}
+
+void ProcessManager::runUninstaller(const Prefix* prefix)
+{
+    runWinetricksUtility("uninstaller", prefix);
+}
+
+void ProcessManager::runWinetricksUtility(const QString& utilName, const Prefix* prefix)
+{
+    if (!isValidPrefix(prefix)) {
+        showError("Cannot run with empty prefix", RunningError::InvalidPrefix);
+        return;
+    }
+
+    if (APP_SETTINGS->winetricksPath().isEmpty()) {
+        showError("\"winetricks\" not found", RunningError::NoWinetricks);
+        return;
+    }
+
+    if (QStandardPaths::findExecutable("umu-run").isEmpty()) {
+        showError("\"umu-run\" not found", RunningError::NoUmu);
+        return;
+    }
+
+    static QStringList winetricksUtils { "winecfg", "explorer", "regedit", "uninstaller" };
+
+    if (!winetricksUtils.contains(utilName)) {
+        qCritical() << "Unknown winetricks utility";
+        return;
+    }
+
+    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+    env.insert("WINEPREFIX", prefix->path());
+
+    m_process.setProcessEnvironment(env);
+    m_process.setProgram("umu-run");
+    m_process.setArguments({ "winetricks", utilName });
+
+    m_process.start();
+}
+
+bool ProcessManager::isReadyToRunExecutable(const ExecutableFile& exeFile)
 {
     if (!exeFile.isValid()) {
-        qCritical() << "The executable file is not valid";
+        showError("The executable file is not valid", RunningError::InvalidExecutable);
         return false;
     }
 
     if (m_process.state() == QProcess::Running) {
-        qCritical() << "The executable file is currently running";
+        showError("The executable file is currently running", RunningError::AlreadyRunning);
         return false;
     }
 
     Prefix* prefix = exeFile.prefix();
-    if (prefix == nullptr || prefix->path().isEmpty()) {
-        qCritical() << "Cannot run with empty prefix";
+    if (!isValidPrefix(prefix)) {
+        showError("Cannot run with empty prefix", RunningError::InvalidPrefix);
         return false;
     }
 
     Ct* ct = prefix->ct();
     if (ct == nullptr || ct->path().isEmpty()) {
-        qCritical() << "Cannot run with empty compatibility tool";
+        showError("Cannot run with empty compatibility tool", RunningError::InvalidCt);
         return false;
     }
 
     return true;
+}
+
+bool ProcessManager::isValidPrefix(const Prefix* prefix)
+{
+    return prefix != nullptr && !prefix->path().isEmpty();
 }
 
 void ProcessManager::stop()
@@ -143,6 +207,30 @@ void ProcessManager::onProcessFinished(int exitCode, QProcess::ExitStatus exitSt
 void ProcessManager::onProcessError(QProcess::ProcessError error)
 {
     QString errorText = m_process.errorString();
-    qCritical() << "Process error:" << errorText;
-    emit processError(errorText);
+    switch (error) {
+    case QProcess::FailedToStart:
+        showError(errorText, RunningError::FailedToStart);
+        break;
+    case QProcess::Crashed:
+        showError(errorText, RunningError::Crashed);
+        break;
+    case QProcess::Timedout:
+        showError(errorText, RunningError::Timedout);
+        break;
+    case QProcess::ReadError:
+        showError(errorText, RunningError::ReadError);
+        break;
+    case QProcess::WriteError:
+        showError(errorText, RunningError::WriteError);
+        break;
+    default:
+        showError(errorText, RunningError::UnknownError);
+        break;
+    }
+}
+
+void ProcessManager::showError(const QString& errorText, RunningError error, bool emitText)
+{
+    qCritical() << errorText;
+    emit runningError(error, emitText ? errorText : "");
 }

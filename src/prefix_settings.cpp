@@ -47,6 +47,16 @@ bool PrefixSettings::xaliaEnabled() const
     return value("xalia", true).toBool();
 }
 
+void PrefixSettings::setNvapiEnabled(bool enabled)
+{
+    setValue("nvapi", enabled);
+}
+
+bool PrefixSettings::nvapiEnabled() const
+{
+    return value("nvapi", false).toBool();
+}
+
 void PrefixSettings::setWaylandEnabled(bool enabled)
 {
     setValue("wayland", enabled);
@@ -57,6 +67,14 @@ bool PrefixSettings::waylandEnabled() const
     return value("wayland", false).toBool();
 }
 
+void PrefixSettings::setHdrEnabled(bool enabled) {
+    setValue("hdr", enabled);
+}
+
+bool PrefixSettings::hdrEnabled() const {
+    return value("hdr", false).toBool();
+}
+
 void PrefixSettings::setWow64Enabled(bool enabled)
 {
     setValue("wow64", enabled);
@@ -65,6 +83,26 @@ void PrefixSettings::setWow64Enabled(bool enabled)
 bool PrefixSettings::wow64Enabled() const
 {
     return value("wow64", false).toBool();
+}
+
+void PrefixSettings::setSdlInputEnabled(bool enabled)
+{
+    setValue("sdlInput", enabled);
+}
+
+bool PrefixSettings::sdlInputEnabled() const
+{
+    return value("sdlInput", false).toBool();
+}
+
+void PrefixSettings::setOpenglEnabled(bool enabled)
+{
+    setValue("opengl", enabled);
+}
+
+bool PrefixSettings::openglEnabled() const
+{
+    return value("opengl", false).toBool();
 }
 
 void PrefixSettings::setSteamEnabled(bool enabled)

@@ -23,7 +23,7 @@ AppSettingsWindow::AppSettingsWindow(QWidget* parent)
     auto* layout = new QVBoxLayout(centralWidget);
     setCentralWidget(centralWidget);
 
-    auto* aboutAppBox = new QGroupBox(tr("About the programm"), this);
+    auto* aboutAppBox = new QGroupBox(tr("About the program"), this);
     auto* aboutAppLayout = new QHBoxLayout(aboutAppBox);
     layout->addWidget(aboutAppBox);
 

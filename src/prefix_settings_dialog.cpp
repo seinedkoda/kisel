@@ -1,10 +1,11 @@
 #include "prefix_settings_dialog.hpp"
 
+#include <QGroupBox>
 #include <QLabel>
+#include <QStandardPaths>
 #include <QTabWidget>
 #include <QVBoxLayout>
-#include <QGroupBox>
-#include <QStandardPaths>
+#include <QTabBar>
 
 #include "app_settings.hpp"
 
@@ -24,9 +25,16 @@ PrefixSettingsDialog::PrefixSettingsDialog(Prefix& prefix, QWidget* parent)
     auto* prefixTitleLabel = new QLabel(tr("<h3>Settings for \"%1\"</h3>").arg(prefix.name()));
     layout->addWidget(prefixTitleLabel);
 
-    auto* serviceBox = new QGroupBox(tr("Services"), this);
-    auto* serviceBoxLayout = new QVBoxLayout(serviceBox);
-    layout->addWidget(serviceBox);
+    auto* helpLabel = new QLabel(tr("<i>Hover over the option to learn more</i>"), this);
+    layout->addWidget(helpLabel);
+
+    auto* tabWidget = new QTabWidget(this);
+    layout->addWidget(tabWidget);
+
+    auto* serviceTab = new QWidget(this);
+    auto* serviceTabLayout = new QVBoxLayout(serviceTab);
+    serviceTabLayout->setAlignment(Qt::AlignTop);
+    tabWidget->addTab(serviceTab, QIcon::fromTheme("services"), tr("Services"));
 
     auto* mangohudCheckBox = new QCheckBox("MangoHud", this);
     mangohudCheckBox->setEnabled(!QStandardPaths::findExecutable("mangohud").isEmpty());
@@ -35,7 +43,7 @@ PrefixSettingsDialog::PrefixSettingsDialog(Prefix& prefix, QWidget* parent)
     connect(mangohudCheckBox, &QCheckBox::clicked, this, [this](bool checked) {
         m_prefix.settings()->setMangoHudEnabled(checked);
     });
-    serviceBoxLayout->addWidget(mangohudCheckBox);
+    serviceTabLayout->addWidget(mangohudCheckBox);
 
     auto* obsVkCaptureCheckBox = new QCheckBox("OBS Vulkan Capture", this);
     obsVkCaptureCheckBox->setEnabled(!QStandardPaths::findExecutable("obs-vkcapture").isEmpty());
@@ -44,7 +52,7 @@ PrefixSettingsDialog::PrefixSettingsDialog(Prefix& prefix, QWidget* parent)
     connect(obsVkCaptureCheckBox, &QCheckBox::clicked, this, [this](bool checked) {
         m_prefix.settings()->setObsVkCaptureEnabled(checked);
     });
-    serviceBoxLayout->addWidget(obsVkCaptureCheckBox);
+    serviceTabLayout->addWidget(obsVkCaptureCheckBox);
 
     auto* xaliaCheckBox = new QCheckBox("Xalia", this);
     xaliaCheckBox->setToolTip(tr("Enable accessibility controls, such as controlling the application interface with a gamepad"));
@@ -52,31 +60,67 @@ PrefixSettingsDialog::PrefixSettingsDialog(Prefix& prefix, QWidget* parent)
     connect(xaliaCheckBox, &QCheckBox::clicked, this, [this](bool checked) {
         m_prefix.settings()->setXaliaEnabled(checked);
     });
-    serviceBoxLayout->addWidget(xaliaCheckBox);
+    serviceTabLayout->addWidget(xaliaCheckBox);
 
-    auto* compatibilityBox = new QGroupBox(tr("Compatibility"), this);
-    auto* compatibilityBoxLayout = new QVBoxLayout(compatibilityBox);
-    layout->addWidget(compatibilityBox);
+    auto* compatibilityTab = new QWidget(this);
+    auto* compatibilityTabLayout = new QVBoxLayout(compatibilityTab);
+    compatibilityTabLayout->setAlignment(Qt::AlignTop);
+    tabWidget->addTab(compatibilityTab, QIcon::fromTheme("tools-wizard"), tr("Compatibility"));
+
+    auto* nvapiCheckBox = new QCheckBox(tr("NVAPI"), this);
+    nvapiCheckBox->setToolTip(tr("Enable NVIDIA's NVAPI GPU support library"));
+    nvapiCheckBox->setChecked(m_prefix.settings()->nvapiEnabled());
+    connect(nvapiCheckBox, &QCheckBox::clicked, this, [this](bool checked) {
+        m_prefix.settings()->setNvapiEnabled(checked);
+    });
+    compatibilityTabLayout->addWidget(nvapiCheckBox);
 
     auto* waylandCheckBox = new QCheckBox(tr("Enable Wayland driver"), this);
     waylandCheckBox->setChecked(m_prefix.settings()->waylandEnabled());
     connect(waylandCheckBox, &QCheckBox::clicked, this, [this](bool checked) {
         m_prefix.settings()->setWaylandEnabled(checked);
     });
-    compatibilityBoxLayout->addWidget(waylandCheckBox);
+    compatibilityTabLayout->addWidget(waylandCheckBox);
+
+    auto* hdrCheckBox = new QCheckBox(tr("HDR"), this);
+    hdrCheckBox->setToolTip(tr("Enabling HDR auto-enables the wine-wayland driver as it is a requirement"));
+    hdrCheckBox->setChecked(m_prefix.settings()->hdrEnabled());
+    connect(hdrCheckBox, &QCheckBox::clicked, this, [this](bool checked) {
+        m_prefix.settings()->setHdrEnabled(checked);
+    });
+    compatibilityTabLayout->addWidget(hdrCheckBox);
 
     auto* wow64CheckBox = new QCheckBox(tr("Enable WOW64"));
     wow64CheckBox->setChecked(m_prefix.settings()->wow64Enabled());
     connect(wow64CheckBox, &QCheckBox::clicked, this, [this](bool checked) {
         m_prefix.settings()->setWow64Enabled(checked);
     });
-    compatibilityBoxLayout->addWidget(wow64CheckBox);
+    compatibilityTabLayout->addWidget(wow64CheckBox);
+
+    auto* sdlInputCheckBox = new QCheckBox(tr("SDL input instead of HIDRAW/Steam Input"));
+    sdlInputCheckBox->setChecked(m_prefix.settings()->sdlInputEnabled());
+    connect(sdlInputCheckBox, &QCheckBox::clicked, this, [this](bool checked) {
+        m_prefix.settings()->setSdlInputEnabled(checked);
+    });
+    compatibilityTabLayout->addWidget(sdlInputCheckBox);
+
+    auto* openglCheckBox = new QCheckBox(tr("OpenGL instead of Vulkan"));
+    openglCheckBox->setChecked(m_prefix.settings()->openglEnabled());
+    connect(openglCheckBox, &QCheckBox::clicked, this, [this](bool checked) {
+        m_prefix.settings()->setOpenglEnabled(checked);
+    });
+    compatibilityTabLayout->addWidget(openglCheckBox);
+
+    auto* steamTab = new QWidget(this);
+    auto* steamTabLayout = new QVBoxLayout(steamTab);
+    tabWidget->addTab(steamTab, QIcon::fromTheme("steam"), tr("Using Steam"));
 
     auto* dontUseSteamBox = new QGroupBox(tr("Don't use Steam"), this);
     dontUseSteamBox->setCheckable(true);
     dontUseSteamBox->setChecked(!m_prefix.settings()->steamEnabled());
     auto* dontUseSteamBoxLayout = new QVBoxLayout(dontUseSteamBox);
-    layout->addWidget(dontUseSteamBox);
+    dontUseSteamBoxLayout->setAlignment(Qt::AlignTop);
+    steamTabLayout->addWidget(dontUseSteamBox);
 
     auto* steamEnvCheckBox = new QCheckBox(tr("Steam Environment"), this);
     steamEnvCheckBox->setToolTip(tr("Using the Steam environment for better compatibility with some games"));
@@ -91,7 +135,8 @@ PrefixSettingsDialog::PrefixSettingsDialog(Prefix& prefix, QWidget* parent)
     useSteamBox->setCheckable(true);
     useSteamBox->setChecked(m_prefix.settings()->steamEnabled());
     auto* useSteamBoxLayout = new QVBoxLayout(useSteamBox);
-    layout->addWidget(useSteamBox);
+    useSteamBoxLayout->setAlignment(Qt::AlignTop);
+    steamTabLayout->addWidget(useSteamBox);
 
     auto* onlineFixCheckBox = new QCheckBox(tr("Enable OnlineFix"));
     onlineFixCheckBox->setChecked(m_prefix.settings()->onlineFixEnabled());
@@ -109,4 +154,6 @@ PrefixSettingsDialog::PrefixSettingsDialog(Prefix& prefix, QWidget* parent)
         m_prefix.settings()->setSteamEnabled(checked);
         dontUseSteamBox->setChecked(!checked);
     });
+
+    tabWidget->setMinimumWidth(tabWidget->tabBar()->sizeHint().width() + 2);
 }

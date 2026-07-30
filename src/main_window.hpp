@@ -22,7 +22,7 @@ private slots:
     void onExeSelectionClicked();
     void onPlayStopButtonClicked();
     void onCreateExeShortcutButtonClicked();
-    void onProcessError(const QString& errorText);
+    void onRunningError(ProcessManager::RunningError error, const QString& errorText);
     void onRunningChanged(bool isRunning);
     void onCurrentPrefixTextChanged(const QString& prefixName);
     void onCurrentCtIndexChanged(int index);

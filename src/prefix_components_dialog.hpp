@@ -7,6 +7,7 @@
 #include <QProcess>
 #include <QProgressBar>
 #include <QPushButton>
+#include <QComboBox>
 
 #include "prefix.hpp"
 
@@ -35,6 +36,7 @@ private:
     const Prefix& m_prefix;
     QProcess* m_updateProcess;
     QProcess* m_installProcess;
+    QComboBox* m_categoryList;
     QListWidget* m_componentsListWidget;
     QLineEdit* m_searchLineEdit;
     QProgressBar* m_progressBar;
