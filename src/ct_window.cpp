@@ -1,16 +1,11 @@
 #include "ct_window.hpp"
 
-#include <QComboBox>
 #include <QDesktopServices>
 #include <QGroupBox>
 #include <QLabel>
-#include <QListView>
 #include <QMenu>
 #include <QMessageBox>
-#include <QProgressBar>
-#include <QPushButton>
 #include <QStatusBar>
-#include <QToolButton>
 #include <QCloseEvent>
 #include <QVBoxLayout>
 
@@ -77,7 +72,7 @@ CtWindow::CtWindow(QWidget* parent)
     auto* installationLocationsLabel = new QLabel(tr("Installation location:"), this);
     installationBoxLayout->addWidget(installationLocationsLabel);
     for (const auto& ctDir : CTS_DIR_LIST) {
-        if (ctDir.absolutePath().contains("steam")) {
+        if (ctDir.absolutePath().contains(QStringLiteral("steam"))) {
             m_installationLocationsComboBox->addItem(QIcon::fromTheme("steam"), ctDir.path());
         } else {
             m_installationLocationsComboBox->addItem(QIcon(":/icons/kisel.svg"), ctDir.path());
@@ -243,7 +238,7 @@ void CtWindow::onContextMenuRequested(const QPoint& pos)
     } else if (selectedAction == m_deleteAction) {
         QString ctName = index.data().toString();
         if (QMessageBox::question(this, tr("Confirm"), tr("Remove \"%1\"?").arg(ctName)) == QMessageBox::Yes) {
-            CT_MODEL->remove(index);
+            CT_MODEL->removeRow(index.row());
         }
     }
 }

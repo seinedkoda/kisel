@@ -37,7 +37,8 @@ AddNewPrefixDialog::AddNewPrefixDialog(QWidget* parent)
     });
 
     connect(m_saveButton, &QPushButton::clicked, this, [this]() {
-        PREFIX_MODEL->create(m_nameInput->text());
+        Prefix* prefix = PREFIX_MODEL->add(m_nameInput->text());
+        prefix->makePath();
         close();
     });
 }
@@ -90,7 +91,7 @@ void PrefixWindow::onContextMenuRequested(const QPoint& pos)
     } else if (selectedAction == m_deleteAction) {
         QString prefixName = index.data().toString();
         if (QMessageBox::question(this, tr("Confirm"), tr("Remove the \"%1\" prefix?").arg(prefixName)) == QMessageBox::Yes) {
-            PREFIX_MODEL->remove(index);
+            PREFIX_MODEL->removeRow(index.row());
         }
     }
 }

@@ -30,6 +30,7 @@ qt_add_executable(kisel
     src/process_manager.hpp src/process_manager.cpp
     src/tray_icon.hpp src/tray_icon.cpp
     src/prefix_components_dialog.hpp src/prefix_components_dialog.cpp
+    src/run_config.hpp src/run_config.cpp
 )
 
 qt_add_resources(kisel "resources"

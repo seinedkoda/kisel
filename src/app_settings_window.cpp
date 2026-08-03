@@ -65,16 +65,34 @@ AppSettingsWindow::AppSettingsWindow(QWidget* parent)
     });
     settingsLayout->addWidget(languageComboBox);
 
+    auto* bottomLanguageLine = new QFrame(this);
+    bottomLanguageLine->setFrameShape(QFrame::HLine);
+    settingsLayout->addWidget(bottomLanguageLine);
+
     auto* defaultPrefixLabel = new QLabel(tr("Default prefix"), this);
     settingsLayout->addWidget(defaultPrefixLabel);
+
+    auto* individualPrefixCheckBox = new QCheckBox(tr("Use individual prefix"), this);
+    individualPrefixCheckBox->setChecked(APP_SETTINGS->useIndividualPrefix());
+    settingsLayout->addWidget(individualPrefixCheckBox);
 
     auto* prefixComboBox = new QComboBox(this);
     prefixComboBox->setModel(PREFIX_MODEL);
     prefixComboBox->setCurrentText(PREFIX_MODEL->defaultPrefix()->name());
+    prefixComboBox->setDisabled(APP_SETTINGS->useIndividualPrefix());
     connect(prefixComboBox, &QComboBox::currentIndexChanged, this, [](int index) {
         APP_SETTINGS->setDefaultPrefixPath(PREFIX_MODEL->forIndex(index)->path());
     });
     settingsLayout->addWidget(prefixComboBox);
+
+    connect(individualPrefixCheckBox, &QCheckBox::clicked, this, [prefixComboBox](bool checked) {
+        APP_SETTINGS->setUseIndividualPrefix(checked);
+        prefixComboBox->setDisabled(checked);
+    });
+
+    auto* bottomPrefixLine = new QFrame(this);
+    bottomPrefixLine->setFrameShape(QFrame::HLine);
+    settingsLayout->addWidget(bottomPrefixLine);
 
     auto* defaultCtLabel = new QLabel(tr("Default compatibility tool"), this);
     settingsLayout->addWidget(defaultCtLabel);
@@ -88,6 +106,10 @@ AppSettingsWindow::AppSettingsWindow(QWidget* parent)
         APP_SETTINGS->setDefaultCtPath(CT_MODEL->forIndex(index)->path());
     });
     settingsLayout->addWidget(ctComboBox);
+
+    auto* bottomCtLine = new QFrame(this);
+    bottomCtLine->setFrameShape(QFrame::HLine);
+    settingsLayout->addWidget(bottomCtLine);
 
     auto* runtimeAutoUpdateCheckBox = new QCheckBox(tr("Runtime auto-update"), this);
     runtimeAutoUpdateCheckBox->setChecked(APP_SETTINGS->runtimeAutoUpdate());

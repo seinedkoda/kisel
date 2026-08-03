@@ -4,6 +4,7 @@
 #include "executable_file.hpp"
 #include "main_window.hpp"
 #include "process_manager.hpp"
+#include "run_config.hpp"
 #include "translator.hpp"
 #include "tray_icon.hpp"
 
@@ -29,14 +30,15 @@ int main(int argc, char* argv[])
 
     const QStringList positionalArgs = parser.positionalArguments();
     if (positionalArgs.isEmpty()) {
-        auto* mainWindow = new kisel::MainWindow(processManager);
+        auto* mainWindow = new kisel::MainWindow(&processManager);
         mainWindow->show();
     } else if (parser.isSet(prefixOption)) {
         kisel::ExecutableFile exeFile(positionalArgs.first());
-        exeFile.setPrefixName(parser.value(prefixOption));
-        processManager.run(exeFile);
+        kisel::RunConfig runConfig;
+        runConfig.setPrefixName(parser.value(prefixOption));
+        processManager.run(exeFile, &runConfig);
     } else {
-        auto* mainWindow = new kisel::MainWindow(processManager, positionalArgs.first());
+        auto* mainWindow = new kisel::MainWindow(&processManager, positionalArgs.first());
         mainWindow->show();
     }
 

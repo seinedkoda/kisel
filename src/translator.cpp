@@ -5,12 +5,13 @@
 
 #include "app_settings.hpp"
 
+using namespace Qt::StringLiterals;
 using namespace kisel;
 
 Translator::Translator(QObject* parent)
     : QObject(parent)
 {
-    const QStringList translationFiles = QDir(":/i18n").entryList(QStringList() << "kisel_*.qm");
+    const QStringList translationFiles = QDir(":/i18n"_L1).entryList({ "kisel_*.qm"_L1 });
     for (const QString& fileName : translationFiles) {
         const QString code = fileName.mid(6, fileName.lastIndexOf('.') - 6);
         const QString name = QLocale(code).nativeLanguageName();
@@ -27,7 +28,7 @@ Translator* Translator::instance()
 bool Translator::setLocale(const QString& localeName)
 {
     QLocale locale(localeName);
-    if (m_qtranslator.load(locale, "kisel", "_", ":/i18n")) {
+    if (m_qtranslator.load(locale, "kisel"_L1, "_"_L1, ":/i18n"_L1)) {
         if (qApp->installTranslator(&m_qtranslator)) {
             m_currentLocale = locale;
             m_currentLanguageName = locale.nativeLanguageName();

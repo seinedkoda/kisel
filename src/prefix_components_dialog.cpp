@@ -10,6 +10,7 @@
 
 #include "app_settings.hpp"
 
+using namespace Qt::StringLiterals;
 using namespace kisel;
 
 PrefixComponentsDialog::PrefixComponentsDialog(const Prefix& prefix, QWidget* parent)
@@ -42,8 +43,8 @@ PrefixComponentsDialog::PrefixComponentsDialog(const Prefix& prefix, QWidget* pa
     auto* categoryLabel = new QLabel(tr("Category"), this);
     layout->addWidget(categoryLabel);
 
-    m_categoryList->addItem(tr("dlls"), "dlls");
-    m_categoryList->addItem(tr("fonts"), "fonts");
+    m_categoryList->addItem(tr("dlls"), "dlls"_L1);
+    m_categoryList->addItem(tr("fonts"), "fonts"_L1);
     connect(m_categoryList, &QComboBox::currentIndexChanged, this, [this](int index) { loadComponents(); });
     layout->addWidget(m_categoryList);
 
@@ -81,7 +82,7 @@ void PrefixComponentsDialog::loadComponents()
     m_searchLineEdit->setEnabled(false);
     m_progressBar->show();
 
-    m_updateProcess->start(APP_SETTINGS->winetricksPath(), { m_categoryList->currentData().toString(), "list" });
+    m_updateProcess->start(APP_SETTINGS->winetricksPath(), { m_categoryList->currentData().toString(), "list"_L1 });
 }
 
 void PrefixComponentsDialog::onUpdateFinished(int exitCode, QProcess::ExitStatus exitStatus)
@@ -98,7 +99,7 @@ void PrefixComponentsDialog::onUpdateFinished(int exitCode, QProcess::ExitStatus
     }
 
     QString output = QString::fromUtf8(m_updateProcess->readAllStandardOutput());
-    const QStringList& lines = output.split('\n', Qt::SkipEmptyParts);
+    const QStringList& lines = output.split(u'\n', Qt::SkipEmptyParts);
 
     for (const QString& line : lines) {
         parseAndAddLine(line.trimmed());
@@ -107,11 +108,11 @@ void PrefixComponentsDialog::onUpdateFinished(int exitCode, QProcess::ExitStatus
 
 void PrefixComponentsDialog::parseAndAddLine(const QString& line)
 {
-    if (line.isEmpty() || line.startsWith("==")) {
+    if (line.isEmpty() || line.startsWith("=="_L1)) {
         return;
     }
 
-    static QRegularExpression re(R"(^([^\s]+)\s+(.*)$)");
+    static QRegularExpression re(R"(^([^\s]+)\s+(.*)$)"_L1);
     QRegularExpressionMatch match = re.match(line);
 
     if (!match.hasMatch()) {
@@ -173,10 +174,10 @@ void PrefixComponentsDialog::installSelected()
     m_progressBar->show();
 
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-    env.insert("WINEPREFIX", m_prefix.path());
+    env.insert("WINEPREFIX"_L1, m_prefix.path());
     m_installProcess->setProcessEnvironment(env);
 
-    m_installProcess->start(APP_SETTINGS->winetricksPath(), QStringList() << "-q" << selectedItems);
+    m_installProcess->start(APP_SETTINGS->winetricksPath(), QStringList() << "-q"_L1 << selectedItems);
 }
 
 void PrefixComponentsDialog::onInstallFinished(int exitCode, QProcess::ExitStatus exitStatus)

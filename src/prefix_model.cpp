@@ -69,6 +69,24 @@ QVariant PrefixModel::data(const QModelIndex& index, int role) const
     }
 }
 
+bool PrefixModel::removeRows(int row, int count, const QModelIndex& parent) // NOLINT(bugprone-easily-swappable-parameters)
+{
+    if (row < 0 || row >= m_prefixes.count()) {
+        return false;
+    }
+
+    Prefix* prefix = m_prefixes.at(row);
+    if (prefix->exists() && !prefix->dir().removeRecursively()) {
+        return false;
+    }
+
+    beginRemoveRows(QModelIndex(), row, row);
+    m_prefixes.removeAt(row);
+    prefix->deleteLater();
+    endRemoveRows();
+    return true;
+}
+
 Prefix* PrefixModel::forIndex(int index) const
 {
     if (index >= 0 && index < m_prefixes.count()) {
@@ -112,7 +130,7 @@ void PrefixModel::refreshList()
 {
     const QStringList dirList = PREFIXES_DIR.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
 
-    // Add new prefixes
+    // Add new prefixes from dir
     for (const QString& dirName : dirList) {
         if (!containsName(dirName)) {
             add(dirName);
@@ -130,55 +148,25 @@ void PrefixModel::refreshList()
             endRemoveRows();
         }
     }
-}
 
-void PrefixModel::add(const QString& name)
-{
-    QString prefixPath = PREFIXES_DIR.filePath(name);
-    if (!isValidPrefixName(name) || !QFileInfo::exists(prefixPath)) {
-        return;
+    if (m_prefixes.count() == 0) {
+        add(APP_SETTINGS->defaultPrefixName());
     }
-
-    auto* prefix = new Prefix(prefixPath, this);
-
-    int insertPos = rowCount();
-    beginInsertRows(QModelIndex(), insertPos, insertPos);
-    m_prefixes.insert(insertPos, prefix);
-    endInsertRows();
 }
 
-Prefix* PrefixModel::create(const QString& name)
+Prefix* PrefixModel::add(const QString& name)
 {
     if (!isValidPrefixName(name)) {
         return nullptr;
     }
 
-    auto* prefix = new Prefix(PREFIXES_DIR.filePath(name), this);
-    prefix->makePath();
+    auto* prefix = new Prefix(name, this);
 
     int insertPos = rowCount();
     beginInsertRows(QModelIndex(), insertPos, insertPos);
     m_prefixes.insert(insertPos, prefix);
     endInsertRows();
     return prefix;
-}
-
-bool PrefixModel::remove(const QModelIndex& itemIndex)
-{
-    if (!itemIndex.isValid()) {
-        return false;
-    }
-
-    int row = itemIndex.row();
-    QDir prefixDir(itemIndex.data(PathRole).toString());
-    if (prefixDir.removeRecursively()) {
-        beginRemoveRows(QModelIndex(), row, row);
-        m_prefixes.remove(row);
-        endRemoveRows();
-        return true;
-    }
-
-    return false;
 }
 
 Prefix* PrefixModel::defaultPrefix()
@@ -188,7 +176,7 @@ Prefix* PrefixModel::defaultPrefix()
 
     if (defaultPrefix == nullptr) {
         qWarning() << "The default prefix does not exist";
-        return create(defaultPrefixName);
+        return add(defaultPrefixName);
     }
 
     return defaultPrefix;
@@ -200,7 +188,7 @@ bool PrefixModel::isValidPrefixName(QStringView name)
         return false;
     }
 
-    static QRegularExpression nameRegex(R"(^(?!\.$)(?!\.\.$)[^\/\x00-\x1F\x7F]+$)"); // POSIX directory
+    static const QRegularExpression nameRegex(QStringLiteral(R"(^(?!\.$)(?!\.\.$)[^\/\x00-\x1F\x7F]+$)")); // POSIX directory
     if (!nameRegex.matchView(name).hasMatch()) {
         return false;
     }

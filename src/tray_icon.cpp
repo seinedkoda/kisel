@@ -1,15 +1,14 @@
 #include "tray_icon.hpp"
 
-#include <QCoreApplication>
 #include <QAction>
+#include <QCoreApplication>
 
 using namespace kisel;
 
 TrayIcon::TrayIcon(ProcessManager* processManager)
     : QObject(processManager)
+    , m_trayIcon(new QSystemTrayIcon(QIcon(":/icons/kisel.svg"), this))
 {
-    m_trayIcon.setIcon(QIcon(":/icons/kisel.svg"));
-
     auto* terminateAction = new QAction(tr("Terminate the process"), &m_trayMenu);
     connect(terminateAction, &QAction::triggered, this, [processManager]() { processManager->stop(); });
     m_trayMenu.addAction(terminateAction);
@@ -23,7 +22,7 @@ TrayIcon::TrayIcon(ProcessManager* processManager)
     });
     m_trayMenu.addAction(quitAction);
 
-    m_trayIcon.setContextMenu(&m_trayMenu);
+    m_trayIcon->setContextMenu(&m_trayMenu);
 
     connect(processManager, &ProcessManager::runningChanged, this, &TrayIcon::onRunningChanged);
 }
@@ -31,8 +30,8 @@ TrayIcon::TrayIcon(ProcessManager* processManager)
 void TrayIcon::onRunningChanged(bool isRunning)
 {
     if (isRunning) {
-        m_trayIcon.show();
+        m_trayIcon->show();
     } else {
-        m_trayIcon.hide();
+        m_trayIcon->hide();
     }
 }

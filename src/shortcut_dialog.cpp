@@ -9,9 +9,10 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 
+using namespace Qt::StringLiterals;
 using namespace kisel;
 
-ShortcutDialog::ShortcutDialog(ExecutableFile* exeFile, QWidget* parent)
+ShortcutDialog::ShortcutDialog(ExecutableFile* exeFile, const RunConfig& runConfig, QWidget* parent)
     : QDialog(parent)
     , m_categoryComboBox(new QComboBox(this))
 {
@@ -71,13 +72,13 @@ ShortcutDialog::ShortcutDialog(ExecutableFile* exeFile, QWidget* parent)
         addButton->setDisabled(text.isEmpty());
     });
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::close);
-    connect(buttonBox, &QDialogButtonBox::accepted, this, [this, exeFile]() {
+    connect(buttonBox, &QDialogButtonBox::accepted, this, [this, exeFile, &runConfig]() {
         QString category = m_categoryComboBox->currentData().toString();
         if (m_menuCheckBox->isChecked()) {
-            exeFile->createShortcut(m_nameEdit->text(), ShortcutDestination::Menu, category);
+            exeFile->createShortcut(runConfig, m_nameEdit->text(), ExecutableFile::ShortcutDestination::Menu, category);
         }
         if (m_desktopCheckbox->isChecked()) {
-            exeFile->createShortcut(m_nameEdit->text(), ShortcutDestination::Desktop, category);
+            exeFile->createShortcut(runConfig, m_nameEdit->text(), ExecutableFile::ShortcutDestination::Desktop, category);
         }
         close();
     });
@@ -86,21 +87,21 @@ ShortcutDialog::ShortcutDialog(ExecutableFile* exeFile, QWidget* parent)
 const QMap<QString, QString>& ShortcutDialog::categoryMap()
 {
     static const QMap<QString, QString> categoryMap {
-        { tr("Other"), "Other" },
-        { tr("AudioVideo"), "AudioVideo" },
-        { tr("Audio"), "Audio" },
-        { tr("Video"), "Video" },
-        { tr("Development"), "Development" },
-        { tr("Education"), "Education" },
-        { tr("HealthFitness"), "HealthFitness" },
-        { tr("Game"), "Game" },
-        { tr("Graphics"), "Graphics" },
-        { tr("Network"), "Network" },
-        { tr("Office"), "Office" },
-        { tr("Science"), "Science" },
-        { tr("Settings"), "Settings" },
-        { tr("System"), "System" },
-        { tr("Utility"), "Utility" }
+        { tr("Other"), "Other"_L1 },
+        { tr("AudioVideo"), "AudioVideo"_L1 },
+        { tr("Audio"), "Audio"_L1 },
+        { tr("Video"), "Video"_L1 },
+        { tr("Development"), "Development"_L1 },
+        { tr("Education"), "Education"_L1 },
+        { tr("HealthFitness"), "HealthFitness"_L1 },
+        { tr("Game"), "Game"_L1 },
+        { tr("Graphics"), "Graphics"_L1 },
+        { tr("Network"), "Network"_L1 },
+        { tr("Office"), "Office"_L1 },
+        { tr("Science"), "Science"_L1 },
+        { tr("Settings"), "Settings"_L1 },
+        { tr("System"), "System"_L1 },
+        { tr("Utility"), "Utility"_L1 }
     };
 
     return categoryMap;
