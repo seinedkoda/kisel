@@ -1,9 +1,5 @@
 #pragma once
 
-#include <QFileInfo>
-#include <QIcon>
-#include <QString>
-
 #include "run_config.hpp"
 
 namespace kisel {
@@ -27,9 +23,9 @@ public:
     [[nodiscard]] bool isValid() const;
     const QIcon& icon();
     void createShortcut(
-        const RunConfig& runConfig,
+        const Prefix& prefix,
         QString shortcutName = "",
-        ShortcutDestination shortcutDest = ShortcutDestination::Menu,
+        ShortcutDestination shortcutDest = Menu,
         const QString& category = "") const;
 
 private:

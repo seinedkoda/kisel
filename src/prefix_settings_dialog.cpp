@@ -3,11 +3,11 @@
 #include <QGroupBox>
 #include <QLabel>
 #include <QStandardPaths>
-#include <QTabWidget>
 #include <QVBoxLayout>
-#include <QTabBar>
+#include <QComboBox>
 
 #include "app_settings.hpp"
+#include "ct_model.hpp"
 
 using namespace Qt::StringLiterals;
 using namespace kisel;
@@ -32,41 +32,24 @@ PrefixSettingsDialog::PrefixSettingsDialog(Prefix* prefix, QWidget* parent)
     auto* tabWidget = new QTabWidget(this);
     layout->addWidget(tabWidget);
 
-    auto* serviceTab = new QWidget(this);
-    auto* serviceTabLayout = new QVBoxLayout(serviceTab);
-    serviceTabLayout->setAlignment(Qt::AlignTop);
-    tabWidget->addTab(serviceTab, QIcon::fromTheme("services"), tr("Services"));
-
-    auto* mangohudCheckBox = new QCheckBox("MangoHud"_L1, this);
-    mangohudCheckBox->setEnabled(!QStandardPaths::findExecutable("mangohud"_L1).isEmpty());
-    mangohudCheckBox->setToolTip(tr("Enable Performance Monitor (requires mangohud to be installed)"));
-    mangohudCheckBox->setChecked(m_prefix->settings()->mangoHudEnabled());
-    connect(mangohudCheckBox, &QCheckBox::clicked, this, [this](bool checked) {
-        m_prefix->settings()->setMangoHudEnabled(checked);
-    });
-    serviceTabLayout->addWidget(mangohudCheckBox);
-
-    auto* obsVkCaptureCheckBox = new QCheckBox("OBS Vulkan Capture"_L1, this);
-    obsVkCaptureCheckBox->setEnabled(!QStandardPaths::findExecutable("obs-vkcapture"_L1).isEmpty());
-    obsVkCaptureCheckBox->setToolTip(tr("Enable Vulkan app screen capture for OBS (requires obs-vkcapture to be installed)"));
-    obsVkCaptureCheckBox->setChecked(m_prefix->settings()->obsVkCaptureEnabled());
-    connect(obsVkCaptureCheckBox, &QCheckBox::clicked, this, [this](bool checked) {
-        m_prefix->settings()->setObsVkCaptureEnabled(checked);
-    });
-    serviceTabLayout->addWidget(obsVkCaptureCheckBox);
-
-    auto* xaliaCheckBox = new QCheckBox("Xalia"_L1, this);
-    xaliaCheckBox->setToolTip(tr("Enable accessibility controls, such as controlling the application interface with a gamepad"));
-    xaliaCheckBox->setChecked(m_prefix->settings()->xaliaEnabled());
-    connect(xaliaCheckBox, &QCheckBox::clicked, this, [this](bool checked) {
-        m_prefix->settings()->setXaliaEnabled(checked);
-    });
-    serviceTabLayout->addWidget(xaliaCheckBox);
-
     auto* compatibilityTab = new QWidget(this);
     auto* compatibilityTabLayout = new QVBoxLayout(compatibilityTab);
     compatibilityTabLayout->setAlignment(Qt::AlignTop);
     tabWidget->addTab(compatibilityTab, QIcon::fromTheme("tools-wizard"), tr("Compatibility"));
+
+    auto* ctLabel = new QLabel(tr("Compatibility tool"), this);
+    compatibilityTabLayout->addWidget(ctLabel);
+
+    auto* ctComboBox = new QComboBox(this);
+    ctComboBox->setModel(CT_MODEL);
+    Ct* prefixCt = CT_MODEL->forPath(prefix->settings()->ctPath());
+    if (prefixCt != nullptr) {
+        ctComboBox->setCurrentIndex(CT_MODEL->ctIndex(prefixCt));
+    }
+    connect(ctComboBox, &QComboBox::currentIndexChanged, this, [this](int index) {
+        m_prefix->settings()->setCtPath(CT_MODEL->forIndex(index)->path());
+    });
+    compatibilityTabLayout->addWidget(ctComboBox);
 
     auto* nvapiCheckBox = new QCheckBox("NVAPI"_L1, this);
     nvapiCheckBox->setToolTip(tr("Enable NVIDIA's NVAPI GPU support library"));
@@ -111,6 +94,37 @@ PrefixSettingsDialog::PrefixSettingsDialog(Prefix* prefix, QWidget* parent)
         m_prefix->settings()->setOpenglEnabled(checked);
     });
     compatibilityTabLayout->addWidget(openglCheckBox);
+
+    auto* serviceTab = new QWidget(this);
+    auto* serviceTabLayout = new QVBoxLayout(serviceTab);
+    serviceTabLayout->setAlignment(Qt::AlignTop);
+    tabWidget->addTab(serviceTab, QIcon::fromTheme("services"), tr("Services"));
+
+    auto* mangohudCheckBox = new QCheckBox("MangoHud"_L1, this);
+    mangohudCheckBox->setEnabled(!QStandardPaths::findExecutable("mangohud"_L1).isEmpty());
+    mangohudCheckBox->setToolTip(tr("Enable Performance Monitor (requires mangohud to be installed)"));
+    mangohudCheckBox->setChecked(m_prefix->settings()->mangoHudEnabled());
+    connect(mangohudCheckBox, &QCheckBox::clicked, this, [this](bool checked) {
+        m_prefix->settings()->setMangoHudEnabled(checked);
+    });
+    serviceTabLayout->addWidget(mangohudCheckBox);
+
+    auto* obsVkCaptureCheckBox = new QCheckBox("OBS Vulkan Capture"_L1, this);
+    obsVkCaptureCheckBox->setEnabled(!QStandardPaths::findExecutable("obs-vkcapture"_L1).isEmpty());
+    obsVkCaptureCheckBox->setToolTip(tr("Enable Vulkan app screen capture for OBS (requires obs-vkcapture to be installed)"));
+    obsVkCaptureCheckBox->setChecked(m_prefix->settings()->obsVkCaptureEnabled());
+    connect(obsVkCaptureCheckBox, &QCheckBox::clicked, this, [this](bool checked) {
+        m_prefix->settings()->setObsVkCaptureEnabled(checked);
+    });
+    serviceTabLayout->addWidget(obsVkCaptureCheckBox);
+
+    auto* xaliaCheckBox = new QCheckBox("Xalia"_L1, this);
+    xaliaCheckBox->setToolTip(tr("Enable accessibility controls, such as controlling the application interface with a gamepad"));
+    xaliaCheckBox->setChecked(m_prefix->settings()->xaliaEnabled());
+    connect(xaliaCheckBox, &QCheckBox::clicked, this, [this](bool checked) {
+        m_prefix->settings()->setXaliaEnabled(checked);
+    });
+    serviceTabLayout->addWidget(xaliaCheckBox);
 
     auto* steamTab = new QWidget(this);
     auto* steamTabLayout = new QHBoxLayout(steamTab);

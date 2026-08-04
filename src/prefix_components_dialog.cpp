@@ -2,10 +2,8 @@
 
 #include <QCloseEvent>
 #include <QGroupBox>
-#include <QHBoxLayout>
 #include <QLabel>
 #include <QMessageBox>
-#include <QSizeGrip>
 #include <QVBoxLayout>
 
 #include "app_settings.hpp"
@@ -23,7 +21,7 @@ PrefixComponentsDialog::PrefixComponentsDialog(const Prefix& prefix, QWidget* pa
     , m_searchLineEdit(new QLineEdit(this))
     , m_progressBar(new QProgressBar(this))
     , m_installButton(new QPushButton(QIcon::fromTheme("browser-download"), tr("Install selected"), this))
-    , m_closeButton(new QPushButton(tr("Close"), this))
+    , m_closeButton(new QPushButton(QIcon::fromTheme("dialog-cancel"), tr("Close"), this))
 {
     setWindowTitle(tr("Kisel — Prefix Components"));
     setAttribute(Qt::WA_DeleteOnClose);

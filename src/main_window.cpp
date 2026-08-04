@@ -27,9 +27,8 @@
 
 using namespace kisel;
 
-MainWindow::MainWindow(ProcessManager* processManager, const QString& exePath)
+MainWindow::MainWindow(const QString& exePath)
     : QMainWindow(nullptr)
-    , m_processManager(processManager)
     , m_exeFile(new ExecutableFile(exePath, this))
     , m_runConfig(new RunConfig(this))
     , m_exeIconLabel(new QLabel(this))
@@ -37,7 +36,7 @@ MainWindow::MainWindow(ProcessManager* processManager, const QString& exePath)
     , m_runStopAction(new QAction(QIcon::fromTheme("media-playback-start"), tr("Run"), this))
     , m_runStopButton(new QToolButton(this))
     , m_exeSelectionButton(new QToolButton(this))
-    , m_individualPrefixCheckBox(new QCheckBox(tr("Create from program file"), this))
+    , m_individualPrefixCheckBox(new QCheckBox(tr("Individual"), this))
     , m_prefixComboBox(new QComboBox(this))
     , m_prefixMenuButton(new QToolButton(this))
     , m_ctComboBox(new QComboBox(this))
@@ -79,13 +78,11 @@ MainWindow::MainWindow(ProcessManager* processManager, const QString& exePath)
 
     auto* exeMenu = new QMenu(this);
 
-    auto* createShortcutAction = new QAction(QIcon::fromTheme("link"), tr("Create shortcut"), this);
+    auto* createShortcutAction = exeMenu->addAction(QIcon::fromTheme("link"), tr("Create shortcut"));
     connect(createShortcutAction, &QAction::triggered, this, &MainWindow::onCreateShortcutTriggered);
-    exeMenu->addAction(createShortcutAction);
 
-    auto* clearExeAction = new QAction(QIcon::fromTheme("edit-clear"), tr("Clear"), this);
+    auto* clearExeAction = exeMenu->addAction(QIcon::fromTheme("edit-clear"), tr("Clear"));
     connect(clearExeAction, &QAction::triggered, this, [this]() { setExecutablePath(""); });
-    exeMenu->addAction(clearExeAction);
 
     connect(m_runStopAction, &QAction::triggered, this, &MainWindow::onRunStopTriggered);
 
@@ -117,15 +114,14 @@ MainWindow::MainWindow(ProcessManager* processManager, const QString& exePath)
 
     auto* prefixMenu = new QMenu(m_prefixMenuButton);
 
-    m_prefixSettingsAction = new QAction(QIcon::fromTheme("view-process-system"), tr("Configure"), prefixMenu);
+    m_prefixSettingsAction = prefixMenu->addAction(QIcon::fromTheme("view-process-system"), tr("Configure"));
     connect(m_prefixSettingsAction, &QAction::triggered, this, [this]() {
         auto* prefixSettingsDialog = new PrefixSettingsDialog(m_runConfig->prefix(), this);
         prefixSettingsDialog->exec(); });
-    prefixMenu->addAction(m_prefixSettingsAction);
 
     m_prefixToolsMenu = prefixMenu->addMenu(QIcon::fromTheme("tools"), tr("Tools"));
 
-    m_prefixComponentsAction = new QAction(QIcon::fromTheme("plugins"), tr("Install components"), m_prefixToolsMenu);
+    m_prefixComponentsAction = m_prefixToolsMenu->addAction(QIcon::fromTheme("plugins"), tr("Install components"));
     connect(m_prefixComponentsAction, &QAction::triggered, this, [this]() {
         if (APP_SETTINGS->winetricksPath().isEmpty()) {
             QMessageBox::critical(this, tr("Opening error"), tr("\"winetricks\" not found! Please install this package to open this window"));
@@ -135,33 +131,26 @@ MainWindow::MainWindow(ProcessManager* processManager, const QString& exePath)
         auto* prefixComponentsDialog = new PrefixComponentsDialog(*m_runConfig->prefix(), this);
         prefixComponentsDialog->exec();
     });
-    m_prefixToolsMenu->addAction(m_prefixComponentsAction);
 
-    auto* winecfgAction = new QAction(QIcon::fromTheme("wine"), tr("Wine settings"), m_prefixToolsMenu);
-    connect(winecfgAction, &QAction::triggered, this, [this]() { m_processManager->runWineCfg(m_runConfig->prefix()); });
-    m_prefixToolsMenu->addAction(winecfgAction);
+    auto* winecfgAction = m_prefixToolsMenu->addAction(QIcon::fromTheme("wine"), tr("Wine settings"));
+    connect(winecfgAction, &QAction::triggered, this, [this]() { PROCESS_MANAGER->runWineCfg(m_runConfig->prefix()); });
 
-    auto* explorerAction = new QAction(QIcon::fromTheme("document-open-folder"), tr("Explorer"), m_prefixToolsMenu);
-    connect(explorerAction, &QAction::triggered, this, [this]() { m_processManager->runExplorer(m_runConfig->prefix()); });
-    m_prefixToolsMenu->addAction(explorerAction);
+    auto* explorerAction = m_prefixToolsMenu->addAction(QIcon::fromTheme("document-open-folder"), tr("Explorer"));
+    connect(explorerAction, &QAction::triggered, this, [this]() { PROCESS_MANAGER->runExplorer(m_runConfig->prefix()); });
 
-    auto* regeditAction = new QAction(QIcon::fromTheme("view-list-text"), tr("Registry"), m_prefixToolsMenu);
-    connect(regeditAction, &QAction::triggered, this, [this]() { m_processManager->runRegedit(m_runConfig->prefix()); });
-    m_prefixToolsMenu->addAction(regeditAction);
+    auto* regeditAction = m_prefixToolsMenu->addAction(QIcon::fromTheme("view-list-text"), tr("Registry"));
+    connect(regeditAction, &QAction::triggered, this, [this]() { PROCESS_MANAGER->runRegedit(m_runConfig->prefix()); });
 
-    auto* uninstallerAction = new QAction(QIcon::fromTheme("trash-empty"), tr("Remove programs"), m_prefixToolsMenu);
-    connect(uninstallerAction, &QAction::triggered, this, [this]() { m_processManager->runUninstaller(m_runConfig->prefix()); });
-    m_prefixToolsMenu->addAction(uninstallerAction);
+    auto* uninstallerAction = m_prefixToolsMenu->addAction(QIcon::fromTheme("trash-empty"), tr("Remove programs"));
+    connect(uninstallerAction, &QAction::triggered, this, [this]() { PROCESS_MANAGER->runUninstaller(m_runConfig->prefix()); });
 
-    m_prefixOpenAction = new QAction(QIcon::fromTheme("document-open-folder"), tr("Open"), prefixMenu);
+    m_prefixOpenAction = prefixMenu->addAction(QIcon::fromTheme("document-open-folder"), tr("Open in files"));
     connect(m_prefixOpenAction, &QAction::triggered, this, [this]() { QDesktopServices::openUrl(QUrl::fromLocalFile(m_runConfig->prefix()->path())); });
-    prefixMenu->addAction(m_prefixOpenAction);
 
     prefixMenu->addSeparator();
 
-    auto* prefixManageAction = new QAction(QIcon::fromTheme("view-list-text"), tr("Manage"), prefixMenu);
+    auto* prefixManageAction = prefixMenu->addAction(QIcon::fromTheme("view-list-text"), tr("Manage"));
     connect(prefixManageAction, &QAction::triggered, this, []() { openPrefixWindow(); });
-    prefixMenu->addAction(prefixManageAction);
 
     m_prefixMenuButton->setToolTip(tr("Open prefix menu"));
     m_prefixMenuButton->setIcon(QIcon::fromTheme("application-menu"));
@@ -194,8 +183,8 @@ MainWindow::MainWindow(ProcessManager* processManager, const QString& exePath)
     versionLabel->setEnabled(false);
     bottomLayout->addWidget(versionLabel);
 
-    connect(m_processManager, &ProcessManager::runningError, this, &MainWindow::onRunningError);
-    connect(m_processManager, &ProcessManager::runningChanged, this, &MainWindow::onRunningChanged);
+    connect(PROCESS_MANAGER, &ProcessManager::runningError, this, &MainWindow::onRunningError);
+    connect(PROCESS_MANAGER, &ProcessManager::runningChanged, this, &MainWindow::onRunningChanged);
 
     setExecutablePath(exePath);
 
@@ -230,6 +219,7 @@ void MainWindow::setExecutablePath(const QString& exePath)
     if (m_individualPrefix) {
         m_individualPrefixName.clear();
         m_individualPrefix->deleteLater();
+        m_individualPrefix.clear(); // Clear pointer
     }
 
     if (exeIsValid) {
@@ -351,26 +341,27 @@ void MainWindow::onExeSelectionClicked()
         QFileDialog::getOpenFileName(
             this,
             tr("Select the executable file"),
-            QDir::homePath(),
+            m_lastSearchPath,
             tr("Executable files (*.exe);;All files (*.*)")));
 
     if (exeFileInfo.exists()) {
+        m_lastSearchPath = exeFileInfo.dir().path();
         setExecutablePath(exeFileInfo.absoluteFilePath());
     }
 }
 
 void MainWindow::onRunStopTriggered()
 {
-    if (m_processManager->isRunning()) {
-        m_processManager->stop();
+    if (PROCESS_MANAGER->isRunning()) {
+        PROCESS_MANAGER->stop();
     } else {
-        m_processManager->run(*m_exeFile, m_runConfig);
+        PROCESS_MANAGER->run(*m_exeFile, m_runConfig);
     }
 }
 
 void MainWindow::onCreateShortcutTriggered()
 {
-    auto* shortcutDialog = new ShortcutDialog(m_exeFile, *m_runConfig, this);
+    auto* shortcutDialog = new ShortcutDialog(m_exeFile, *m_runConfig->prefix(), this);
     shortcutDialog->show();
 }
 

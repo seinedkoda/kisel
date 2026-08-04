@@ -17,7 +17,7 @@ class MainWindow : public QMainWindow {
     Q_OBJECT
 
 public:
-    explicit MainWindow(ProcessManager* processManager, const QString& exePath = "");
+    explicit MainWindow(const QString& exePath = "");
 
 private slots:
     void onExeSelectionClicked();
@@ -40,7 +40,7 @@ private:
 
     const QSize m_exeIconSize { 64, 64 };
     const QPixmap m_unknownExePixmap { QIcon::fromTheme("unknown").pixmap(m_exeIconSize) };
-    ProcessManager* m_processManager;
+    QString m_lastSearchPath = QDir::homePath();
     ExecutableFile* m_exeFile;
     QString m_individualPrefixName;
     RunConfig* m_runConfig;

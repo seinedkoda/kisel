@@ -19,6 +19,12 @@ ProcessManager::ProcessManager(QObject* parent)
     connect(&m_process, &QProcess::errorOccurred, this, &ProcessManager::onProcessError);
 }
 
+ProcessManager* ProcessManager::instance()
+{
+    static ProcessManager instance;
+    return &instance;
+}
+
 void ProcessManager::run(const ExecutableFile& exeFile, RunConfig* runConfig)
 {
     if (!preRunCheck(exeFile, runConfig)) {

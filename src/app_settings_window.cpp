@@ -72,7 +72,7 @@ AppSettingsWindow::AppSettingsWindow(QWidget* parent)
     auto* defaultPrefixLabel = new QLabel(tr("Default prefix"), this);
     settingsLayout->addWidget(defaultPrefixLabel);
 
-    auto* individualPrefixCheckBox = new QCheckBox(tr("Use individual prefix"), this);
+    auto* individualPrefixCheckBox = new QCheckBox(tr("Individual"), this);
     individualPrefixCheckBox->setChecked(APP_SETTINGS->useIndividualPrefix());
     settingsLayout->addWidget(individualPrefixCheckBox);
 
@@ -100,7 +100,7 @@ AppSettingsWindow::AppSettingsWindow(QWidget* parent)
     auto* ctComboBox = new QComboBox(this);
     ctComboBox->setModel(CT_MODEL);
     if (CT_MODEL->defaultCt() != nullptr) {
-        ctComboBox->setCurrentText(CT_MODEL->defaultCt()->name());
+        ctComboBox->setCurrentIndex(CT_MODEL->ctIndex(CT_MODEL->defaultCt()));
     }
     connect(ctComboBox, &QComboBox::currentIndexChanged, this, [](int index) {
         APP_SETTINGS->setDefaultCtPath(CT_MODEL->forIndex(index)->path());

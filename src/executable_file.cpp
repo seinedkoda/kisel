@@ -125,26 +125,25 @@ bool ExecutableFile::extractIconGroup(const QString& groupName, const QString& o
 }
 
 void ExecutableFile::createShortcut(
-    const RunConfig& runConfig,
+    const Prefix& prefix,
     QString shortcutName,
     ShortcutDestination shortcutDest,
     const QString& category) const
 {
-    const Prefix* prefix = runConfig.prefix();
-    if (!isValid() || prefix == nullptr) {
+    if (!isValid()) {
         return;
     }
 
-    const QDir iconsDir(prefix->dir().filePath(".kisel/icons/"_L1));
+    const QDir iconsDir(prefix.dir().filePath(".kisel/icons/"_L1));
     QString iconPath = saveIconWithHashName(iconsDir);
     if (iconPath.isEmpty()) {
         qWarning() << "Failed to save icon for shortcut";
     }
 
     QStandardPaths::StandardLocation outputLocation { };
-    if (shortcutDest == ShortcutDestination::Menu) {
+    if (shortcutDest == Menu) {
         outputLocation = QStandardPaths::ApplicationsLocation;
-    } else if (shortcutDest == ShortcutDestination::Desktop) {
+    } else if (shortcutDest == Desktop) {
         outputLocation = QStandardPaths::DesktopLocation;
     } else {
         qCritical() << "Invalid shortcut destination";
@@ -182,7 +181,7 @@ void ExecutableFile::createShortcut(
         return str;
     };
 
-    const QString escapedPrefixName = escapeExecArg(prefix->name());
+    const QString escapedPrefixName = escapeExecArg(prefix.name());
     const QString escapedExePath = escapeExecArg(path());
 
     QTextStream stream(&desktopFile);
@@ -213,19 +212,14 @@ QString ExecutableFile::saveIconWithHashName(const QDir& outputDir) const
     QBuffer buffer(&bytes);
     buffer.open(QIODevice::WriteOnly);
 
-    QList<QSize> availableSizes = m_icon.availableSizes();
-    QSize targetSize(256, 256);
-    if (!availableSizes.isEmpty()) {
-        targetSize = availableSizes.last();
-    }
-
-    const QPixmap& pixmap = m_icon.pixmap(targetSize);
+    const QSize size = m_icon.actualSize(QSize(256, 256));
+    const QPixmap& pixmap = m_icon.pixmap(size);
 
     if (!pixmap.save(&buffer, "PNG")) {
         return { };
     }
 
-    QByteArray hashBytes = QCryptographicHash::hash(bytes, QCryptographicHash::Md5);
+    const QByteArray hashBytes = QCryptographicHash::hash(bytes, QCryptographicHash::Md5);
     QString hashString = QString::fromLatin1(hashBytes.toHex());
 
     if (!outputDir.exists()) {

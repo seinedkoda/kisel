@@ -4,7 +4,6 @@
 #include <QLineEdit>
 #include <QListView>
 #include <QMainWindow>
-#include <QPushButton>
 
 namespace kisel {
 class AddNewPrefixDialog : public QDialog {
@@ -28,8 +27,5 @@ private slots:
 
 private:
     QListView* m_prefixListView;
-    QMenu* m_listViewContextMenu;
-    QAction* m_openAction;
-    QAction* m_deleteAction;
 };
 }

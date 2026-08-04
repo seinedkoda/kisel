@@ -1,12 +1,13 @@
 #pragma once
 
-#include <QObject>
 #include <QProcess>
 
 #include "executable_file.hpp"
 #include "run_config.hpp"
 
 namespace kisel {
+#define PROCESS_MANAGER ProcessManager::instance()
+
 class ProcessManager : public QObject {
     Q_OBJECT
 
@@ -27,7 +28,7 @@ public:
     };
     Q_ENUM(RunningError)
 
-    explicit ProcessManager(QObject* parent = nullptr);
+    static ProcessManager* instance();
 
     void run(const ExecutableFile& exeFile, RunConfig* runConfig);
     void runWineCfg(const Prefix* prefix);
@@ -47,6 +48,8 @@ private slots:
     void onProcessError(QProcess::ProcessError error);
 
 private:
+    explicit ProcessManager(QObject* parent = nullptr);
+
     bool preRunCheck(const ExecutableFile& exeFile, RunConfig* runConfig);
     void runWinetricksUtility(const QString& utilName, const Prefix* prefix);
     void showError(const QString& errorText, RunningError error, bool emitText = false);

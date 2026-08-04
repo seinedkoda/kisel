@@ -25,20 +25,19 @@ int main(int argc, char* argv[])
     parser.addOption(prefixOption);
     parser.process(app);
 
-    kisel::ProcessManager processManager;
-    kisel::TrayIcon trayIcon(&processManager);
+    kisel::TrayIcon trayIcon(kisel::PROCESS_MANAGER);
 
     const QStringList positionalArgs = parser.positionalArguments();
     if (positionalArgs.isEmpty()) {
-        auto* mainWindow = new kisel::MainWindow(&processManager);
+        auto* mainWindow = new kisel::MainWindow();
         mainWindow->show();
     } else if (parser.isSet(prefixOption)) {
         kisel::ExecutableFile exeFile(positionalArgs.first());
         kisel::RunConfig runConfig;
         runConfig.setPrefixName(parser.value(prefixOption));
-        processManager.run(exeFile, &runConfig);
+        kisel::PROCESS_MANAGER->run(exeFile, &runConfig);
     } else {
-        auto* mainWindow = new kisel::MainWindow(&processManager, positionalArgs.first());
+        auto* mainWindow = new kisel::MainWindow(positionalArgs.first());
         mainWindow->show();
     }
 
