@@ -98,7 +98,7 @@ PrefixSettingsDialog::PrefixSettingsDialog(Prefix* prefix, QWidget* parent)
     auto* serviceTab = new QWidget(this);
     auto* serviceTabLayout = new QVBoxLayout(serviceTab);
     serviceTabLayout->setAlignment(Qt::AlignTop);
-    tabWidget->addTab(serviceTab, QIcon::fromTheme("services"), tr("Services"));
+    tabWidget->addTab(serviceTab, QIcon::fromTheme("flag"), tr("Services"));
 
     auto* mangohudCheckBox = new QCheckBox("MangoHud"_L1, this);
     mangohudCheckBox->setEnabled(!QStandardPaths::findExecutable("mangohud"_L1).isEmpty());

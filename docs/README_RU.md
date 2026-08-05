@@ -30,13 +30,13 @@
     - Русский
 
 ## Зависимости
-- qt6-base: Графический интерфейс
-- [umu-launcher](https://github.com/Open-Wine-Components/umu-launcher): Способ запуска приложений Windows без Steam
-- icoutils: Извлечение значков
-- #### По желанию:
-    - winetricks: Дополнительные скрипты для работы с префиксом Wine
-    - mangohud: Мониторинга FPS, температуры, загрузки ЦП/ГП поверх игры
-    - obs-vkcapture: Плагин для захвата игр на Vulkan для OBS
+- **qt6-base**: Графический интерфейс
+- **[umu-launcher](https://github.com/Open-Wine-Components/umu-launcher)**: Способ запуска приложений Windows без Steam
+- **icoutils**: Извлечение значков
+- ### По желанию:
+    - **winetricks**: Дополнительные скрипты для работы с префиксом Wine
+    - **mangohud**: Мониторинга FPS, температуры, загрузки ЦП/ГП поверх игры
+    - **obs-vkcapture**: Плагин для захвата игр на Vulkan для OBS
 
 ## Установка
 
@@ -58,4 +58,12 @@ cmake -B build -DCMAKE_BUILD_TYPE=Release && cmake --build build
 ```
 
 ## Лицензия
-*GPL-3.0*
+Данный проект распространяется под лицензией **GNU General Public License v3.0** (GPLv3).
+Для получения дополнительной информации см. файл [LICENSE](LICENSE).
+
+### Сторонние ресурсы
+
+- **[Papirus Icon Theme](https://github.com/PapirusDevelopmentTeam/papirus-icon-theme)** - запасной набор иконок
+  - **Автор:** Papirus Development Team
+  - **Лицензия:** [GNU General Public License v3.0 (GPLv3)](resources/icons/thirdparty/Papirus/LICENSE)
+  - **Изменения:** Изменён index.theme, убраны неиспользуемые иконки

@@ -21,7 +21,7 @@ PrefixComponentsDialog::PrefixComponentsDialog(const Prefix& prefix, QWidget* pa
     , m_searchLineEdit(new QLineEdit(this))
     , m_progressBar(new QProgressBar(this))
     , m_installButton(new QPushButton(QIcon::fromTheme("browser-download"), tr("Install selected"), this))
-    , m_closeButton(new QPushButton(QIcon::fromTheme("dialog-cancel"), tr("Close"), this))
+    , m_closeButton(new QPushButton(QIcon::fromTheme("window-close"), tr("Close"), this))
 {
     setWindowTitle(tr("Kisel — Prefix Components"));
     setAttribute(Qt::WA_DeleteOnClose);
@@ -168,7 +168,7 @@ void PrefixComponentsDialog::installSelected()
     m_categoryList->setEnabled(false);
     m_searchLineEdit->setEnabled(false);
     m_installButton->setText(tr("Stop"));
-    m_installButton->setIcon(QIcon::fromTheme("stop"));
+    m_installButton->setIcon(QIcon::fromTheme("media-playback-stop"));
     m_progressBar->show();
 
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();

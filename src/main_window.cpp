@@ -93,7 +93,7 @@ MainWindow::MainWindow(const QString& exePath)
     exeActionsLayout->addWidget(m_runStopButton, Qt::AlignLeft);
 
     m_exeSelectionButton->setToolTip(tr("Select executable file"));
-    m_exeSelectionButton->setIcon(QIcon::fromTheme("search"));
+    m_exeSelectionButton->setIcon(QIcon::fromTheme("document-open"));
     connect(m_exeSelectionButton, &QToolButton::clicked, this, &MainWindow::onExeSelectionClicked);
     exeActionsLayout->addWidget(m_exeSelectionButton, Qt::AlignLeft);
 
@@ -114,7 +114,7 @@ MainWindow::MainWindow(const QString& exePath)
 
     auto* prefixMenu = new QMenu(m_prefixMenuButton);
 
-    m_prefixSettingsAction = prefixMenu->addAction(QIcon::fromTheme("view-process-system"), tr("Configure"));
+    m_prefixSettingsAction = prefixMenu->addAction(QIcon::fromTheme("configure"), tr("Configure"));
     connect(m_prefixSettingsAction, &QAction::triggered, this, [this]() {
         auto* prefixSettingsDialog = new PrefixSettingsDialog(m_runConfig->prefix(), this);
         prefixSettingsDialog->exec(); });
@@ -132,7 +132,7 @@ MainWindow::MainWindow(const QString& exePath)
         prefixComponentsDialog->exec();
     });
 
-    auto* winecfgAction = m_prefixToolsMenu->addAction(QIcon::fromTheme("wine"), tr("Wine settings"));
+    auto* winecfgAction = m_prefixToolsMenu->addAction(QIcon::fromTheme("wine-symbolic"), tr("Wine settings"));
     connect(winecfgAction, &QAction::triggered, this, [this]() { PROCESS_MANAGER->runWineCfg(m_runConfig->prefix()); });
 
     auto* explorerAction = m_prefixToolsMenu->addAction(QIcon::fromTheme("document-open-folder"), tr("Explorer"));
@@ -141,7 +141,7 @@ MainWindow::MainWindow(const QString& exePath)
     auto* regeditAction = m_prefixToolsMenu->addAction(QIcon::fromTheme("view-list-text"), tr("Registry"));
     connect(regeditAction, &QAction::triggered, this, [this]() { PROCESS_MANAGER->runRegedit(m_runConfig->prefix()); });
 
-    auto* uninstallerAction = m_prefixToolsMenu->addAction(QIcon::fromTheme("trash-empty"), tr("Remove programs"));
+    auto* uninstallerAction = m_prefixToolsMenu->addAction(QIcon::fromTheme("entry-delete"), tr("Remove programs"));
     connect(uninstallerAction, &QAction::triggered, this, [this]() { PROCESS_MANAGER->runUninstaller(m_runConfig->prefix()); });
 
     m_prefixOpenAction = prefixMenu->addAction(QIcon::fromTheme("document-open-folder"), tr("Open in files"));
@@ -153,7 +153,7 @@ MainWindow::MainWindow(const QString& exePath)
     connect(prefixManageAction, &QAction::triggered, this, []() { openPrefixWindow(); });
 
     m_prefixMenuButton->setToolTip(tr("Open prefix menu"));
-    m_prefixMenuButton->setIcon(QIcon::fromTheme("application-menu"));
+    m_prefixMenuButton->setIcon(QIcon::fromTheme("open-menu"));
     m_prefixMenuButton->setMenu(prefixMenu);
     m_prefixMenuButton->setPopupMode(QToolButton::InstantPopup);
     environmentBoxLayout->addWidget(m_prefixMenuButton, 2, 1);
@@ -165,7 +165,7 @@ MainWindow::MainWindow(const QString& exePath)
     environmentBoxLayout->addWidget(m_ctComboBox, 4, 0);
 
     m_ctWindowButton->setToolTip(tr("Open the Compatibility Tools window"));
-    m_ctWindowButton->setIcon(QIcon::fromTheme("window"));
+    m_ctWindowButton->setIcon(QIcon::fromTheme("browser-download"));
     connect(m_ctWindowButton, &QToolButton::clicked, this, [this]() { openCtWindow(); });
     environmentBoxLayout->addWidget(m_ctWindowButton, 4, 1);
 

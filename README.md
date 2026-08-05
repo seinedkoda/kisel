@@ -32,13 +32,13 @@ Efficient launch of Windows programs
     - Русский
 
 ## Dependencies
-- qt6-base: Graphical interface
-- [umu-launcher](https://github.com/Open-Wine-Components/umu-launcher): Way to launch Windows applications without Steam
-- icoutils: Extracting icons
-- #### Optional:
-    - winetricks: Additional scripts for working with Wine prefix
-    - mangohud: Overlay for monitoring FPS, temperature, CPU/GPU load
-    - obs-vkcapture: Vulkan game capture plugin for OBS
+- **qt6-base**: Graphical interface
+- **[umu-launcher](https://github.com/Open-Wine-Components/umu-launcher)**: Way to launch Windows applications without Steam
+- **icoutils**: Extracting icons
+- ### Optional:
+    - **winetricks**: Additional scripts for working with Wine prefix
+    - **mangohud**: Overlay for monitoring FPS, temperature, CPU/GPU load
+    - **obs-vkcapture**: Vulkan game capture plugin for OBS
 
 ## Installation
 
@@ -60,4 +60,12 @@ cmake -B build -DCMAKE_BUILD_TYPE=Release && cmake --build build
 ```
 
 ## License
-*GPL-3.0*
+This project is licensed under the **GNU General Public License v3.0** (GPLv3).
+For more information, see the file [LICENSE](LICENSE).
+
+### Third-Party Resources
+
+- **[Papirus Icon Theme](https://github.com/PapirusDevelopmentTeam/papirus-icon-theme)** - fallback icons theme
+  - **Author:** Papirus Development Team
+  - **License:** [GNU General Public License v3.0 (GPLv3)](resources/icons/thirdparty/Papirus/LICENSE)
+  - **Changes:** Changed index.theme, removed unused icons

@@ -42,7 +42,7 @@ CtWindow::CtWindow(QWidget* parent)
     layout->addWidget(m_ctListView);
 
     m_openAction = m_listViewContextMenu->addAction(QIcon::fromTheme("document-open-folder"), tr("Open in files"));
-    m_deleteAction = m_listViewContextMenu->addAction(QIcon::fromTheme("remove"), tr("Delete"));
+    m_deleteAction = m_listViewContextMenu->addAction(QIcon::fromTheme("list-remove"), tr("Delete"));
 
     auto* installationGroupBox = new QGroupBox(tr("Install a new tool"), this);
     auto* installationBoxLayout = new QVBoxLayout(installationGroupBox);
@@ -157,7 +157,7 @@ void CtWindow::onDownloadStarted()
     m_refreshReleasesButton->setEnabled(false);
     m_installationLocationsComboBox->setEnabled(false);
     m_installCancelButton->setText(tr("Cancel"));
-    m_installCancelButton->setIcon(QIcon::fromTheme("stop"));
+    m_installCancelButton->setIcon(QIcon::fromTheme("media-playback-stop"));
     m_progressBar->setRange(0, 100);
     m_progressBar->setValue(0);
     statusBar()->show();
@@ -230,7 +230,7 @@ void CtWindow::onContextMenuRequested(const QPoint& pos)
         return;
     }
 
-    QAction* selectedAction = m_listViewContextMenu->exec(pos);
+    QAction* selectedAction = m_listViewContextMenu->exec(QCursor::pos());
 
     if (selectedAction == m_openAction) {
         QString prefixPath = CT_MODEL->data(index, CtModel::PathRole).toString();

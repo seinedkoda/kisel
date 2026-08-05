@@ -39,14 +39,15 @@ AppSettingsWindow::AppSettingsWindow(QWidget* parent)
     aboutAppInfoLayout->setAlignment(Qt::AlignTop);
     aboutAppLayout->addWidget(aboutAppInfoWidget, Qt::AlignLeft);
 
-    auto* nameLabel = new QLabel(tr("<b>Kisel %1 by %2</b>").arg(APP_VERSION, APP_AUTHOR), this);
+    auto* nameLabel = new QLabel(tr("<b>Kisel %1 ©%2</b>").arg(APP_VERSION, APP_AUTHOR), this);
     aboutAppInfoLayout->addWidget(nameLabel);
-
-    auto* licenseLabel = new QLabel(tr("License: GNU GPLv3"), this);
-    aboutAppInfoLayout->addWidget(licenseLabel);
 
     auto* descriptionLabel = new QLabel(tr("<i>Efficient launch of Windows programs</i>"), this);
     aboutAppInfoLayout->addWidget(descriptionLabel);
+
+    auto* sourceCodeLabel = new QLabel(tr("<a href='%1'>Source code (%2)</a>").arg("https://github.com/seinedkoda/kisel", "GNU GPLv3"), this);
+    sourceCodeLabel->setOpenExternalLinks(true);
+    aboutAppInfoLayout->addWidget(sourceCodeLabel);
 
     auto* settingsBox = new QGroupBox(tr("Settings"), this);
     settingsBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);

@@ -4,12 +4,12 @@
 <context>
     <name>cli</name>
     <message>
-        <location filename="../src/main.cpp" line="20"/>
+        <location filename="../src/main.cpp" line="23"/>
         <source>Efficient launch of Windows programs</source>
         <translation>Эффективный запуск Windows программ</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="24"/>
+        <location filename="../src/main.cpp" line="27"/>
         <source>Run immediately in &lt;PrefixName&gt;</source>
         <translation>Запустить немедленно в &lt;ИмяПрефикса&gt;</translation>
     </message>
@@ -55,47 +55,47 @@
         <translation>О программе</translation>
     </message>
     <message>
-        <location filename="../src/app_settings_window.cpp" line="42"/>
-        <source>&lt;b&gt;Kisel %1 by %2&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Кисель %1 от %2&lt;/b&gt;</translation>
-    </message>
-    <message>
         <location filename="../src/app_settings_window.cpp" line="45"/>
-        <source>License: GNU GPLv3</source>
-        <translation>Лицензия: GNU GPLv3</translation>
-    </message>
-    <message>
-        <location filename="../src/app_settings_window.cpp" line="48"/>
         <source>&lt;i&gt;Efficient launch of Windows programs&lt;/i&gt;</source>
         <translation>&lt;i&gt;Эффективный запуск Windows программ&lt;/i&gt;</translation>
     </message>
     <message>
-        <location filename="../src/app_settings_window.cpp" line="51"/>
+        <location filename="../src/app_settings_window.cpp" line="42"/>
+        <source>&lt;b&gt;Kisel %1 ©%2&lt;/b&gt;</source>
+        <translation>&lt;b&gt;Кисель %1 ©%2&lt;/b&gt;</translation>
+    </message>
+    <message>
+        <location filename="../src/app_settings_window.cpp" line="48"/>
+        <source>&lt;a href=&apos;%1&apos;&gt;Source code (%2)&lt;/a&gt;</source>
+        <translation>&lt;a href=&apos;%1&apos;&gt;Исходный код (%2)&lt;/a&gt;</translation>
+    </message>
+    <message>
+        <location filename="../src/app_settings_window.cpp" line="52"/>
         <source>Settings</source>
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="../src/app_settings_window.cpp" line="57"/>
+        <location filename="../src/app_settings_window.cpp" line="58"/>
         <source>Language</source>
         <translation>Язык</translation>
     </message>
     <message>
-        <location filename="../src/app_settings_window.cpp" line="72"/>
+        <location filename="../src/app_settings_window.cpp" line="73"/>
         <source>Default prefix</source>
         <translation>Префикс по умолчанию</translation>
     </message>
     <message>
-        <location filename="../src/app_settings_window.cpp" line="75"/>
+        <location filename="../src/app_settings_window.cpp" line="76"/>
         <source>Individual</source>
         <translation>Индивидуальный</translation>
     </message>
     <message>
-        <location filename="../src/app_settings_window.cpp" line="97"/>
+        <location filename="../src/app_settings_window.cpp" line="98"/>
         <source>Default compatibility tool</source>
         <translation>Средство совместимости по умолчанию</translation>
     </message>
     <message>
-        <location filename="../src/app_settings_window.cpp" line="114"/>
+        <location filename="../src/app_settings_window.cpp" line="115"/>
         <source>Runtime auto-update</source>
         <translation>Автоматическое обновление среды выполнения</translation>
     </message>

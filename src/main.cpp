@@ -14,6 +14,9 @@ int main(int argc, char* argv[])
     QApplication::setApplicationName("kisel");
     QApplication::setApplicationVersion(APP_VERSION);
 
+    QIcon::setThemeSearchPaths(QIcon::themeSearchPaths() << ":/icons/thirdparty");
+    QIcon::setFallbackThemeName("Papirus");
+
     kisel::TRANSLATOR->setLocaleFromSettings();
 
     QCommandLineParser parser;

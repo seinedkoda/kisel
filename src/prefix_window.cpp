@@ -35,7 +35,7 @@ AddNewPrefixDialog::AddNewPrefixDialog(QWidget* parent)
 
     m_saveButton->setEnabled(false);
 
-    auto* closeButton = new QPushButton(QIcon::fromTheme("dialog-cancel"), tr("Close"), this);
+    auto* closeButton = new QPushButton(QIcon::fromTheme("window-close"), tr("Close"), this);
     connect(closeButton, &QPushButton::clicked, this, &AddNewPrefixDialog::close);
 
     auto* buttonBox = new QDialogButtonBox(Qt::Horizontal);
@@ -73,7 +73,7 @@ PrefixWindow::PrefixWindow(QWidget* parent)
     connect(m_prefixListView, &QListView::customContextMenuRequested, this, &PrefixWindow::onContextMenuRequested);
     layout->addWidget(m_prefixListView);
 
-    auto* addNewButton = new QPushButton(QIcon::fromTheme("add"), tr("Add new"), this);
+    auto* addNewButton = new QPushButton(QIcon::fromTheme("list-add"), tr("Add new"), this);
     connect(addNewButton, &QPushButton::clicked, this, [this]() {
         auto* dialog = new AddNewPrefixDialog(this);
         dialog->show();
@@ -93,7 +93,7 @@ void PrefixWindow::onContextMenuRequested(const QPoint& pos)
 
     auto* menu = new QMenu(this);
 
-    QAction* settingsAction = menu->addAction(QIcon::fromTheme("view-process-system"), tr("Configure"));
+    QAction* settingsAction = menu->addAction(QIcon::fromTheme("configure"), tr("Configure"));
     connect(settingsAction, &QAction::triggered, this, [this, prefix]() {
         auto* prefixSettingsDialog = new PrefixSettingsDialog(prefix, this);
         prefixSettingsDialog->exec();
@@ -112,7 +112,7 @@ void PrefixWindow::onContextMenuRequested(const QPoint& pos)
         prefixComponentsDialog->exec();
     });
 
-    QAction* winecfgAction = toolsMenu->addAction(QIcon::fromTheme("wine"), tr("Wine settings"));
+    QAction* winecfgAction = toolsMenu->addAction(QIcon::fromTheme("wine-symbolic"), tr("Wine settings"));
     connect(winecfgAction, &QAction::triggered, this, [prefix]() { PROCESS_MANAGER->runWineCfg(prefix); });
 
     QAction* explorerAction = toolsMenu->addAction(QIcon::fromTheme("document-open-folder"), tr("Explorer"));
@@ -121,7 +121,7 @@ void PrefixWindow::onContextMenuRequested(const QPoint& pos)
     QAction* regeditAction = toolsMenu->addAction(QIcon::fromTheme("view-list-text"), tr("Registry"));
     connect(regeditAction, &QAction::triggered, this, [prefix]() { PROCESS_MANAGER->runRegedit(prefix); });
 
-    QAction* uninstallerAction = toolsMenu->addAction(QIcon::fromTheme("trash-empty"), tr("Remove programs"));
+    QAction* uninstallerAction = toolsMenu->addAction(QIcon::fromTheme("entry-delete"), tr("Remove programs"));
     connect(uninstallerAction, &QAction::triggered, this, [prefix]() { PROCESS_MANAGER->runUninstaller(prefix); });
 
     QAction* openAction = menu->addAction(QIcon::fromTheme("document-open-folder"), tr("Open in files"));
@@ -129,12 +129,12 @@ void PrefixWindow::onContextMenuRequested(const QPoint& pos)
 
     menu->addSeparator();
 
-    QAction* removeAction = menu->addAction(QIcon::fromTheme("remove"), tr("Delete"));
+    QAction* removeAction = menu->addAction(QIcon::fromTheme("list-remove"), tr("Delete"));
     connect(removeAction, &QAction::triggered, this, [this, prefix, index]() {
         if (QMessageBox::question(this, tr("Confirm"), tr("Remove the \"%1\" prefix?").arg(prefix->name())) == QMessageBox::Yes) {
             PREFIX_MODEL->removeRow(index.row());
         }
     });
 
-    menu->exec(pos);
+    menu->exec(QCursor::pos());
 }
