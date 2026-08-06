@@ -1,6 +1,6 @@
 # Maintainer: Seined Koda <seinedk@gmail.com>
 pkgname=kisel
-pkgver=1.1.0
+pkgver=1.2.0
 pkgrel=1
 pkgdesc="Efficient launch of Windows programs"
 arch=('x86_64')
@@ -18,7 +18,6 @@ depends=(
 optdepends=(
   'winetricks: Additional scripts for working with Wine prefix'
   'mangohud: Overlay for monitoring FPS, temperature, CPU/GPU load'
-  'lib32-mangohud: 32-bit overlay support for older 32-bit games'
   'obs-vkcapture: Vulkan game capture plugin for OBS'
 )
 
@@ -29,7 +28,7 @@ makedepends=(
 )
 
 source=("${pkgname}-${pkgver}.tar.gz::${url}/archive/v${pkgver}.tar.gz")
-sha256sums=('1923d0d08ab9db6d457261f3c5a1bff0a31fdee1f702787a2125810fa5b8fc1f')
+sha256sums=('9b9493ddf22678bc367d37b7ab542d2e07ada5d34c70a5a959eca5ee9b9b673f')
 
 build() {
   cmake -B build -S "${pkgname}-${pkgver}" \
