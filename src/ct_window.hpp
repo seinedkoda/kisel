@@ -35,9 +35,6 @@ private:
     QComboBox* m_installationLocationsComboBox;
     QPushButton* m_installCancelButton;
     QProgressBar* m_progressBar;
-    QMenu* m_listViewContextMenu;
-    QAction* m_openAction;
-    QAction* m_deleteAction;
 
     void resetInstallationWidgetsState();
 };

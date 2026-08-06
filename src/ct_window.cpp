@@ -1,16 +1,11 @@
 #include "ct_window.hpp"
 
-#include <QComboBox>
 #include <QDesktopServices>
 #include <QGroupBox>
 #include <QLabel>
-#include <QListView>
 #include <QMenu>
 #include <QMessageBox>
-#include <QProgressBar>
-#include <QPushButton>
 #include <QStatusBar>
-#include <QToolButton>
 #include <QCloseEvent>
 #include <QVBoxLayout>
 
@@ -27,7 +22,6 @@ CtWindow::CtWindow(QWidget* parent)
     , m_refreshReleasesButton(new QToolButton(this))
     , m_installationLocationsComboBox(new QComboBox(this))
     , m_progressBar(new QProgressBar(this))
-    , m_listViewContextMenu(new QMenu(this))
     , m_installCancelButton(new QPushButton(QIcon::fromTheme("browser-download"), tr("Install"), this))
 {
     setWindowTitle(tr("Kisel — Compatibility Tools"));
@@ -45,9 +39,6 @@ CtWindow::CtWindow(QWidget* parent)
     m_ctListView->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(m_ctListView, &QListView::customContextMenuRequested, this, &CtWindow::onContextMenuRequested);
     layout->addWidget(m_ctListView);
-
-    m_openAction = m_listViewContextMenu->addAction(QIcon::fromTheme("document-open-folder"), tr("Open in files"));
-    m_deleteAction = m_listViewContextMenu->addAction(QIcon::fromTheme("remove"), tr("Delete"));
 
     auto* installationGroupBox = new QGroupBox(tr("Install a new tool"), this);
     auto* installationBoxLayout = new QVBoxLayout(installationGroupBox);
@@ -77,7 +68,7 @@ CtWindow::CtWindow(QWidget* parent)
     auto* installationLocationsLabel = new QLabel(tr("Installation location:"), this);
     installationBoxLayout->addWidget(installationLocationsLabel);
     for (const auto& ctDir : CTS_DIR_LIST) {
-        if (ctDir.absolutePath().contains("steam")) {
+        if (ctDir.absolutePath().contains(QStringLiteral("steam"))) {
             m_installationLocationsComboBox->addItem(QIcon::fromTheme("steam"), ctDir.path());
         } else {
             m_installationLocationsComboBox->addItem(QIcon(":/icons/kisel.svg"), ctDir.path());
@@ -162,7 +153,7 @@ void CtWindow::onDownloadStarted()
     m_refreshReleasesButton->setEnabled(false);
     m_installationLocationsComboBox->setEnabled(false);
     m_installCancelButton->setText(tr("Cancel"));
-    m_installCancelButton->setIcon(QIcon::fromTheme("stop"));
+    m_installCancelButton->setIcon(QIcon::fromTheme("media-playback-stop"));
     m_progressBar->setRange(0, 100);
     m_progressBar->setValue(0);
     statusBar()->show();
@@ -189,7 +180,7 @@ void CtWindow::resetInstallationWidgetsState()
     m_releasesComboBox->setEnabled(true);
     m_refreshReleasesButton->setEnabled(true);
     m_installationLocationsComboBox->setEnabled(true);
-    m_installCancelButton->setText("Install");
+    m_installCancelButton->setText(tr("Install"));
     m_installCancelButton->setIcon(QIcon::fromTheme("browser-download"));
     statusBar()->hide();
 }
@@ -235,15 +226,19 @@ void CtWindow::onContextMenuRequested(const QPoint& pos)
         return;
     }
 
-    QAction* selectedAction = m_listViewContextMenu->exec(pos);
+    Ct* ct = CT_MODEL->forIndex(index.row());
 
-    if (selectedAction == m_openAction) {
-        QString prefixPath = CT_MODEL->data(index, CtModel::PathRole).toString();
-        QDesktopServices::openUrl(QUrl::fromLocalFile(prefixPath));
-    } else if (selectedAction == m_deleteAction) {
-        QString ctName = index.data().toString();
-        if (QMessageBox::question(this, tr("Confirm"), tr("Remove \"%1\"?").arg(ctName)) == QMessageBox::Yes) {
-            CT_MODEL->remove(index);
+    auto* menu = new QMenu(this);
+
+    QAction* openAction = menu->addAction(QIcon::fromTheme("document-open-folder"), tr("Open in files"));
+    connect(openAction, &QAction::triggered, this, [ct]() { QDesktopServices::openUrl(QUrl::fromLocalFile(ct->path())); });
+
+    QAction* deleteAction = menu->addAction(QIcon::fromTheme("list-remove"), tr("Delete"));
+    connect(deleteAction, &QAction::triggered, this, [this, ct, index]() {
+        if (QMessageBox::question(this, tr("Confirm"), tr("Remove \"%1\"?").arg(ct->name())) == QMessageBox::Yes) {
+            CT_MODEL->removeRow(index.row());
         }
-    }
+    });
+
+    menu->exec(QCursor::pos());
 }

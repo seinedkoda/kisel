@@ -6,7 +6,7 @@ Ct::Ct(const QString& path, QObject* parent)
     : QObject(parent)
     , m_dir(path)
 {
-    if (m_dir.absolutePath().contains("steam")) {
+    if (m_dir.absolutePath().contains(QStringLiteral("steam"))) {
         m_icon = QIcon::fromTheme("steam");
     } else {
         m_icon = QIcon(":/icons/kisel.svg");
@@ -17,6 +17,10 @@ QString Ct::path() const
 {
     return m_dir.absolutePath();
 };
+
+QDir Ct::dir() const {
+    return m_dir;
+}
 
 QString Ct::name() const
 {

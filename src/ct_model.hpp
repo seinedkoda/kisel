@@ -15,13 +15,21 @@ class CtModel : public QAbstractListModel { // NOLINT(cppcoreguidelines-virtual-
     Q_DISABLE_COPY_MOVE(CtModel)
 
 public:
+    enum Roles {
+        NameRole = Qt::UserRole + 1,
+        PathRole
+    };
+    Q_ENUM(Roles);
+
     static CtModel* instance();
 
     [[nodiscard]] int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     [[nodiscard]] Qt::ItemFlags flags(const QModelIndex& index) const override;
     [[nodiscard]] QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
     [[nodiscard]] QHash<int, QByteArray> roleNames() const override;
+    bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex()) override;
 
+    [[nodiscard]] int ctIndex(Ct* ct) const;
     [[nodiscard]] Ct* forIndex(int index) const;
     [[nodiscard]] Ct* forPath(QStringView path) const;
     [[nodiscard]] QStringList availableReleasesList() const;
@@ -29,7 +37,6 @@ public:
     [[nodiscard]] bool installationIsRunning() const;
     void refreshList();
     void add(const QString& path);
-    void remove(const QModelIndex& itemIndex);
     void setCtSourceFromName(const QString& name);
     void fetchAvailableReleases();
     void installRelease(const QString& name, const QString& installDir);
@@ -37,10 +44,6 @@ public:
     Ct* defaultCt();
     static const QMap<QString, QUrl>& ctSourceMap();
 
-    enum Roles {
-        NameRole = Qt::UserRole + 1,
-        PathRole
-    };
 signals:
     void fetchReleasesStarted();
     void fetchReleasesFinished();

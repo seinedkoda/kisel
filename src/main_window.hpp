@@ -10,22 +10,24 @@
 #include "executable_file.hpp"
 #include "prefix.hpp"
 #include "process_manager.hpp"
+#include "run_config.hpp"
 
 namespace kisel {
 class MainWindow : public QMainWindow {
     Q_OBJECT
 
 public:
-    explicit MainWindow(ProcessManager& processManager, const QString& exePath = "");
+    explicit MainWindow(const QString& exePath = "");
 
 private slots:
     void onExeSelectionClicked();
-    void onPlayStopButtonClicked();
-    void onCreateExeShortcutButtonClicked();
-    void onProcessError(const QString& errorText);
+    void onRunStopTriggered();
+    void onCreateShortcutTriggered();
+    void onRunningError(kisel::ProcessManager::RunningError error, const QString& errorText);
     void onRunningChanged(bool isRunning);
     void onCurrentPrefixTextChanged(const QString& prefixName);
     void onCurrentCtIndexChanged(int index);
+    void individualPrefixStateChanged(bool checked);
 
 private:
     static void openPrefixWindow();
@@ -34,15 +36,22 @@ private:
     void setExecutablePath(const QString& exePath);
     void setPreferredPrefix();
     void setPrefix(Prefix* prefix);
+    void setPreferredCt();
 
-    const QPixmap m_unknownExePixmap { QIcon::fromTheme("unknown").pixmap(64, 64) };
-    ProcessManager& m_processManager;
-    ExecutableFile* m_exeFile = nullptr;
+    const QSize m_exeIconSize { 64, 64 };
+    const QPixmap m_unknownExePixmap { QIcon::fromTheme("unknown").pixmap(m_exeIconSize) };
+    QString m_lastSearchPath = QDir::homePath();
+    ExecutableFile* m_exeFile;
+    QString m_individualPrefixName;
+    RunConfig* m_runConfig;
     QLabel* m_exeIconLabel;
     QLabel* m_exeNameLabel;
-    QPushButton* m_playStopButton;
-    QToolButton* m_createExeShortcutButton;
+    QAction* m_runStopAction;
+    QMenu* m_prefixToolsMenu;
+    QToolButton* m_runStopButton;
     QToolButton* m_exeSelectionButton;
+    QPointer<Prefix> m_individualPrefix;
+    QCheckBox* m_individualPrefixCheckBox;
     QComboBox* m_prefixComboBox;
     QAction* m_prefixSettingsAction;
     QAction* m_prefixComponentsAction;

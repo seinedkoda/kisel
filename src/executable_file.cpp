@@ -3,13 +3,12 @@
 #include <QBuffer>
 #include <QCryptographicHash>
 #include <QDir>
-#include <QFileInfo>
+#include <QProcess>
 #include <QRegularExpression>
 #include <QStandardPaths>
 #include <QTemporaryFile>
 
-#include "prefix_model.hpp"
-
+using namespace Qt::StringLiterals;
 using namespace kisel;
 
 ExecutableFile::ExecutableFile(const QString& path, QObject* parent)
@@ -17,21 +16,6 @@ ExecutableFile::ExecutableFile(const QString& path, QObject* parent)
     , m_fileInfo(path)
     , m_needUpdateIcon(!path.isEmpty())
 {
-}
-
-void ExecutableFile::setPrefixName(const QString& prefixName)
-{
-    setPrefix(PREFIX_MODEL->forName(prefixName));
-}
-
-void ExecutableFile::setPrefix(Prefix* prefix)
-{
-    if (prefix == nullptr) {
-        m_prefix = PREFIX_MODEL->defaultPrefix();
-        qDebug() << "Unable to set prefix, default prefix is ​​used";
-    } else {
-        m_prefix = prefix;
-    }
 }
 
 void ExecutableFile::setPath(const QString& newPath)
@@ -60,11 +44,6 @@ QString ExecutableFile::baseName() const
     return m_fileInfo.baseName();
 }
 
-Prefix* ExecutableFile::prefix() const
-{
-    return m_prefix;
-}
-
 const QIcon& ExecutableFile::icon()
 {
     if (m_needUpdateIcon) {
@@ -76,7 +55,7 @@ const QIcon& ExecutableFile::icon()
 
 bool ExecutableFile::isValid() const
 {
-    return m_fileInfo.exists() && m_fileInfo.suffix().toLower() == "exe";
+    return m_fileInfo.exists() && m_fileInfo.suffix().toLower() == "exe"_L1;
 }
 
 void ExecutableFile::loadIcon()
@@ -87,7 +66,7 @@ void ExecutableFile::loadIcon()
 
     QString bestIconGroupName = findBestIconGroupName();
 
-    QTemporaryFile tempIconGroupFile(QDir::tempPath() % "/" % name() % "_icon_group_XXXXXX.ico");
+    QTemporaryFile tempIconGroupFile(QDir::tempPath() % "/"_L1 % name() % "_icon_group_XXXXXX.ico"_L1);
     if (!tempIconGroupFile.open()) {
         qCritical() << "Failed to open temporary icon group file";
         return;
@@ -104,26 +83,26 @@ void ExecutableFile::loadIcon()
 QString ExecutableFile::findBestIconGroupName() const
 {
     QProcess process;
-    process.start("wrestool", { "-l", "-t14", path() }); // t14 - icon group
+    process.start("wrestool"_L1, { "-l"_L1, "-t14"_L1, path() }); // t14 - icon group
 
     if (!process.waitForFinished() || process.exitCode() != 0) {
-        qCritical() << "Error while searching for best icon name using wrestool";
+        qCritical() << "Error while searching for best icon name using wrestool:" << process.readAllStandardError();
         return { };
     }
 
-    QString output = process.readAllStandardOutput();
+    QString output = QString::fromUtf8(process.readAllStandardOutput());
     const QStringList lines = output.split('\n', Qt::SkipEmptyParts);
 
-    static QRegularExpression regex(R"(--name='?(?<name>[^'\s]+)'?.*size=(?<size>\d+))");
+    static const QRegularExpression regex(R"(--name='?(?<name>[^'\s]+)'?.*size=(?<size>\d+))"_L1);
 
     QString bestIconName = "";
     int maxIconSize = -1;
-    for (QStringView line : lines) {
-        QRegularExpressionMatch match = regex.matchView(line);
+    for (const QString& line : lines) {
+        QRegularExpressionMatch match = regex.match(line);
         if (match.hasMatch()) {
-            int size = match.captured("size").toInt();
+            int size = match.captured("size"_L1).toInt();
             if (size > maxIconSize) {
-                bestIconName = match.captured("name");
+                bestIconName = match.captured("name"_L1);
                 maxIconSize = size;
             }
         }
@@ -135,10 +114,10 @@ QString ExecutableFile::findBestIconGroupName() const
 bool ExecutableFile::extractIconGroup(const QString& groupName, const QString& outputPath) const
 {
     QProcess process;
-    process.start("wrestool", { "-x", QString("--name=%1").arg(groupName), path(), "-o", outputPath });
+    process.start("wrestool"_L1, { "-x"_L1, QStringLiteral("--name=%1").arg(groupName), path(), "-o"_L1, outputPath });
 
     if (!process.waitForFinished() || process.exitCode() != 0) {
-        qCritical() << "Error while extracting icon group from exe using wrestool";
+        qCritical() << "Error while extracting icon group from exe using wrestool:" << process.readAllStandardError();
         return false;
     }
 
@@ -146,33 +125,47 @@ bool ExecutableFile::extractIconGroup(const QString& groupName, const QString& o
 }
 
 void ExecutableFile::createShortcut(
+    const Prefix& prefix,
     QString shortcutName,
     ShortcutDestination shortcutDest,
-    const QString& category)
+    const QString& category) const
 {
-    if (!isValid() || !m_prefix) {
+    if (!isValid()) {
         return;
     }
 
-    QDir iconsDir(m_prefix->path() % "/.kisel/icons/");
+    const QDir iconsDir(prefix.dir().filePath(".kisel/icons/"_L1));
     QString iconPath = saveIconWithHashName(iconsDir);
     if (iconPath.isEmpty()) {
         qWarning() << "Failed to save icon for shortcut";
     }
 
-    QDir shortcutDestDir;
-    if (shortcutDest == ShortcutDestination::Menu) {
-        shortcutDestDir = QStandardPaths::writableLocation(QStandardPaths::ApplicationsLocation);
-    } else if (shortcutDest == ShortcutDestination::Desktop) {
-        shortcutDestDir = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
+    QStandardPaths::StandardLocation outputLocation { };
+    if (shortcutDest == Menu) {
+        outputLocation = QStandardPaths::ApplicationsLocation;
+    } else if (shortcutDest == Desktop) {
+        outputLocation = QStandardPaths::DesktopLocation;
     } else {
         qCritical() << "Invalid shortcut destination";
         return;
     }
 
-    QFile desktopFile(shortcutDestDir.filePath(baseName() % ".desktop"));
+    const QString destDirPath = QStandardPaths::writableLocation(outputLocation);
+    if (destDirPath.isEmpty()) {
+        qCritical() << "Could not determine writable location for shortcut";
+        return;
+    }
+
+    if (!QDir().mkpath(destDirPath)) {
+        qCritical() << "Failed to create destination directory:" << destDirPath;
+        return;
+    }
+
+    const QDir shortcutDestDir(destDirPath);
+    const QString desktopFilePath = shortcutDestDir.filePath(baseName() % ".desktop"_L1);
+    QFile desktopFile(desktopFilePath);
     if (!desktopFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        qCritical() << "Failed to open shortcut file for writing:" << desktopFile.fileName();
+        qCritical() << "Failed to open shortcut file for writing:" << desktopFilePath;
         return;
     }
 
@@ -180,27 +173,36 @@ void ExecutableFile::createShortcut(
         shortcutName = baseName();
     }
 
+    // Escape characters
+    auto escapeExecArg = [](QString str) {
+        str.replace(u'\\', R"(\\)"_L1);
+        str.replace(u'"', R"(\")"_L1);
+        str.replace(u'%', R"(%%)"_L1);
+        return str;
+    };
+
+    const QString escapedPrefixName = escapeExecArg(prefix.name());
+    const QString escapedExePath = escapeExecArg(path());
+
     QTextStream stream(&desktopFile);
-    stream << "[Desktop Entry]\n";
-    stream << "Type=Application\n";
-    stream << QString("Name=%1\n").arg(shortcutName);
-    stream << QString("Exec=kisel -p \"%1\" \"%2\"\n").arg(m_prefix->name(), path());
-    stream << QString("Icon=%1\n").arg(iconPath);
-    stream << QString("Categories=%1\n").arg(category);
-    stream << "StartupNotify=true\n";
-    stream << "Terminal=false\n";
+    stream << "[Desktop Entry]\n"_L1;
+    stream << "Type=Application\n"_L1;
+    stream << "Name="_L1 << shortcutName << u'\n';
+    stream << "Exec=kisel -p \""_L1 << escapedPrefixName << "\" \""_L1 << escapedExePath << "\"\n"_L1;
+    stream << "Icon="_L1 << iconPath << u'\n';
+    stream << "Categories="_L1 << category << ";\n"_L1;
+    stream << "StartupNotify=true\n"_L1;
+    stream << "Terminal=false\n"_L1;
 
     desktopFile.close();
 
-    QFileDevice::Permissions permissions = desktopFile.permissions();
-    permissions |= QFileDevice::ExeUser;
-
-    if (!desktopFile.setPermissions(permissions)) {
-        qWarning() << "Failed to make .desktop file executable";
+    const QFileDevice::Permissions permissions = QFile::permissions(desktopFilePath) | QFileDevice::ExeUser;
+    if (!QFile::setPermissions(desktopFilePath, permissions)) {
+        qWarning() << "Failed to make .desktop file executable:" << desktopFilePath;
     }
 }
 
-QString ExecutableFile::saveIconWithHashName(const QDir& outputDir)
+QString ExecutableFile::saveIconWithHashName(const QDir& outputDir) const
 {
     if (m_icon.isNull()) {
         return { };
@@ -210,19 +212,14 @@ QString ExecutableFile::saveIconWithHashName(const QDir& outputDir)
     QBuffer buffer(&bytes);
     buffer.open(QIODevice::WriteOnly);
 
-    QList<QSize> availableSizes = m_icon.availableSizes();
-    QSize targetSize(256, 256);
-    if (!availableSizes.isEmpty()) {
-        targetSize = availableSizes.last();
-    }
-
-    const QPixmap& pixmap = m_icon.pixmap(targetSize);
+    const QSize size = m_icon.actualSize(QSize(256, 256));
+    const QPixmap& pixmap = m_icon.pixmap(size);
 
     if (!pixmap.save(&buffer, "PNG")) {
         return { };
     }
 
-    QByteArray hashBytes = QCryptographicHash::hash(bytes, QCryptographicHash::Md5);
+    const QByteArray hashBytes = QCryptographicHash::hash(bytes, QCryptographicHash::Md5);
     QString hashString = QString::fromLatin1(hashBytes.toHex());
 
     if (!outputDir.exists()) {
@@ -232,7 +229,7 @@ QString ExecutableFile::saveIconWithHashName(const QDir& outputDir)
         }
     }
 
-    QString filePath = outputDir.filePath(name() % "_" % hashString % ".png");
+    QString filePath = outputDir.filePath(name() % "_"_L1 % hashString % ".png"_L1);
     if (pixmap.save(filePath, "PNG")) {
         return filePath;
     }

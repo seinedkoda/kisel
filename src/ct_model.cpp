@@ -7,11 +7,12 @@
 
 #include "app_settings.hpp"
 
+using namespace Qt::StringLiterals;
 using namespace kisel;
 
 CtModel::CtModel(QObject* parent)
     : QAbstractListModel(parent)
-    , m_ctSourceName("Proton-GE (Github)")
+    , m_ctSourceName("Proton-GE (Github)"_L1)
 {
     refreshList();
 }
@@ -32,8 +33,8 @@ CtModel* CtModel::instance()
 const QMap<QString, QUrl>& CtModel::ctSourceMap()
 {
     static QMap<QString, QUrl> map {
-        { "Proton-GE (Github)", QUrl("https://api.github.com/repos/GloriousEggroll/proton-ge-custom/releases?per_page=10") },
-        { "Proton-CachyOS (Github)", QUrl("https://api.github.com/repos/CachyOS/proton-cachyos/releases?per_page=10") }
+        { "Proton-GE (Github)"_L1, QUrl("https://api.github.com/repos/GloriousEggroll/proton-ge-custom/releases?per_page=10"_L1) },
+        { "Proton-CachyOS (Github)"_L1, QUrl("https://api.github.com/repos/CachyOS/proton-cachyos/releases?per_page=10"_L1) }
     };
     return map;
 }
@@ -83,6 +84,33 @@ QHash<int, QByteArray> CtModel::roleNames() const
     };
 
     return roles;
+}
+
+bool CtModel::removeRows(int row, int count, const QModelIndex& parent) // NOLINT(bugprone-easily-swappable-parameters)
+{
+    if (row < 0 || row >= m_cts.count()) {
+        return false;
+    }
+
+    Ct* ct = m_cts.at(row);
+    if (!ct->dir().removeRecursively()) {
+        return false;
+    }
+
+    beginRemoveRows(QModelIndex(), row, row);
+    m_cts.removeAt(row);
+    ct->deleteLater();
+    endRemoveRows();
+    return true;
+}
+
+int CtModel::ctIndex(Ct* ct) const
+{
+    if (ct == nullptr) {
+        return -1;
+    }
+
+    return static_cast<int>(m_cts.indexOf(ct));
 }
 
 Ct* CtModel::forIndex(int index) const
@@ -136,7 +164,7 @@ void CtModel::refreshList()
         // Add new ones
         for (const auto& fileInfo : entryInfoList) {
             QString ctPath = fileInfo.absoluteFilePath();
-            if (!containsPath(ctPath) && QFileInfo::exists(ctPath % "/proton")) {
+            if (!containsPath(ctPath) && QFileInfo::exists(ctPath % "/proton"_L1)) {
                 add(ctPath);
             }
         }
@@ -167,21 +195,6 @@ void CtModel::add(const QString& path)
     beginInsertRows(QModelIndex(), insertPos, insertPos);
     m_cts.insert(insertPos, ct);
     endInsertRows();
-}
-
-void CtModel::remove(const QModelIndex& itemIndex)
-{
-    if (!itemIndex.isValid()) {
-        return;
-    }
-
-    int row = itemIndex.row();
-    QString dirPath = itemIndex.data(PathRole).toString();
-    if (QDir(dirPath).removeRecursively()) {
-        beginRemoveRows(QModelIndex(), row, row);
-        m_cts.remove(row);
-        endRemoveRows();
-    }
 }
 
 void CtModel::setCtSourceFromName(const QString& name)
@@ -221,7 +234,7 @@ void CtModel::cancelInstallation()
 Ct* CtModel::defaultCt()
 {
     const QString defaultCtPath = APP_SETTINGS->defaultCtPath();
-    if (!defaultCtPath.isEmpty()) {
+    if (!defaultCtPath.isEmpty() && QFileInfo::exists(defaultCtPath)) {
         return forPath(defaultCtPath);
     }
 
@@ -243,7 +256,7 @@ void CtModel::fetchAvailableReleases()
     m_sortedReleasesList.clear();
 
     QNetworkRequest request(ctSourceMap().value(m_ctSourceName));
-    request.setHeader(QNetworkRequest::UserAgentHeader, "kisel");
+    request.setHeader(QNetworkRequest::UserAgentHeader, "kisel"_L1);
 
     QNetworkReply* reply = m_networkManager.get(request);
     connect(reply, &QNetworkReply::finished, this, [this, reply]() { onReleasesFetched(reply); });
@@ -255,22 +268,22 @@ QString CtModel::deviceArchitecture()
 {
     static QString arch = QSysInfo::currentCpuArchitecture().toLower();
 
-    if (arch == "x86_64" || arch == "amd64") {
+    if (arch == "x86_64"_L1 || arch == "amd64"_L1) {
         return "x86_64";
     }
 
-    if (arch == "arm64" || arch == "aarch64") {
-        return "aarch64";
+    if (arch == "arm64"_L1 || arch == "aarch64"_L1) {
+        return "aarch64"_L1;
     }
 
-    return "unknown";
+    return "unknown"_L1;
 }
 
 bool CtModel::deviceHasV3Exstensions()
 {
     static QString arch = deviceArchitecture();
 
-    if (arch == "x86_64") {
+    if (arch == "x86_64"_L1) {
         if (__builtin_cpu_supports("avx2") && __builtin_cpu_supports("fma") && __builtin_cpu_supports("bmi2")) {
             return true;
         }
@@ -281,15 +294,15 @@ bool CtModel::deviceHasV3Exstensions()
 
 QString CtModel::getBaseArchitectureNameFromAsset(const QString& assetName)
 {
-    if (assetName.contains("x86_64_v3", Qt::CaseInsensitive)) {
-        return "x86_64_v3";
+    if (assetName.contains("x86_64_v3"_L1, Qt::CaseInsensitive)) {
+        return "x86_64_v3"_L1;
     }
 
-    if (assetName.contains("aarch64", Qt::CaseInsensitive) || assetName.contains("arm64", Qt::CaseInsensitive)) {
-        return "aarch64";
+    if (assetName.contains("aarch64"_L1, Qt::CaseInsensitive) || assetName.contains("arm64"_L1, Qt::CaseInsensitive)) {
+        return "aarch64"_L1;
     }
 
-    return "x86_64";
+    return "x86_64"_L1;
 }
 
 void CtModel::onReleasesFetched(QNetworkReply* reply)
@@ -316,14 +329,14 @@ void CtModel::onReleasesFetched(QNetworkReply* reply)
 void CtModel::parseReleasesArray(const QJsonArray& releasesArray)
 {
     static const QString devArch = deviceArchitecture();
-    static const bool isDevAarch64 = (devArch == "aarch64");
-    static const bool isDevX86_64 = (devArch == "x86_64");
+    static const bool isDevAarch64 = (devArch == "aarch64"_L1);
+    static const bool isDevX86_64 = (devArch == "x86_64"_L1);
     static const bool supportsV3 = isDevX86_64 && deviceHasV3Exstensions();
 
     for (const auto& releaseVal : releasesArray) {
         const QJsonObject release = releaseVal.toObject();
-        const QString tagName = release.value("tag_name").toString();
-        const QJsonArray assetsArray = release.value("assets").toArray();
+        const QString tagName = release.value("tag_name"_L1).toString();
+        const QJsonArray assetsArray = release.value("assets"_L1).toArray();
 
         const QUrl downloadUrl = findBestAssetUrl(assetsArray);
 
@@ -337,34 +350,34 @@ void CtModel::parseReleasesArray(const QJsonArray& releasesArray)
 QUrl CtModel::findBestAssetUrl(const QJsonArray& assetsArray)
 {
     static const QString devArch = deviceArchitecture();
-    static const bool isDevAarch64 = (devArch == "aarch64");
-    static const bool isDevX86_64 = (devArch == "x86_64");
+    static const bool isDevAarch64 = (devArch == "aarch64"_L1);
+    static const bool isDevX86_64 = (devArch == "x86_64"_L1);
     static const bool supportsV3 = isDevX86_64 && deviceHasV3Exstensions();
 
     QUrl fallbackUrl;
 
     for (const auto& assetVal : assetsArray) {
         const QJsonObject assetObj = assetVal.toObject();
-        const QString assetName = assetObj.value("name").toString();
+        const QString assetName = assetObj.value("name"_L1).toString();
 
-        const bool isTarball = assetName.endsWith(".tar.gz") || assetName.endsWith(".tar.xz");
+        const bool isTarball = assetName.endsWith(".tar.gz"_L1) || assetName.endsWith(".tar.xz"_L1);
         if (!isTarball) {
             continue;
         }
 
         const QString assetArch = getBaseArchitectureNameFromAsset(assetName);
-        const QString assetUrl = assetObj.value("browser_download_url").toString();
+        const QString assetUrl = assetObj.value("browser_download_url"_L1).toString();
 
-        if (isDevAarch64 && assetArch == "aarch64") {
+        if (isDevAarch64 && assetArch == "aarch64"_L1) {
             return assetUrl;
         }
 
         if (isDevX86_64) {
-            if (assetArch == "x86_64_v3" && supportsV3) {
+            if (assetArch == "x86_64_v3"_L1 && supportsV3) {
                 return assetUrl;
             }
 
-            if (assetArch == "x86_64") {
+            if (assetArch == "x86_64"_L1) {
                 fallbackUrl = assetUrl;
             }
         }
@@ -402,7 +415,7 @@ void CtModel::installRelease(const QString& name, const QString& installDir)
     m_installationIsRunning = true;
 
     QNetworkRequest request(m_releaseUrlMap.value(name));
-    request.setHeader(QNetworkRequest::UserAgentHeader, "kisel");
+    request.setHeader(QNetworkRequest::UserAgentHeader, "kisel"_L1);
 
     m_downloadReply = m_networkManager.get(request);
 
@@ -421,7 +434,7 @@ void CtModel::onDownloadFinished()
         return;
     }
 
-    auto* tempArchive = new QTemporaryFile(QDir::tempPath() + "/" + m_downloadableReleaseName + "_XXXXXX.tar.gz", this);
+    auto* tempArchive = new QTemporaryFile(QDir::tempPath() % "/"_L1 % m_downloadableReleaseName % "_XXXXXX.tar.gz"_L1, this);
 
     if (tempArchive->open()) {
         tempArchive->setAutoRemove(false);
@@ -468,5 +481,5 @@ void CtModel::extractCt(const QString& archivePath)
         }
     });
 
-    m_tarProcess->start("tar", { "-xf", archivePath });
+    m_tarProcess->start("tar"_L1, { "-xf"_L1, archivePath });
 }

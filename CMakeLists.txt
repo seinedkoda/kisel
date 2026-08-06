@@ -1,9 +1,14 @@
 cmake_minimum_required(VERSION 3.19)
-project(Kisel VERSION 1.1.0 LANGUAGES CXX)
+project(Kisel VERSION 1.2.0 LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+
+set(UMU_VERSION "1.4.4")
 
 find_package(Qt6 6.5 REQUIRED COMPONENTS Core Widgets Network LinguistTools)
 qt_standard_project_setup(I18N_TRANSLATED_LANGUAGES en ru)
@@ -27,6 +32,7 @@ qt_add_executable(kisel
     src/process_manager.hpp src/process_manager.cpp
     src/tray_icon.hpp src/tray_icon.cpp
     src/prefix_components_dialog.hpp src/prefix_components_dialog.cpp
+    src/run_config.hpp src/run_config.cpp
 )
 
 qt_add_resources(kisel "resources"
@@ -35,13 +41,37 @@ qt_add_resources(kisel "resources"
     FILES
         "resources/icons/kisel.png"
         "resources/icons/kisel.svg"
+        "resources/icons/thirdparty/Papirus/index.theme"
+        "resources/icons/thirdparty/Papirus/64x64/mimetypes/unknown.svg"
+        "resources/icons/thirdparty/Papirus/16x16/actions/media-playback-start.svg"
+        "resources/icons/thirdparty/Papirus/16x16/actions/media-playback-stop.svg"
+        "resources/icons/thirdparty/Papirus/16x16/actions/open-menu.svg"
+        "resources/icons/thirdparty/Papirus/16x16/actions/configure.svg"
+        "resources/icons/thirdparty/Papirus/16x16/actions/document-open.svg"
+        "resources/icons/thirdparty/Papirus/16x16/actions/document-open-folder.svg"
+        "resources/icons/thirdparty/Papirus/16x16/actions/browser-download.svg"
+        "resources/icons/thirdparty/Papirus/16x16/actions/flag.svg"
+        "resources/icons/thirdparty/Papirus/16x16/actions/link.svg"
+        "resources/icons/thirdparty/Papirus/16x16/actions/tools.svg"
+        "resources/icons/thirdparty/Papirus/16x16/actions/plugins.svg"
+        "resources/icons/thirdparty/Papirus/16x16/actions/tool-wizard.svg"
+        "resources/icons/thirdparty/Papirus/16x16/actions/view-refresh.svg"
+        "resources/icons/thirdparty/Papirus/16x16/actions/view-list-text.svg"
+        "resources/icons/thirdparty/Papirus/16x16/actions/list-add.svg"
+        "resources/icons/thirdparty/Papirus/16x16/actions/list-remove.svg"
+        "resources/icons/thirdparty/Papirus/16x16/actions/edit-clear.svg"
+        "resources/icons/thirdparty/Papirus/16x16/actions/entry-delete.svg"
+        "resources/icons/thirdparty/Papirus/16x16/actions/window-close.svg"
+        "resources/icons/thirdparty/Papirus/16x16/apps/steam.svg"
+        "resources/icons/thirdparty/Papirus/16x16/symbolic/apps/wine-symbolic.svg"
 )
 
 add_dependencies(kisel update_translations)
 
 qt_add_translations(kisel
-    TS_FILE_BASE kisel
-    TS_OUTPUT_DIRECTORY "translations/"
+    TS_FILES
+        translations/kisel_en.ts
+        translations/kisel_ru.ts
     PLURALS_TS_FILE "translations/kisel_en.ts"
     LUPDATE_OPTIONS -no-obsolete
 )
@@ -59,27 +89,60 @@ target_link_libraries(kisel
         Qt::Network
 )
 
+include(FetchContent)
+FetchContent_Declare(
+    umu_launcher_pkg
+    URL "https://github.com/Open-Wine-Components/umu-launcher/releases/download/${UMU_VERSION}/umu-launcher-${UMU_VERSION}-zipapp.tar"
+    DOWNLOAD_EXTRACT_TIMESTAMP  TRUE
+)
+FetchContent_MakeAvailable(umu_launcher_pkg)
+
 install(TARGETS kisel
     BUNDLE  DESTINATION .
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
 
-if(LINUX)
-    include(GNUInstallDirs)
+include(GNUInstallDirs)
 
-    install(TARGETS kisel
-        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-    )
+install(TARGETS kisel
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
 
-    install(
-        FILES "resources/icons/kisel.svg"
-        DESTINATION "share/icons/hicolor/scalable/apps"
-        RENAME "kisel.svg"
-    )
+install(
+    FILES "resources/icons/kisel.svg"
+    DESTINATION share/icons/hicolor/scalable/apps
+    RENAME "kisel.svg"
+)
 
-    install(
-        FILES "resources/kisel.desktop"
-        DESTINATION "share/applications"
-    )
-endif()
+install(
+    FILES "resources/kisel.desktop"
+    DESTINATION share/applications
+)
+
+install(
+    PROGRAMS "${umu_launcher_pkg_SOURCE_DIR}/umu-run"
+    DESTINATION libexec/kisel
+)
+
+set(CPACK_PACKAGE_NAME "kisel")
+set(CPACK_PACKAGE_VERSION "${PROJECT_VERSION}")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Efficient launch of Windows programs")
+set(CPACK_PACKAGE_CONTACT "Seined Koda <seinedk@gmail.com>")
+set(CPACK_PACKAGE_HOMEPAGE_URL "https://github.com/seinedkoda/kisel")
+set(CPACK_PACKAGE_LICENSE "GPLv3")
+set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_PROCESSOR}")
+
+# .rpm (cpack -G RPM)
+set(CPACK_RPM_PACKAGE_ARCHITECTURE "x86_64")
+set(CPACK_RPM_PACKAGE_REQUIRES "qt6-qtbase, icoutils")
+set(CPACK_RPM_PACKAGE_SUGGESTS "winetricks, mangohud, obs-studio-plugin-vkcapture")
+
+# .deb (cpack -G DEB)
+set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "amd64")
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "libqt6widgets6, icoutils")
+set(CPACK_DEBIAN_PACKAGE_SUGGESTS "winetricks, mangohud, obs-vkcapture")
+set(CPACK_DEBIAN_PACKAGE_SECTION "utils")
+set(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
+
+include(CPack)

@@ -22,6 +22,9 @@ public:
     void setLocale(const QString& localeName);
     QString locale();
 
+    void setUseIndividualPrefix(bool useIndividualPrefix);
+    bool useIndividualPrefix();
+
     void setDefaultPrefixPath(const QString& prefixPath);
     QString defaultPrefixPath();
     QString defaultPrefixName();
@@ -35,6 +38,7 @@ public:
     static const QDir& steamDir();
     static bool steamExists();
 
+    static const QString& umuPath();
     static const QString& winetricksPath();
 
 private:

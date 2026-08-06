@@ -23,7 +23,7 @@ AppSettingsWindow::AppSettingsWindow(QWidget* parent)
     auto* layout = new QVBoxLayout(centralWidget);
     setCentralWidget(centralWidget);
 
-    auto* aboutAppBox = new QGroupBox(tr("About the programm"), this);
+    auto* aboutAppBox = new QGroupBox(tr("About the program"), this);
     auto* aboutAppLayout = new QHBoxLayout(aboutAppBox);
     layout->addWidget(aboutAppBox);
 
@@ -39,14 +39,15 @@ AppSettingsWindow::AppSettingsWindow(QWidget* parent)
     aboutAppInfoLayout->setAlignment(Qt::AlignTop);
     aboutAppLayout->addWidget(aboutAppInfoWidget, Qt::AlignLeft);
 
-    auto* nameLabel = new QLabel(tr("<b>Kisel %1 by %2</b>").arg(APP_VERSION, APP_AUTHOR), this);
+    auto* nameLabel = new QLabel(tr("<b>Kisel %1 ©%2</b>").arg(APP_VERSION, APP_AUTHOR), this);
     aboutAppInfoLayout->addWidget(nameLabel);
-
-    auto* licenseLabel = new QLabel(tr("License: GNU GPLv3"), this);
-    aboutAppInfoLayout->addWidget(licenseLabel);
 
     auto* descriptionLabel = new QLabel(tr("<i>Efficient launch of Windows programs</i>"), this);
     aboutAppInfoLayout->addWidget(descriptionLabel);
+
+    auto* sourceCodeLabel = new QLabel(tr("<a href='%1'>Source code (%2)</a>").arg("https://github.com/seinedkoda/kisel", "GNU GPLv3"), this);
+    sourceCodeLabel->setOpenExternalLinks(true);
+    aboutAppInfoLayout->addWidget(sourceCodeLabel);
 
     auto* settingsBox = new QGroupBox(tr("Settings"), this);
     settingsBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -65,16 +66,34 @@ AppSettingsWindow::AppSettingsWindow(QWidget* parent)
     });
     settingsLayout->addWidget(languageComboBox);
 
+    auto* bottomLanguageLine = new QFrame(this);
+    bottomLanguageLine->setFrameShape(QFrame::HLine);
+    settingsLayout->addWidget(bottomLanguageLine);
+
     auto* defaultPrefixLabel = new QLabel(tr("Default prefix"), this);
     settingsLayout->addWidget(defaultPrefixLabel);
+
+    auto* individualPrefixCheckBox = new QCheckBox(tr("Individual"), this);
+    individualPrefixCheckBox->setChecked(APP_SETTINGS->useIndividualPrefix());
+    settingsLayout->addWidget(individualPrefixCheckBox);
 
     auto* prefixComboBox = new QComboBox(this);
     prefixComboBox->setModel(PREFIX_MODEL);
     prefixComboBox->setCurrentText(PREFIX_MODEL->defaultPrefix()->name());
+    prefixComboBox->setDisabled(APP_SETTINGS->useIndividualPrefix());
     connect(prefixComboBox, &QComboBox::currentIndexChanged, this, [](int index) {
         APP_SETTINGS->setDefaultPrefixPath(PREFIX_MODEL->forIndex(index)->path());
     });
     settingsLayout->addWidget(prefixComboBox);
+
+    connect(individualPrefixCheckBox, &QCheckBox::clicked, this, [prefixComboBox](bool checked) {
+        APP_SETTINGS->setUseIndividualPrefix(checked);
+        prefixComboBox->setDisabled(checked);
+    });
+
+    auto* bottomPrefixLine = new QFrame(this);
+    bottomPrefixLine->setFrameShape(QFrame::HLine);
+    settingsLayout->addWidget(bottomPrefixLine);
 
     auto* defaultCtLabel = new QLabel(tr("Default compatibility tool"), this);
     settingsLayout->addWidget(defaultCtLabel);
@@ -82,12 +101,16 @@ AppSettingsWindow::AppSettingsWindow(QWidget* parent)
     auto* ctComboBox = new QComboBox(this);
     ctComboBox->setModel(CT_MODEL);
     if (CT_MODEL->defaultCt() != nullptr) {
-        ctComboBox->setCurrentText(CT_MODEL->defaultCt()->name());
+        ctComboBox->setCurrentIndex(CT_MODEL->ctIndex(CT_MODEL->defaultCt()));
     }
     connect(ctComboBox, &QComboBox::currentIndexChanged, this, [](int index) {
         APP_SETTINGS->setDefaultCtPath(CT_MODEL->forIndex(index)->path());
     });
     settingsLayout->addWidget(ctComboBox);
+
+    auto* bottomCtLine = new QFrame(this);
+    bottomCtLine->setFrameShape(QFrame::HLine);
+    settingsLayout->addWidget(bottomCtLine);
 
     auto* runtimeAutoUpdateCheckBox = new QCheckBox(tr("Runtime auto-update"), this);
     runtimeAutoUpdateCheckBox->setChecked(APP_SETTINGS->runtimeAutoUpdate());

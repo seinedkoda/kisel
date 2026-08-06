@@ -1,14 +1,14 @@
 #include "prefix_components_dialog.hpp"
-#include "app_settings.hpp"
 
 #include <QCloseEvent>
 #include <QGroupBox>
-#include <QHBoxLayout>
 #include <QLabel>
 #include <QMessageBox>
-#include <QSizeGrip>
 #include <QVBoxLayout>
 
+#include "app_settings.hpp"
+
+using namespace Qt::StringLiterals;
 using namespace kisel;
 
 PrefixComponentsDialog::PrefixComponentsDialog(const Prefix& prefix, QWidget* parent)
@@ -16,11 +16,12 @@ PrefixComponentsDialog::PrefixComponentsDialog(const Prefix& prefix, QWidget* pa
     , m_prefix(prefix)
     , m_updateProcess(new QProcess(this))
     , m_installProcess(new QProcess(this))
+    , m_categoryList(new QComboBox(this))
     , m_componentsListWidget(new QListWidget(this))
     , m_searchLineEdit(new QLineEdit(this))
     , m_progressBar(new QProgressBar(this))
     , m_installButton(new QPushButton(QIcon::fromTheme("browser-download"), tr("Install selected"), this))
-    , m_closeButton(new QPushButton(tr("Close"), this))
+    , m_closeButton(new QPushButton(QIcon::fromTheme("window-close"), tr("Close"), this))
 {
     setWindowTitle(tr("Kisel — Prefix Components"));
     setAttribute(Qt::WA_DeleteOnClose);
@@ -28,7 +29,7 @@ PrefixComponentsDialog::PrefixComponentsDialog(const Prefix& prefix, QWidget* pa
 
     auto* layout = new QVBoxLayout(this);
 
-    auto* prefixTitleLabel = new QLabel(tr("<h3>Preifx \"%1\"</h3>").arg(prefix.name()));
+    auto* prefixTitleLabel = new QLabel(tr("<h3>Prefix \"%1\"</h3>").arg(prefix.name()));
     layout->addWidget(prefixTitleLabel);
 
     auto* titleLabel = new QLabel(tr("Available components for installation:"), this);
@@ -36,6 +37,14 @@ PrefixComponentsDialog::PrefixComponentsDialog(const Prefix& prefix, QWidget* pa
 
     m_componentsListWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     layout->addWidget(m_componentsListWidget);
+
+    auto* categoryLabel = new QLabel(tr("Category"), this);
+    layout->addWidget(categoryLabel);
+
+    m_categoryList->addItem(tr("dlls"), "dlls"_L1);
+    m_categoryList->addItem(tr("fonts"), "fonts"_L1);
+    connect(m_categoryList, &QComboBox::currentIndexChanged, this, [this](int index) { loadComponents(); });
+    layout->addWidget(m_categoryList);
 
     m_searchLineEdit->setPlaceholderText(tr("Search by name"));
     layout->addWidget(m_searchLineEdit);
@@ -64,17 +73,20 @@ PrefixComponentsDialog::PrefixComponentsDialog(const Prefix& prefix, QWidget* pa
 
 void PrefixComponentsDialog::loadComponents()
 {
+    m_componentsListWidget->clear();
     m_componentsListWidget->setEnabled(false);
+    m_categoryList->setEnabled(false);
     m_installButton->setEnabled(false);
     m_searchLineEdit->setEnabled(false);
     m_progressBar->show();
 
-    m_updateProcess->start(APP_SETTINGS->winetricksPath(), { "dlls", "list" });
+    m_updateProcess->start(APP_SETTINGS->winetricksPath(), { m_categoryList->currentData().toString(), "list"_L1 });
 }
 
 void PrefixComponentsDialog::onUpdateFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
     m_componentsListWidget->setEnabled(true);
+    m_categoryList->setEnabled(true);
     m_installButton->setEnabled(true);
     m_searchLineEdit->setEnabled(true);
     m_progressBar->hide();
@@ -85,7 +97,7 @@ void PrefixComponentsDialog::onUpdateFinished(int exitCode, QProcess::ExitStatus
     }
 
     QString output = QString::fromUtf8(m_updateProcess->readAllStandardOutput());
-    const QStringList& lines = output.split('\n', Qt::SkipEmptyParts);
+    const QStringList& lines = output.split(u'\n', Qt::SkipEmptyParts);
 
     for (const QString& line : lines) {
         parseAndAddLine(line.trimmed());
@@ -94,11 +106,11 @@ void PrefixComponentsDialog::onUpdateFinished(int exitCode, QProcess::ExitStatus
 
 void PrefixComponentsDialog::parseAndAddLine(const QString& line)
 {
-    if (line.isEmpty() || line.startsWith("==")) {
+    if (line.isEmpty() || line.startsWith("=="_L1)) {
         return;
     }
 
-    static QRegularExpression re(R"(^([^\s]+)\s+(.*)$)");
+    static QRegularExpression re(R"(^([^\s]+)\s+(.*)$)"_L1);
     QRegularExpressionMatch match = re.match(line);
 
     if (!match.hasMatch()) {
@@ -153,21 +165,23 @@ void PrefixComponentsDialog::installSelected()
     }
 
     m_componentsListWidget->setEnabled(false);
+    m_categoryList->setEnabled(false);
     m_searchLineEdit->setEnabled(false);
     m_installButton->setText(tr("Stop"));
-    m_installButton->setIcon(QIcon::fromTheme("stop"));
+    m_installButton->setIcon(QIcon::fromTheme("media-playback-stop"));
     m_progressBar->show();
 
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-    env.insert("WINEPREFIX", m_prefix.path());
+    env.insert("WINEPREFIX"_L1, m_prefix.path());
     m_installProcess->setProcessEnvironment(env);
 
-    m_installProcess->start(APP_SETTINGS->winetricksPath(), QStringList() << "-q" << selectedItems);
+    m_installProcess->start(APP_SETTINGS->winetricksPath(), QStringList() << "-q"_L1 << selectedItems);
 }
 
 void PrefixComponentsDialog::onInstallFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
     m_componentsListWidget->setEnabled(true);
+    m_categoryList->setEnabled(true);
     m_searchLineEdit->setEnabled(true);
     m_installButton->setText(tr("Install selected"));
     m_installButton->setIcon(QIcon::fromTheme("browser-download"));

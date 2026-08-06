@@ -12,6 +12,7 @@ public:
     explicit Ct(const QString& path, QObject* parent = nullptr);
 
     [[nodiscard]] QString path() const;
+    [[nodiscard]] QDir dir() const;
     [[nodiscard]] QString name() const;
     [[nodiscard]] QIcon icon() const;
     [[nodiscard]] bool exists() const;

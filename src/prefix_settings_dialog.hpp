@@ -10,8 +10,8 @@ namespace kisel {
 class PrefixSettingsDialog : public QDialog {
     Q_OBJECT
 public:
-    explicit PrefixSettingsDialog(Prefix& prefix, QWidget* parent = nullptr);
+    explicit PrefixSettingsDialog(Prefix* prefix, QWidget* parent = nullptr);
 private:
-    Prefix& m_prefix;
+    Prefix* m_prefix;
 };
 }

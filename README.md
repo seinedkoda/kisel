@@ -1,10 +1,14 @@
-[На русском](docs/README_RU.md)
-
 # Kisel
 
 Efficient launch of Windows programs
 
 ![screenshot](resources/screenshot.png)
+
+---
+
+Translations: **[Русский](docs/README_RU.md)**
+
+---
 
 ## Highlights
 - It can run games without Steam using [umu-launcher](https://github.com/Open-Wine-Components/umu-launcher), and with it
@@ -15,30 +19,30 @@ Efficient launch of Windows programs
 - Installing additional prefix dlls
 - OnlineFix Support (Disabled by default)
 - Support for downloading compatibility tools:
-    - Proton-GE (Default)
-    - Proton-CachyOS
+    - [Proton-GE](https://github.com/GloriousEggroll/proton-ge-custom) (Default)
+    - [Proton-CachyOS](https://github.com/CachyOS/proton-cachyos)
 - Configure the following parameters:
     - Runtime auto-update
     - Using Steam or umu-launcher
     - MangoHud
     - OBS Vulkan Game Capture
     - Xalia
+    - NVAPI
     - Wayland driver
+    - HDR
+    - SDL Input
     - Steam Environment
     - WOW64
     - OnlineFix
-- Available translations:
-    - English
-    - Русский
 
 ## Dependencies
-- qt6-base: Graphical interface
-- [umu-launcher](https://github.com/Open-Wine-Components/umu-launcher): Way to launch Windows applications without Steam
-- icoutils: Extracting icons
-- #### Optional:
-    - winetricks: Additional scripts for working with Wine prefix
-    - mangohud: Overlay for monitoring FPS, temperature, CPU/GPU load
-    - obs-vkcapture: Vulkan game capture plugin for OBS
+- **qt6-base**: Graphical interface
+- **[umu-launcher](https://github.com/Open-Wine-Components/umu-launcher)**: Way to launch Windows applications without Steam
+- **icoutils**: Extracting icons
+- ### Optional:
+    - **winetricks**: Additional scripts for working with Wine prefix
+    - **mangohud**: Overlay for monitoring FPS, temperature, CPU/GPU load
+    - **obs-vkcapture**: Vulkan game capture plugin for OBS
 
 ## Installation
 
@@ -60,4 +64,12 @@ cmake -B build -DCMAKE_BUILD_TYPE=Release && cmake --build build
 ```
 
 ## License
-*GPL-3.0*
+This project is licensed under the **GNU General Public License v3.0** (GPLv3).
+For more information, see the file [LICENSE](LICENSE).
+
+### Third-Party Resources
+
+- **[Papirus Icon Theme](https://github.com/PapirusDevelopmentTeam/papirus-icon-theme)** - fallback icons theme
+  - **Author:** Papirus Development Team
+  - **License:** [GNU General Public License v3.0 (GPLv3)](resources/icons/thirdparty/Papirus/LICENSE)
+  - **Changes:** Changed index.theme, removed unused icons

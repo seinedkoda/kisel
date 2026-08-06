@@ -1,47 +1,41 @@
 #pragma once
 
-#include <QFileInfo>
-#include <QProcess>
-#include <QString>
-
-#include "prefix.hpp"
+#include "run_config.hpp"
 
 namespace kisel {
-enum class ShortcutDestination {
-    Menu,
-    Desktop
-};
-
 class ExecutableFile : public QObject {
     Q_OBJECT
 
 public:
-    explicit ExecutableFile(const QString& path, QObject* parent = nullptr);
+    enum ShortcutDestination {
+        Menu,
+        Desktop
+    };
+    Q_ENUM(ShortcutDestination)
+
+    explicit ExecutableFile(const QString& path = "", QObject* parent = nullptr);
 
     void setPath(const QString& newPath);
     [[nodiscard]] QString path() const;
     [[nodiscard]] QString dirPath() const;
     [[nodiscard]] QString name() const;
     [[nodiscard]] QString baseName() const;
-    [[nodiscard]] Prefix* prefix() const;
     [[nodiscard]] bool isValid() const;
     const QIcon& icon();
-    void setPrefix(Prefix* prefix);
-    void setPrefixName(const QString& prefixName);
     void createShortcut(
+        const Prefix& prefix,
         QString shortcutName = "",
-        ShortcutDestination shortcutDest = ShortcutDestination::Menu,
-        const QString& category = "");
+        ShortcutDestination shortcutDest = Menu,
+        const QString& category = "") const;
 
 private:
     void loadIcon();
     [[nodiscard]] QString findBestIconGroupName() const;
     [[nodiscard]] bool extractIconGroup(const QString& groupName, const QString& outputPath) const;
-    QString saveIconWithHashName(const QDir& outputDir);
+    [[nodiscard]] QString saveIconWithHashName(const QDir& outputDir) const;
 
     QFileInfo m_fileInfo;
     QIcon m_icon;
-    QPointer<Prefix> m_prefix = nullptr;
     bool m_needUpdateIcon;
 };
 }
