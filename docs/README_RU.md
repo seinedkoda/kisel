@@ -13,21 +13,21 @@
 - Установка дополнительных DLL-файлов в префиксы
 - Поддержка OnlineFix (по умолчанию отключено)
 - Поддержка загрузки инструментов совместимости:
-    - Proton-GE (по умолчанию)
-    - Proton-CachyOS
+    - [Proton-GE]([Proton-GE](https://github.com/GloriousEggroll/proton-ge-custom)) (по умолчанию)
+    - [Proton-CachyOS]([Proton-CachyOS](https://github.com/CachyOS/proton-cachyos))
 - Настройка следующих параметров:
     - Автоматическое обновление среды выполнения
     - Использование Steam или umu-launcher
     - MangoHud
     - OBS Vulkan Game Capture
     - Xalia
+    - NVAPI
     - Драйвер Wayland
+    - HDR
+    - SDL Input
     - Использование среды Steam
     - WOW64
     - OnlineFix
-- Доступные переводы:
-    - English
-    - Русский
 
 ## Зависимости
 - **qt6-base**: Графический интерфейс

@@ -109,6 +109,12 @@ const QString& AppSettings::winetricksPath() {
 }
 
 const QString& AppSettings::umuPath() {
-    static QString umuPath = QStandardPaths::findExecutable("umu-run"_L1);
-    return umuPath;
+    static QString builtinUmuPath = "/usr/libexec/kisel/umu-run"_L1;
+    static bool builtinUmuExists = QFileInfo::exists(builtinUmuPath);
+    if (builtinUmuExists) {
+        return builtinUmuPath;
+    }
+
+    static QString systemUmuPath = QStandardPaths::findExecutable("umu-run"_L1);
+    return systemUmuPath;
 }

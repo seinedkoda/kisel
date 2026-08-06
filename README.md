@@ -1,10 +1,14 @@
-[На русском](docs/README_RU.md)
-
 # Kisel
 
 Efficient launch of Windows programs
 
 ![screenshot](resources/screenshot.png)
+
+---
+
+Translations: **[Русский](docs/README_RU.md)**
+
+---
 
 ## Highlights
 - It can run games without Steam using [umu-launcher](https://github.com/Open-Wine-Components/umu-launcher), and with it
@@ -15,21 +19,21 @@ Efficient launch of Windows programs
 - Installing additional prefix dlls
 - OnlineFix Support (Disabled by default)
 - Support for downloading compatibility tools:
-    - Proton-GE (Default)
-    - Proton-CachyOS
+    - [Proton-GE](https://github.com/GloriousEggroll/proton-ge-custom) (Default)
+    - [Proton-CachyOS](https://github.com/CachyOS/proton-cachyos)
 - Configure the following parameters:
     - Runtime auto-update
     - Using Steam or umu-launcher
     - MangoHud
     - OBS Vulkan Game Capture
     - Xalia
+    - NVAPI
     - Wayland driver
+    - HDR
+    - SDL Input
     - Steam Environment
     - WOW64
     - OnlineFix
-- Available translations:
-    - English
-    - Русский
 
 ## Dependencies
 - **qt6-base**: Graphical interface

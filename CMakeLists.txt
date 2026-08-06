@@ -111,33 +111,35 @@ install(TARGETS kisel
 
 install(
     FILES "resources/icons/kisel.svg"
-    DESTINATION "share/icons/hicolor/scalable/apps"
+    DESTINATION share/icons/hicolor/scalable/apps
     RENAME "kisel.svg"
 )
 
 install(
     FILES "resources/kisel.desktop"
-    DESTINATION "share/applications"
+    DESTINATION share/applications
 )
 
 install(
     PROGRAMS "${umu_launcher_pkg_SOURCE_DIR}/umu-run"
-    DESTINATION bin
+    DESTINATION libexec/kisel
 )
 
 set(CPACK_PACKAGE_NAME "kisel")
 set(CPACK_PACKAGE_VERSION "${PROJECT_VERSION}")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Efficient launch of Windows programs")
 set(CPACK_PACKAGE_CONTACT "Seined Koda <seinedk@gmail.com>")
+set(CPACK_PACKAGE_HOMEPAGE_URL "https://github.com/seinedkoda/kisel")
+set(CPACK_PACKAGE_LICENSE "GPLv3")
+set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_PROCESSOR}")
 
 # .rpm (cpack -G RPM)
-set(CPACK_GENERATOR "RPM")
+set(CPACK_RPM_PACKAGE_ARCHITECTURE "x86_64")
 set(CPACK_RPM_PACKAGE_REQUIRES "qt6-qtbase, icoutils")
 set(CPACK_RPM_PACKAGE_SUGGESTS "winetricks, mangohud, obs-studio-plugin-vkcapture")
-set(CPACK_RPM_PACKAGE_AUTOREQ "YES")
-set(CPACK_RPM_PACKAGE_AUTOPROV "YES")
 
 # .deb (cpack -G DEB)
+set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "amd64")
 set(CPACK_DEBIAN_PACKAGE_DEPENDS "libqt6widgets6, icoutils")
 set(CPACK_DEBIAN_PACKAGE_SUGGESTS "winetricks, mangohud, obs-vkcapture")
 set(CPACK_DEBIAN_PACKAGE_SECTION "utils")

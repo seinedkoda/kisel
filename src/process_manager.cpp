@@ -40,7 +40,8 @@ void ProcessManager::run(const ExecutableFile& exeFile, RunConfig* runConfig)
     // Save run settings
     prefixSettings->setCtPath(ct->path());
 
-    bool useSteam = APP_SETTINGS->steamExists() && prefixSettings->steamEnabled();
+    const QString& umuPath = APP_SETTINGS->umuPath();
+    const bool useSteam = APP_SETTINGS->steamExists() && prefixSettings->steamEnabled();
 
     static auto y = "1"_L1;
     static auto n = "0"_L1;
@@ -82,7 +83,7 @@ void ProcessManager::run(const ExecutableFile& exeFile, RunConfig* runConfig)
         }
     } else {
         // Launching without of Steam
-        m_process.setProgram(APP_SETTINGS->umuPath());
+        m_process.setProgram(umuPath);
         m_process.setArguments({ exeFile.path() });
 
         env.insert("PROTONPATH"_L1, ct->path());
@@ -93,11 +94,14 @@ void ProcessManager::run(const ExecutableFile& exeFile, RunConfig* runConfig)
     m_process.setProcessEnvironment(env);
     m_process.setWorkingDirectory(exeFile.dirPath());
 
-    qDebug() << "Use Steam:"_L1 << useSteam;
-    qDebug() << "Executable:"_L1 << exeFile.name();
-    qDebug() << "Prefix:"_L1 << prefix->name();
-    qDebug() << "Compatibility tool:"_L1 << ct->name();
-    qDebug() << "Runtime auto-update:"_L1 << APP_SETTINGS->runtimeAutoUpdate();
+    qDebug() << "Use Steam:" << useSteam;
+    if (!useSteam) {
+        qDebug() << "UMU:" << umuPath;
+    }
+    qDebug() << "Executable:" << exeFile.name();
+    qDebug() << "Prefix:" << prefix->name();
+    qDebug() << "Compatibility tool:" << ct->name();
+    qDebug() << "Runtime auto-update:" << APP_SETTINGS->runtimeAutoUpdate();
 
     m_process.start();
 }
@@ -125,12 +129,12 @@ void ProcessManager::runUninstaller(const Prefix* prefix)
 void ProcessManager::runWinetricksUtility(const QString& utilName, const Prefix* prefix)
 {
     if (APP_SETTINGS->winetricksPath().isEmpty()) {
-        showError("\"winetricks\" not found", RunningError::NoWinetricks);
+        showError("\"winetricks\" not found", NoWinetricks);
         return;
     }
 
     if (APP_SETTINGS->umuPath().isEmpty()) {
-        showError("\"umu-run\" not found", RunningError::NoUmu);
+        showError("\"umu-run\" not found", NoUmu);
         return;
     }
 
@@ -154,17 +158,17 @@ void ProcessManager::runWinetricksUtility(const QString& utilName, const Prefix*
 bool ProcessManager::preRunCheck(const ExecutableFile& exeFile, RunConfig* runConfig)
 {
     if (!exeFile.isValid()) {
-        showError("The executable file is not valid", RunningError::InvalidExecutable);
+        showError("The executable file is not valid", InvalidExecutable);
         return false;
     }
 
     if (m_process.state() == QProcess::Running) {
-        showError("The executable file is currently running", RunningError::AlreadyRunning);
+        showError("The executable file is currently running", AlreadyRunning);
         return false;
     }
 
     if (APP_SETTINGS->umuPath().isEmpty()) {
-        showError("\"umu-run\" not found", RunningError::NoUmu);
+        showError("\"umu-run\" not found", NoUmu);
         return false;
     }
 
@@ -176,7 +180,7 @@ bool ProcessManager::preRunCheck(const ExecutableFile& exeFile, RunConfig* runCo
 
     if (!prefix->exists()) {
         if (!prefix->makePath()) {
-            showError("Failed to write prefix", RunningError::PrefixWriteError);
+            showError("Failed to write prefix", PrefixWriteError);
             return false;
         }
     }
@@ -185,7 +189,7 @@ bool ProcessManager::preRunCheck(const ExecutableFile& exeFile, RunConfig* runCo
     if (ct == nullptr || ct->path().isEmpty()) {
         Ct* defaultCt = CT_MODEL->defaultCt();
         if (defaultCt == nullptr || defaultCt->path().isEmpty()) {
-            showError("Cannot run with empty compatibility tool", RunningError::InvalidCt);
+            showError("Cannot run with empty compatibility tool", InvalidCt);
             return false;
         }
         runConfig->setCt(defaultCt);
@@ -232,22 +236,22 @@ void ProcessManager::onProcessError(QProcess::ProcessError error)
     QString errorText = m_process.errorString();
     switch (error) {
     case QProcess::FailedToStart:
-        showError(errorText, RunningError::FailedToStart);
+        showError(errorText, FailedToStart);
         break;
     case QProcess::Crashed:
-        showError(errorText, RunningError::Crashed);
+        showError(errorText, Crashed);
         break;
     case QProcess::Timedout:
-        showError(errorText, RunningError::Timedout);
+        showError(errorText, Timedout);
         break;
     case QProcess::ReadError:
-        showError(errorText, RunningError::ReadError);
+        showError(errorText, ReadError);
         break;
     case QProcess::WriteError:
-        showError(errorText, RunningError::WriteError);
+        showError(errorText, WriteError);
         break;
     default:
-        showError(errorText, RunningError::UnknownError);
+        showError(errorText, UnknownError);
         break;
     }
 }
