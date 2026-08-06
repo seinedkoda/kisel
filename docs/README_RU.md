@@ -41,10 +41,21 @@
 ## Установка
 
 ### Arch Linux
-[Скачать последнюю версию pkg.tar.zst](https://github.com/seinedkoda/kisel/releases/latest)
-
+**[Загрузите последнюю версию pkg.tar.zst](https://github.com/seinedkoda/kisel/releases/latest)**
 ```bash
 sudo pacman -U kisel-*.pkg.tar.zst
+```
+
+### Debian
+**[Загрузите последнюю версию deb](https://github.com/seinedkoda/kisel/releases/latest)**
+```bash
+sudo apt install ./kisel-*.deb
+```
+
+### Fedora
+**[Загрузите последнюю версию rpm](https://github.com/seinedkoda/kisel/releases/latest)**
+```bash
+sudo dnf install ./kisel-*.rpm
 ```
 
 ### Сборка из исходного кода с использованием CMake
