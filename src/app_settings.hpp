@@ -38,6 +38,7 @@ public:
     static const QDir& steamDir();
     static bool steamExists();
 
+    static const QString& umuPath();
     static const QString& winetricksPath();
 
 private:

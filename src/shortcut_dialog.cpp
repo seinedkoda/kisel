@@ -118,7 +118,7 @@ ShortcutDialog::ShortcutDialog(ExecutableFile* exeFile, const Prefix& prefix, QW
     });
 
     auto* addButton = new QPushButton(QIcon::fromTheme("list-add"), tr("Add"), this);
-    auto* cancelButton = new QPushButton(QIcon::fromTheme("dialog-cancel"), tr("Cancel"), this);
+    auto* cancelButton = new QPushButton(QIcon::fromTheme("window-close"), tr("Cancel"), this);
 
     auto* buttonBox = new QDialogButtonBox(Qt::Horizontal);
     buttonBox->addButton(addButton, QDialogButtonBox::AcceptRole);

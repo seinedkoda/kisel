@@ -141,108 +141,109 @@
 <context>
     <name>kisel::CtWindow</name>
     <message>
-        <location filename="../src/ct_window.cpp" line="36"/>
+        <location filename="../src/ct_window.cpp" line="35"/>
         <source>Installed compatibility tools:</source>
         <translation>Установленные средства совместимости:</translation>
     </message>
     <message>
-        <location filename="../src/ct_window.cpp" line="44"/>
+        <location filename="../src/ct_window.cpp" line="233"/>
         <source>Open in files</source>
         <translation>Открыть в файлах</translation>
     </message>
     <message>
-        <location filename="../src/ct_window.cpp" line="45"/>
+        <location filename="../src/ct_window.cpp" line="236"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../src/ct_window.cpp" line="47"/>
+        <location filename="../src/ct_window.cpp" line="43"/>
         <source>Install a new tool</source>
         <translation>Установить новое средство</translation>
     </message>
     <message>
-        <location filename="../src/ct_window.cpp" line="58"/>
+        <location filename="../src/ct_window.cpp" line="54"/>
         <source>Version:</source>
         <translation>Версия:</translation>
     </message>
     <message>
-        <location filename="../src/ct_window.cpp" line="72"/>
+        <location filename="../src/ct_window.cpp" line="68"/>
         <source>Installation location:</source>
         <translation>Место установки:</translation>
     </message>
     <message>
-        <location filename="../src/ct_window.cpp" line="26"/>
+        <location filename="../src/ct_window.cpp" line="25"/>
+        <location filename="../src/ct_window.cpp" line="183"/>
         <source>Install</source>
         <translation>Установить</translation>
     </message>
     <message>
-        <location filename="../src/ct_window.cpp" line="28"/>
+        <location filename="../src/ct_window.cpp" line="27"/>
         <source>Kisel — Compatibility Tools</source>
         <translation>Кисель — Средства совместимости</translation>
     </message>
     <message>
-        <location filename="../src/ct_window.cpp" line="51"/>
+        <location filename="../src/ct_window.cpp" line="47"/>
         <source>Source:</source>
         <translation>Источник:</translation>
     </message>
     <message>
-        <location filename="../src/ct_window.cpp" line="111"/>
+        <location filename="../src/ct_window.cpp" line="107"/>
         <source>Cancel the installation process?</source>
         <translation>Отменить процесс установки?</translation>
     </message>
     <message>
-        <location filename="../src/ct_window.cpp" line="150"/>
+        <location filename="../src/ct_window.cpp" line="146"/>
         <source>Error loading releases</source>
         <translation>Ошибка загрузки выпусков</translation>
     </message>
     <message>
-        <location filename="../src/ct_window.cpp" line="159"/>
+        <location filename="../src/ct_window.cpp" line="155"/>
         <source>Cancel</source>
         <translation>Отменить</translation>
     </message>
     <message>
-        <location filename="../src/ct_window.cpp" line="164"/>
+        <location filename="../src/ct_window.cpp" line="160"/>
         <source>Downloading</source>
         <translation>Загрузка</translation>
     </message>
     <message>
-        <location filename="../src/ct_window.cpp" line="178"/>
+        <location filename="../src/ct_window.cpp" line="174"/>
         <source>Extracting</source>
         <translation>Извлечение</translation>
     </message>
     <message>
-        <location filename="../src/ct_window.cpp" line="195"/>
+        <location filename="../src/ct_window.cpp" line="191"/>
         <source>Completed</source>
         <translation>Завершено</translation>
     </message>
     <message>
-        <location filename="../src/ct_window.cpp" line="195"/>
+        <location filename="../src/ct_window.cpp" line="191"/>
         <source>Successfully installed!</source>
         <translation>Успешно установлено</translation>
     </message>
     <message>
-        <location filename="../src/ct_window.cpp" line="201"/>
+        <location filename="../src/ct_window.cpp" line="197"/>
         <source>Install error</source>
         <translation>Ошибка установки</translation>
     </message>
     <message>
-        <location filename="../src/ct_window.cpp" line="111"/>
-        <location filename="../src/ct_window.cpp" line="212"/>
+        <location filename="../src/ct_window.cpp" line="107"/>
+        <location filename="../src/ct_window.cpp" line="208"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../src/ct_window.cpp" line="212"/>
+        <location filename="../src/ct_window.cpp" line="208"/>
         <source>Cancel the installation process and close the window?</source>
         <translation>Отменить процесс установки и закрыть окно?</translation>
     </message>
     <message>
-        <location filename="../src/ct_window.cpp" line="240"/>
+        <location filename="../src/ct_window.cpp" line="238"/>
         <source>Confirm</source>
         <translation>Подтвердить</translation>
     </message>
     <message>
-        <location filename="../src/ct_window.cpp" line="240"/>
+        <location filename="../src/ct_window.cpp" line="238"/>
         <source>Remove &quot;%1&quot;?</source>
         <translation>Удалить &quot;%1&quot;?</translation>
     </message>

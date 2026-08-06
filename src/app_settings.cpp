@@ -107,3 +107,8 @@ const QString& AppSettings::winetricksPath() {
     static QString winetricksPath = QStandardPaths::findExecutable("winetricks"_L1);
     return winetricksPath;
 }
+
+const QString& AppSettings::umuPath() {
+    static QString umuPath = QStandardPaths::findExecutable("umu-run"_L1);
+    return umuPath;
+}

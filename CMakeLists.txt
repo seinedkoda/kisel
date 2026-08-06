@@ -8,6 +8,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
+set(UMU_VERSION "1.4.4")
+
 find_package(Qt6 6.5 REQUIRED COMPONENTS Core Widgets Network LinguistTools)
 qt_standard_project_setup(I18N_TRANSLATED_LANGUAGES en ru)
 
@@ -87,27 +89,58 @@ target_link_libraries(kisel
         Qt::Network
 )
 
+include(FetchContent)
+FetchContent_Declare(
+    umu_launcher_pkg
+    URL "https://github.com/Open-Wine-Components/umu-launcher/releases/download/${UMU_VERSION}/umu-launcher-${UMU_VERSION}-zipapp.tar"
+    DOWNLOAD_EXTRACT_TIMESTAMP  TRUE
+)
+FetchContent_MakeAvailable(umu_launcher_pkg)
+
 install(TARGETS kisel
     BUNDLE  DESTINATION .
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
 
-if(LINUX)
-    include(GNUInstallDirs)
+include(GNUInstallDirs)
 
-    install(TARGETS kisel
-        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-    )
+install(TARGETS kisel
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
 
-    install(
-        FILES "resources/icons/kisel.svg"
-        DESTINATION "share/icons/hicolor/scalable/apps"
-        RENAME "kisel.svg"
-    )
+install(
+    FILES "resources/icons/kisel.svg"
+    DESTINATION "share/icons/hicolor/scalable/apps"
+    RENAME "kisel.svg"
+)
 
-    install(
-        FILES "resources/kisel.desktop"
-        DESTINATION "share/applications"
-    )
-endif()
+install(
+    FILES "resources/kisel.desktop"
+    DESTINATION "share/applications"
+)
+
+install(
+    PROGRAMS "${umu_launcher_pkg_SOURCE_DIR}/umu-run"
+    DESTINATION bin
+)
+
+set(CPACK_PACKAGE_NAME "kisel")
+set(CPACK_PACKAGE_VERSION "${PROJECT_VERSION}")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Efficient launch of Windows programs")
+set(CPACK_PACKAGE_CONTACT "Seined Koda <seinedk@gmail.com>")
+
+# .rpm (cpack -G RPM)
+set(CPACK_GENERATOR "RPM")
+set(CPACK_RPM_PACKAGE_REQUIRES "qt6-qtbase, icoutils")
+set(CPACK_RPM_PACKAGE_SUGGESTS "winetricks, mangohud, obs-studio-plugin-vkcapture")
+set(CPACK_RPM_PACKAGE_AUTOREQ "YES")
+set(CPACK_RPM_PACKAGE_AUTOPROV "YES")
+
+# .deb (cpack -G DEB)
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "libqt6widgets6, icoutils")
+set(CPACK_DEBIAN_PACKAGE_SUGGESTS "winetricks, mangohud, obs-vkcapture")
+set(CPACK_DEBIAN_PACKAGE_SECTION "utils")
+set(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
+
+include(CPack)

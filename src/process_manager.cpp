@@ -82,7 +82,7 @@ void ProcessManager::run(const ExecutableFile& exeFile, RunConfig* runConfig)
         }
     } else {
         // Launching without of Steam
-        m_process.setProgram("umu-run"_L1);
+        m_process.setProgram(APP_SETTINGS->umuPath());
         m_process.setArguments({ exeFile.path() });
 
         env.insert("PROTONPATH"_L1, ct->path());
@@ -129,7 +129,7 @@ void ProcessManager::runWinetricksUtility(const QString& utilName, const Prefix*
         return;
     }
 
-    if (QStandardPaths::findExecutable("umu-run"_L1).isEmpty()) {
+    if (APP_SETTINGS->umuPath().isEmpty()) {
         showError("\"umu-run\" not found", RunningError::NoUmu);
         return;
     }
@@ -145,8 +145,8 @@ void ProcessManager::runWinetricksUtility(const QString& utilName, const Prefix*
     env.insert("WINEPREFIX"_L1, prefix->path());
 
     m_process.setProcessEnvironment(env);
-    m_process.setProgram("umu-run"_L1);
-    m_process.setArguments({ "winetricks"_L1, utilName });
+    m_process.setProgram(APP_SETTINGS->umuPath());
+    m_process.setArguments({ APP_SETTINGS->winetricksPath(), utilName });
 
     m_process.start();
 }
@@ -160,6 +160,11 @@ bool ProcessManager::preRunCheck(const ExecutableFile& exeFile, RunConfig* runCo
 
     if (m_process.state() == QProcess::Running) {
         showError("The executable file is currently running", RunningError::AlreadyRunning);
+        return false;
+    }
+
+    if (APP_SETTINGS->umuPath().isEmpty()) {
+        showError("\"umu-run\" not found", RunningError::NoUmu);
         return false;
     }
 
