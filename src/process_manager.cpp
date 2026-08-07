@@ -150,7 +150,7 @@ void ProcessManager::runWinetricksUtility(const QString& utilName, const Prefix*
 
     m_process.setProcessEnvironment(env);
     m_process.setProgram(APP_SETTINGS->umuPath());
-    m_process.setArguments({ APP_SETTINGS->winetricksPath(), utilName });
+    m_process.setArguments({ "winetricks", utilName }); // Don't use winetricks path!
 
     m_process.start();
 }

@@ -101,7 +101,7 @@ PrefixSettingsDialog::PrefixSettingsDialog(Prefix* prefix, QWidget* parent)
     tabWidget->addTab(serviceTab, QIcon::fromTheme("flag"), tr("Services"));
 
     auto* mangohudCheckBox = new QCheckBox("MangoHud"_L1, this);
-    mangohudCheckBox->setEnabled(!QStandardPaths::findExecutable("mangohud"_L1).isEmpty());
+    mangohudCheckBox->setDisabled(APP_SETTINGS->mangoHudPath().isEmpty());
     mangohudCheckBox->setToolTip(tr("Enable Performance Monitor (requires mangohud to be installed)"));
     mangohudCheckBox->setChecked(m_prefix->settings()->mangoHudEnabled());
     connect(mangohudCheckBox, &QCheckBox::clicked, this, [this](bool checked) {
@@ -110,7 +110,7 @@ PrefixSettingsDialog::PrefixSettingsDialog(Prefix* prefix, QWidget* parent)
     serviceTabLayout->addWidget(mangohudCheckBox);
 
     auto* obsVkCaptureCheckBox = new QCheckBox("OBS Vulkan Capture"_L1, this);
-    obsVkCaptureCheckBox->setEnabled(!QStandardPaths::findExecutable("obs-vkcapture"_L1).isEmpty());
+    obsVkCaptureCheckBox->setDisabled(APP_SETTINGS->obsVkCapturePath().isEmpty());
     obsVkCaptureCheckBox->setToolTip(tr("Enable Vulkan app screen capture for OBS (requires obs-vkcapture to be installed)"));
     obsVkCaptureCheckBox->setChecked(m_prefix->settings()->obsVkCaptureEnabled());
     connect(obsVkCaptureCheckBox, &QCheckBox::clicked, this, [this](bool checked) {

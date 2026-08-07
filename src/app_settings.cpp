@@ -1,6 +1,7 @@
 #include "app_settings.hpp"
 
 #include <QFileInfo>
+#include <QProcessEnvironment>
 #include <QStandardPaths>
 
 using namespace Qt::StringLiterals;
@@ -43,16 +44,23 @@ void AppSettings::setLocale(const QString& localeName)
     setValue("locale"_L1, localeName);
 }
 
-QString AppSettings::locale()
+QString AppSettings::locale() const
 {
     return value("locale"_L1, QLocale::system().name()).toString();
 }
 
-void AppSettings::setUseIndividualPrefix(bool useIndividualPrefix) {
+bool AppSettings::isFlatpak()
+{
+    return QProcessEnvironment::systemEnvironment().contains("FLATPAK_ID"_L1);
+}
+
+void AppSettings::setUseIndividualPrefix(bool useIndividualPrefix)
+{
     setValue("individualPrefix"_L1, useIndividualPrefix);
 }
 
-bool AppSettings::useIndividualPrefix() {
+bool AppSettings::useIndividualPrefix() const
+{
     return value("individualPrefix"_L1, false).toBool();
 }
 
@@ -61,13 +69,13 @@ void AppSettings::setDefaultPrefixPath(const QString& prefixPath)
     setValue("defaultPrefix"_L1, prefixPath);
 }
 
-QString AppSettings::defaultPrefixPath()
+QString AppSettings::defaultPrefixPath() const
 {
     static QString defaultPrefixPath = appDataDir().filePath("prefixes/Default/"_L1);
     return value("defaultPrefix"_L1, defaultPrefixPath).toString();
 }
 
-QString AppSettings::defaultPrefixName()
+QString AppSettings::defaultPrefixName() const
 {
     const QString defaultPrefixName = QFileInfo(defaultPrefixPath()).fileName();
     return defaultPrefixName.isEmpty() ? "Default"_L1 : defaultPrefixName;
@@ -78,7 +86,7 @@ void AppSettings::setDefaultCtPath(const QString& ctPath)
     setValue("defaultCt"_L1, ctPath);
 }
 
-QString AppSettings::defaultCtPath()
+QString AppSettings::defaultCtPath() const
 {
     return value("defaultCt"_L1).toString();
 }
@@ -88,33 +96,59 @@ void AppSettings::setRuntimeAutoUpdate(bool enable)
     setValue("runtimeAutoUpdate"_L1, enable);
 }
 
-bool AppSettings::runtimeAutoUpdate()
+bool AppSettings::runtimeAutoUpdate() const
 {
     return value("runtimeAutoUpdate"_L1, true).toBool();
 }
 
-const QDir& AppSettings::steamDir() {
+const QDir& AppSettings::steamDir()
+{
     static QDir steamDir(QDir::homePath() % "/.local/share/Steam"_L1);
     return steamDir;
 }
 
-bool AppSettings::steamExists() {
+bool AppSettings::steamExists()
+{
     static bool steamExists = steamDir().exists();
     return steamExists;
 }
 
-const QString& AppSettings::winetricksPath() {
-    static QString winetricksPath = QStandardPaths::findExecutable("winetricks"_L1);
-    return winetricksPath;
+void AppSettings::setUseSystemUMU(bool use)
+{
+    setValue("useSystemUmu", use);
 }
 
-const QString& AppSettings::umuPath() {
-    static QString builtinUmuPath = "/usr/libexec/kisel/umu-run"_L1;
-    static bool builtinUmuExists = QFileInfo::exists(builtinUmuPath);
-    if (builtinUmuExists) {
-        return builtinUmuPath;
+bool AppSettings::useSystemUMU() const
+{
+    return value("useSystemUmu", false).toBool();
+}
+
+QString AppSettings::umuPath() const
+{
+    if (isFlatpak()) {
+        return "/app/libexec/kisel/umu-run"_L1;
+    }
+
+    if (!useSystemUMU()) {
+        return "/usr/libexec/kisel/umu-run"_L1;
     }
 
     static QString systemUmuPath = QStandardPaths::findExecutable("umu-run"_L1);
     return systemUmuPath;
+}
+
+const QString& AppSettings::winetricksPath()
+{
+    static QString winetricksPath = QStandardPaths::findExecutable("winetricks"_L1);
+    return winetricksPath;
+}
+
+const QString& AppSettings::mangoHudPath() {
+    static QString mangoHudPath = QStandardPaths::findExecutable("mangohud"_L1);
+    return mangoHudPath;
+}
+
+const QString& AppSettings::obsVkCapturePath() {
+    static QString obsVkCapturePath = QStandardPaths::findExecutable("obs-gamecapture"_L1);
+    return obsVkCapturePath;
 }

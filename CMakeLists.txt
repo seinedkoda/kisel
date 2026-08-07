@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.19)
-project(Kisel VERSION 1.2.0 LANGUAGES CXX)
+project(Kisel VERSION 1.3.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -33,6 +33,7 @@ qt_add_executable(kisel
     src/tray_icon.hpp src/tray_icon.cpp
     src/prefix_components_dialog.hpp src/prefix_components_dialog.cpp
     src/run_config.hpp src/run_config.cpp
+    src/about_dialog.hpp src/about_dialog.cpp
 )
 
 qt_add_resources(kisel "resources"
@@ -52,6 +53,7 @@ qt_add_resources(kisel "resources"
         "resources/icons/thirdparty/Papirus/16x16/actions/browser-download.svg"
         "resources/icons/thirdparty/Papirus/16x16/actions/flag.svg"
         "resources/icons/thirdparty/Papirus/16x16/actions/link.svg"
+        "resources/icons/thirdparty/Papirus/16x16/actions/help-about.svg"
         "resources/icons/thirdparty/Papirus/16x16/actions/tools.svg"
         "resources/icons/thirdparty/Papirus/16x16/actions/plugins.svg"
         "resources/icons/thirdparty/Papirus/16x16/actions/tool-wizard.svg"

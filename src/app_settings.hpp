@@ -20,26 +20,35 @@ public:
     static const QList<QDir>& ctsDirList();
 
     void setLocale(const QString& localeName);
-    QString locale();
+    [[nodiscard]] QString locale() const;
+
+    static bool isFlatpak();
 
     void setUseIndividualPrefix(bool useIndividualPrefix);
-    bool useIndividualPrefix();
+    [[nodiscard]] bool useIndividualPrefix() const;
 
     void setDefaultPrefixPath(const QString& prefixPath);
-    QString defaultPrefixPath();
-    QString defaultPrefixName();
+    [[nodiscard]] QString defaultPrefixPath() const;
+    [[nodiscard]] QString defaultPrefixName() const;
 
     void setDefaultCtPath(const QString& ctPath);
-    QString defaultCtPath();
+    [[nodiscard]] QString defaultCtPath() const;
 
     void setRuntimeAutoUpdate(bool enable);
-    bool runtimeAutoUpdate();
+    [[nodiscard]] bool runtimeAutoUpdate() const;
 
     static const QDir& steamDir();
     static bool steamExists();
 
-    static const QString& umuPath();
+    void setUseSystemUMU(bool use);
+    [[nodiscard]] bool useSystemUMU() const;
+    [[nodiscard]] QString umuPath() const;
+
     static const QString& winetricksPath();
+
+    static const QString& mangoHudPath();
+
+    static const QString& obsVkCapturePath();
 
 private:
     explicit AppSettings(QObject* parent = nullptr);

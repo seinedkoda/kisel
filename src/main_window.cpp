@@ -11,6 +11,7 @@
 #include <QSizePolicy>
 #include <QVBoxLayout>
 
+#include "about_dialog.hpp"
 #include "app_settings.hpp"
 #include "app_settings_window.hpp"
 #include "ct_model.hpp"
@@ -178,6 +179,14 @@ MainWindow::MainWindow(const QString& exePath)
     m_appSettingsWindowButton->setIcon(QIcon::fromTheme("configure"));
     connect(m_appSettingsWindowButton, &QToolButton::clicked, this, []() { openAppSettingsWindow(); });
     bottomLayout->addWidget(m_appSettingsWindowButton);
+
+    auto* aboutAppButton = new QToolButton(this);
+    aboutAppButton->setIcon(QIcon::fromTheme("help-about"));
+    connect(aboutAppButton, &QToolButton::clicked, this, [this]() {
+        auto* aboutDialog = new AboutDialog(this);
+        aboutDialog->exec();
+    });
+    bottomLayout->addWidget(aboutAppButton);
 
     auto* versionLabel = new QLabel(tr("Version: %1").arg(APP_VERSION), this);
     versionLabel->setEnabled(false);
