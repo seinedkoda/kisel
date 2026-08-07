@@ -6,7 +6,14 @@ Efficient launch of Windows programs
 
 ![screenshot](resources/screenshot.png)
 
-## Highlights
+![C++](https://img.shields.io/badge/c++-%2300599C.svg?style=for-the-badge&logo=c%2B%2B&logoColor=white)
+![Qt](https://img.shields.io/badge/Qt-%23217346.svg?style=for-the-badge&logo=Qt&logoColor=white)
+![CMake](https://img.shields.io/badge/CMake-%23008FBA.svg?style=for-the-badge&logo=cmake&logoColor=white)
+![Arch](https://img.shields.io/badge/Arch%20Linux-1793D1?logo=arch-linux&logoColor=fff&style=for-the-badge)
+![Debian](https://img.shields.io/badge/Debian-D70A53?style=for-the-badge&logo=debian&logoColor=white)
+![Fedora](https://img.shields.io/badge/Fedora-294172?style=for-the-badge&logo=fedora&logoColor=white)
+
+## Highlights 🍒
 - It can run games without Steam using [umu-launcher](https://github.com/Open-Wine-Components/umu-launcher), and with it
 - Compatibility with the Steam environment
 - C++ code and minimal actions to run exe
@@ -31,16 +38,7 @@ Efficient launch of Windows programs
     - WOW64
     - OnlineFix
 
-## Dependencies
-- **qt6-base**: Graphical interface
-- **[umu-launcher](https://github.com/Open-Wine-Components/umu-launcher)**: Way to launch Windows applications without Steam
-- **icoutils**: Extracting icons
-- ### Optional:
-    - **winetricks**: Additional scripts for working with Wine prefix
-    - **mangohud**: Overlay for monitoring FPS, temperature, CPU/GPU load
-    - **obs-vkcapture**: Vulkan game capture plugin for OBS
-
-## Installation
+## Installation 📦
 
 ### Arch Linux
 **[Download the latest version of pkg.tar.zst](https://github.com/seinedkoda/kisel/releases/latest)**
@@ -60,9 +58,17 @@ sudo apt install ./kisel-*.deb
 sudo dnf install ./kisel-*.rpm
 ```
 
-### Build from source using CMake
-
-*Qt6 LinguistTools (qt6-tools) required*
+### Build from source
+- **Dependencies:**
+  - qt6-base
+  - icoutils
+- **Make dependencies:**
+  - cmake
+  - qt6-tools
+- **Optional dependencies:**
+  - winetricks
+  - mangohud
+  - obs-vkcapture
 
 ```bash
 git clone https://github.com/seinedkoda/kisel.git
@@ -70,7 +76,11 @@ cd kisel
 cmake -B build -DCMAKE_BUILD_TYPE=Release && cmake --build build
 ```
 
-## License
+## Support 🥴
+
+**[Boosty](https://boosty.to/seinedk/donate)**
+
+## License 📖
 This project is licensed under the **GNU General Public License v3.0** (GPLv3).
 For more information, see the file [LICENSE](LICENSE).
 
