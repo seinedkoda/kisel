@@ -42,6 +42,7 @@ void ProcessManager::run(const ExecutableFile& exeFile, RunConfig* runConfig)
 
     const QString& umuPath = APP_SETTINGS->umuPath();
     const bool useSteam = APP_SETTINGS->steamExists() && prefixSettings->steamEnabled();
+    const bool needLogging = APP_SETTINGS->loggingEnabled();
 
     static auto y = "1"_L1;
     static auto n = "0"_L1;
@@ -89,19 +90,37 @@ void ProcessManager::run(const ExecutableFile& exeFile, RunConfig* runConfig)
         env.insert("PROTONPATH"_L1, ct->path());
         env.insert("UMU_RUNTIME_UPDATE"_L1, APP_SETTINGS->runtimeAutoUpdate() ? y : n);
         env.insert("UMU_USE_STEAM"_L1, prefixSettings->steamEnvEnabled() ? y : n);
+        env.insert("UMU_LOG"_L1, needLogging ? y : n);
     }
 
     m_process.setProcessEnvironment(env);
     m_process.setWorkingDirectory(exeFile.dirPath());
 
-    qDebug() << "Use Steam:" << useSteam;
-    if (!useSteam) {
-        qDebug() << "UMU:" << umuPath;
+    if (needLogging) {
+        QFile logFile(APP_SETTINGS->logFilePath());
+        if (logFile.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate)) {
+            QTextStream stream(&logFile);
+
+            stream << "=== kisel "_L1 << APP_VERSION << " ===\n"_L1;
+            stream << "OS: "_L1 << QSysInfo::prettyProductName() << u'\n';
+            stream << "TIME: " << QDateTime::currentDateTime().toString(Qt::ISODate) << u'\n';
+            stream << "USE STEAM: "_L1 << static_cast<int>(useSteam) << u'\n';
+            if (!useSteam) {
+                stream << "UMU: "_L1 << umuPath << u'\n';
+            }
+
+            stream << "EXECUTABLE: "_L1 << exeFile.path() << u'\n';
+            stream << "PREFIX: "_L1 << prefix->path() << u'\n';
+            stream << "COMPATIBILITY TOOL: "_L1 << ct->path() << u'\n';
+            stream << "RUNTIME AUTO-UPDATE: " << APP_SETTINGS->runtimeAutoUpdate() << u'\n';
+            stream << "===================\n\n"_L1;
+
+            logFile.close();
+        }
+
+        m_process.setProcessChannelMode(QProcess::MergedChannels);
+        m_process.setStandardOutputFile(APP_SETTINGS->logFilePath(), QIODevice::Append);
     }
-    qDebug() << "Executable:" << exeFile.name();
-    qDebug() << "Prefix:" << prefix->name();
-    qDebug() << "Compatibility tool:" << ct->name();
-    qDebug() << "Runtime auto-update:" << APP_SETTINGS->runtimeAutoUpdate();
 
     m_process.start();
 }
@@ -236,22 +255,22 @@ void ProcessManager::onProcessError(QProcess::ProcessError error)
     QString errorText = m_process.errorString();
     switch (error) {
     case QProcess::FailedToStart:
-        showError(errorText, FailedToStart);
+        showError(errorText, FailedToStart, true);
         break;
     case QProcess::Crashed:
-        showError(errorText, Crashed);
+        showError(errorText, Crashed, true);
         break;
     case QProcess::Timedout:
-        showError(errorText, Timedout);
+        showError(errorText, Timedout, true);
         break;
     case QProcess::ReadError:
-        showError(errorText, ReadError);
+        showError(errorText, ReadError, true);
         break;
     case QProcess::WriteError:
-        showError(errorText, WriteError);
+        showError(errorText, WriteError, true);
         break;
     default:
-        showError(errorText, UnknownError);
+        showError(errorText, UnknownError, true);
         break;
     }
 }

@@ -42,7 +42,6 @@ MainWindow::MainWindow(const QString& exePath)
     , m_prefixMenuButton(new QToolButton(this))
     , m_ctComboBox(new QComboBox(this))
     , m_ctWindowButton(new QToolButton(this))
-    , m_appSettingsWindowButton(new QToolButton(this))
 {
     setWindowTitle(tr("Kisel"));
     setWindowIcon(QIcon(":/icons/kisel.svg"));
@@ -175,10 +174,23 @@ MainWindow::MainWindow(const QString& exePath)
     bottomLayout->setContentsMargins(0, 0, 0, 0);
     layout->addWidget(bottomWidget);
 
-    m_appSettingsWindowButton->setToolTip(tr("Application settings"));
-    m_appSettingsWindowButton->setIcon(QIcon::fromTheme("configure"));
-    connect(m_appSettingsWindowButton, &QToolButton::clicked, this, []() { openAppSettingsWindow(); });
-    bottomLayout->addWidget(m_appSettingsWindowButton);
+    auto* appSettingsWindowButton = new QToolButton(this);
+    appSettingsWindowButton->setToolTip(tr("Application settings"));
+    appSettingsWindowButton->setIcon(QIcon::fromTheme("configure"));
+    connect(appSettingsWindowButton, &QToolButton::clicked, this, []() { openAppSettingsWindow(); });
+    bottomLayout->addWidget(appSettingsWindowButton);
+
+    auto* openLogFileButton = new QToolButton(this);
+    openLogFileButton->setToolTip(tr("Open log file"));
+    openLogFileButton->setIcon(QIcon::fromTheme("text-x-log"));
+    connect(openLogFileButton, &QToolButton::clicked, this, [this]() {
+        if (APP_SETTINGS->loggingEnabled()) {
+            QDesktopServices::openUrl(QUrl::fromLocalFile(APP_SETTINGS->logFilePath()));
+        } else {
+            QMessageBox::information(this, tr("Unable to open"), tr("Logging is disabled in the settings"));
+        }
+    });
+    bottomLayout->addWidget(openLogFileButton);
 
     auto* aboutAppButton = new QToolButton(this);
     aboutAppButton->setIcon(QIcon::fromTheme("help-about"));

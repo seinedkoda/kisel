@@ -79,44 +79,59 @@
 <context>
     <name>kisel::AppSettingsWindow</name>
     <message>
-        <location filename="../src/app_settings_window.cpp" line="22"/>
+        <location filename="../src/app_settings_window.cpp" line="19"/>
         <source>Kisel — Settings</source>
         <translation>Кисель — Настройки</translation>
     </message>
     <message>
-        <location filename="../src/app_settings_window.cpp" line="30"/>
+        <location filename="../src/app_settings_window.cpp" line="27"/>
+        <source>&lt;h3&gt;Global settings&lt;/h3&gt;</source>
+        <translation>&lt;h3&gt;Глобальные настройки&lt;/h3&gt;</translation>
+    </message>
+    <message>
+        <location filename="../src/app_settings_window.cpp" line="34"/>
+        <source>General</source>
+        <translation>Основное</translation>
+    </message>
+    <message>
+        <location filename="../src/app_settings_window.cpp" line="39"/>
         <source>Language</source>
         <translation>Язык</translation>
     </message>
     <message>
-        <location filename="../src/app_settings_window.cpp" line="45"/>
+        <location filename="../src/app_settings_window.cpp" line="61"/>
         <source>Default prefix</source>
         <translation>Префикс по умолчанию</translation>
     </message>
     <message>
-        <location filename="../src/app_settings_window.cpp" line="48"/>
+        <location filename="../src/app_settings_window.cpp" line="64"/>
         <source>Individual</source>
         <translation>Индивидуальный</translation>
     </message>
     <message>
-        <location filename="../src/app_settings_window.cpp" line="70"/>
+        <location filename="../src/app_settings_window.cpp" line="86"/>
         <source>Default compatibility tool</source>
         <translation>Средство совместимости по умолчанию</translation>
     </message>
     <message>
-        <location filename="../src/app_settings_window.cpp" line="91"/>
+        <location filename="../src/app_settings_window.cpp" line="106"/>
         <source>Built-in</source>
         <translation>Встроенный</translation>
     </message>
     <message>
-        <location filename="../src/app_settings_window.cpp" line="92"/>
+        <location filename="../src/app_settings_window.cpp" line="107"/>
         <source>System</source>
         <translation>Системный</translation>
     </message>
     <message>
-        <location filename="../src/app_settings_window.cpp" line="100"/>
+        <location filename="../src/app_settings_window.cpp" line="115"/>
         <source>Runtime auto-update</source>
         <translation>Автоматическое обновление среды выполнения</translation>
+    </message>
+    <message>
+        <location filename="../src/app_settings_window.cpp" line="50"/>
+        <source>Logging</source>
+        <translation>Логирование</translation>
     </message>
 </context>
 <context>
@@ -270,94 +285,94 @@
 <context>
     <name>kisel::MainWindow</name>
     <message>
-        <location filename="../src/main_window.cpp" line="47"/>
+        <location filename="../src/main_window.cpp" line="46"/>
         <source>Kisel</source>
         <translation>Кисель</translation>
     </message>
     <message>
         <location filename="../src/main_window.cpp" line="36"/>
-        <location filename="../src/main_window.cpp" line="221"/>
+        <location filename="../src/main_window.cpp" line="233"/>
         <source>The program is not selected</source>
         <translation>Программа не выбрана</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="96"/>
+        <location filename="../src/main_window.cpp" line="95"/>
         <source>Select executable file</source>
         <translation>Выбрать исполняемый файл</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="107"/>
+        <location filename="../src/main_window.cpp" line="106"/>
         <source>Prefix</source>
         <translation>Префикс</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="125"/>
+        <location filename="../src/main_window.cpp" line="124"/>
         <source>Install components</source>
         <translation>Установить компоненты</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="145"/>
+        <location filename="../src/main_window.cpp" line="144"/>
         <source>Remove programs</source>
         <translation>Удаление программ</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="156"/>
+        <location filename="../src/main_window.cpp" line="155"/>
         <source>Open prefix menu</source>
         <translation>Открыть меню префикса</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="118"/>
+        <location filename="../src/main_window.cpp" line="117"/>
         <source>Configure</source>
         <translation>Настроить</translation>
     </message>
     <message>
         <location filename="../src/main_window.cpp" line="37"/>
-        <location filename="../src/main_window.cpp" line="430"/>
+        <location filename="../src/main_window.cpp" line="442"/>
         <source>Run</source>
         <translation>Запустить</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="123"/>
+        <location filename="../src/main_window.cpp" line="122"/>
         <source>Tools</source>
         <translation>Инструменты</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="128"/>
+        <location filename="../src/main_window.cpp" line="127"/>
         <source>Opening error</source>
         <translation>Ошибка открытия</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="128"/>
+        <location filename="../src/main_window.cpp" line="127"/>
         <source>&quot;winetricks&quot; not found! Please install this package to open this window</source>
         <translation>&quot;winetricks&quot; не найден! Пожалуйста установите этот пакет для открытия этого окна</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="136"/>
+        <location filename="../src/main_window.cpp" line="135"/>
         <source>Wine settings</source>
         <translation>Настройки Wine</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="139"/>
+        <location filename="../src/main_window.cpp" line="138"/>
         <source>Explorer</source>
         <translation>Проводник</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="142"/>
+        <location filename="../src/main_window.cpp" line="141"/>
         <source>Registry</source>
         <translation>Реестр</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="153"/>
+        <location filename="../src/main_window.cpp" line="152"/>
         <source>Manage</source>
         <translation>Управление</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="162"/>
+        <location filename="../src/main_window.cpp" line="161"/>
         <source>Compatibility tool</source>
         <translation>Средство совместимости</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="168"/>
+        <location filename="../src/main_window.cpp" line="167"/>
         <source>Open the Compatibility Tools window</source>
         <translation>Открыть окно управления средствами совместимости</translation>
     </message>
@@ -367,27 +382,37 @@
         <translation>Настройки приложения</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="191"/>
+        <location filename="../src/main_window.cpp" line="190"/>
+        <source>Unable to open</source>
+        <translation>Невозможно открыть</translation>
+    </message>
+    <message>
+        <location filename="../src/main_window.cpp" line="190"/>
+        <source>Logging is disabled in the settings</source>
+        <translation>Логирование отключено в настройках</translation>
+    </message>
+    <message>
+        <location filename="../src/main_window.cpp" line="203"/>
         <source>Version: %1</source>
         <translation>Версия: %1</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="352"/>
+        <location filename="../src/main_window.cpp" line="364"/>
         <source>Select the executable file</source>
         <translation>Выберите исполняемый файл</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="354"/>
+        <location filename="../src/main_window.cpp" line="366"/>
         <source>Executable files (*.exe);;All files (*.*)</source>
         <translation>Исполняемые файлы (*.exe);;Все файлы (*.*)</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="394"/>
+        <location filename="../src/main_window.cpp" line="406"/>
         <source>The required compatibility tool is missing, open window to manage?</source>
         <translation>Отсутствует необходимое средство совместимости, открыть окно для управления?</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="379"/>
+        <location filename="../src/main_window.cpp" line="391"/>
         <source>Running error</source>
         <translation>Ошибка запуска</translation>
     </message>
@@ -397,87 +422,92 @@
         <translation>Индивидуальный</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="82"/>
+        <location filename="../src/main_window.cpp" line="81"/>
         <source>Create shortcut</source>
         <translation>Создать ярлык</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="85"/>
+        <location filename="../src/main_window.cpp" line="84"/>
         <source>Clear</source>
         <translation>Очистить</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="101"/>
+        <location filename="../src/main_window.cpp" line="100"/>
         <source>Environment</source>
         <translation>Окружение</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="148"/>
+        <location filename="../src/main_window.cpp" line="147"/>
         <source>Open in files</source>
         <translation>Открыть в файлах</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="239"/>
+        <location filename="../src/main_window.cpp" line="184"/>
+        <source>Open log file</source>
+        <translation>Открыть отладочный файл</translation>
+    </message>
+    <message>
+        <location filename="../src/main_window.cpp" line="251"/>
         <source>&lt;Select a program&gt;</source>
         <translation>&lt;Выберите программу&gt;</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="382"/>
+        <location filename="../src/main_window.cpp" line="394"/>
         <source>The executable file is currently running</source>
         <translation>Исполняемый файл уже запущен</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="385"/>
+        <location filename="../src/main_window.cpp" line="397"/>
         <source>The executable file is not valid</source>
         <translation>Не подходящий исполняемый файл</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="388"/>
+        <location filename="../src/main_window.cpp" line="400"/>
         <source>Failed to write prefix</source>
         <translation>Не удалось записать префикс</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="400"/>
+        <location filename="../src/main_window.cpp" line="412"/>
         <source>&quot;umu-run&quot; not found</source>
         <translation>Не найден &quot;umu-run&quot;</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="403"/>
+        <location filename="../src/main_window.cpp" line="415"/>
         <source>&quot;winetricks&quot; not found</source>
         <translation>Не найден &quot;winetricks&quot;</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="406"/>
+        <location filename="../src/main_window.cpp" line="418"/>
         <source>Failed to start process: %1</source>
         <translation>Не удалось запустить процесс: %1</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="409"/>
+        <location filename="../src/main_window.cpp" line="421"/>
         <source>Process error: %1</source>
         <translation>Ошибка процесса: %1</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="412"/>
+        <location filename="../src/main_window.cpp" line="424"/>
         <source>Process timeout: %1</source>
         <translation>Истекло время ожидания процесса: %1</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="415"/>
+        <location filename="../src/main_window.cpp" line="427"/>
         <source>Process read error: %1</source>
         <translation>Ошибка чтения процесса: %1</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="418"/>
+        <location filename="../src/main_window.cpp" line="430"/>
         <source>Process write error: %1</source>
         <translation>Ошибка записи процесса: %1</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="421"/>
+        <location filename="../src/main_window.cpp" line="433"/>
         <source>Unknown error: %1</source>
         <translation>Неизвестная ошибка: %1</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="430"/>
+        <location filename="../src/main_window.cpp" line="442"/>
         <source>Stop</source>
         <translation>Остановить</translation>
     </message>

@@ -59,6 +59,5 @@ private:
     QToolButton* m_prefixMenuButton;
     QComboBox* m_ctComboBox;
     QToolButton* m_ctWindowButton;
-    QToolButton* m_appSettingsWindowButton;
 };
 };

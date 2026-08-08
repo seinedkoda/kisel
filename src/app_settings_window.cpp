@@ -5,9 +5,6 @@
 #include <QGroupBox>
 #include <QHBoxLayout>
 #include <QLabel>
-#include <qcombobox.h>
-#include <qlabel.h>
-#include <qnamespace.h>
 
 #include "app_settings.hpp"
 #include "ct_model.hpp"
@@ -23,12 +20,24 @@ AppSettingsWindow::AppSettingsWindow(QWidget* parent)
     setAttribute(Qt::WA_DeleteOnClose);
 
     auto* centralWidget = new QWidget(this);
-    auto* layout = new QVBoxLayout(centralWidget);
-    layout->setAlignment(Qt::AlignTop);
     setCentralWidget(centralWidget);
 
+    auto* layout = new QVBoxLayout(centralWidget);
+
+    auto* titleLabel = new QLabel(tr("<h3>Global settings</h3>"));
+    layout->addWidget(titleLabel);
+
+    auto* tabWidget = new QTabWidget(this);
+    layout->addWidget(tabWidget);
+
+    auto* generalTab = new QWidget(this);
+    tabWidget->addTab(generalTab, tr("General"));
+
+    auto* generalTabLayout = new QVBoxLayout(generalTab);
+    generalTabLayout->setAlignment(Qt::AlignTop);
+
     auto* languageLabel = new QLabel(tr("Language"), this);
-    layout->addWidget(languageLabel);
+    generalTabLayout->addWidget(languageLabel);
 
     auto* languageComboBox = new QComboBox(this);
     languageComboBox->addItems(TRANSLATOR->languageList());
@@ -36,18 +45,25 @@ AppSettingsWindow::AppSettingsWindow(QWidget* parent)
     connect(languageComboBox, &QComboBox::currentTextChanged, this, [](const QString& languageName) {
         TRANSLATOR->saveLanguage(languageName);
     });
-    layout->addWidget(languageComboBox);
+    generalTabLayout->addWidget(languageComboBox);
+
+    auto* loggingCheckBox = new QCheckBox(tr("Logging"), this);
+    loggingCheckBox->setChecked(APP_SETTINGS->loggingEnabled());
+    connect(loggingCheckBox, &QCheckBox::clicked, this, [](bool checked) {
+        APP_SETTINGS->setLoggingEnabled(checked);
+    });
+    generalTabLayout->addWidget(loggingCheckBox);
 
     auto* bottomLanguageLine = new QFrame(this);
     bottomLanguageLine->setFrameShape(QFrame::HLine);
-    layout->addWidget(bottomLanguageLine);
+    generalTabLayout->addWidget(bottomLanguageLine);
 
     auto* defaultPrefixLabel = new QLabel(tr("Default prefix"), this);
-    layout->addWidget(defaultPrefixLabel);
+    generalTabLayout->addWidget(defaultPrefixLabel);
 
     auto* individualPrefixCheckBox = new QCheckBox(tr("Individual"), this);
     individualPrefixCheckBox->setChecked(APP_SETTINGS->useIndividualPrefix());
-    layout->addWidget(individualPrefixCheckBox);
+    generalTabLayout->addWidget(individualPrefixCheckBox);
 
     auto* prefixComboBox = new QComboBox(this);
     prefixComboBox->setModel(PREFIX_MODEL);
@@ -56,7 +72,7 @@ AppSettingsWindow::AppSettingsWindow(QWidget* parent)
     connect(prefixComboBox, &QComboBox::currentIndexChanged, this, [](int index) {
         APP_SETTINGS->setDefaultPrefixPath(PREFIX_MODEL->forIndex(index)->path());
     });
-    layout->addWidget(prefixComboBox);
+    generalTabLayout->addWidget(prefixComboBox);
 
     connect(individualPrefixCheckBox, &QCheckBox::clicked, this, [prefixComboBox](bool checked) {
         APP_SETTINGS->setUseIndividualPrefix(checked);
@@ -65,10 +81,10 @@ AppSettingsWindow::AppSettingsWindow(QWidget* parent)
 
     auto* bottomPrefixLine = new QFrame(this);
     bottomPrefixLine->setFrameShape(QFrame::HLine);
-    layout->addWidget(bottomPrefixLine);
+    generalTabLayout->addWidget(bottomPrefixLine);
 
     auto* defaultCtLabel = new QLabel(tr("Default compatibility tool"), this);
-    layout->addWidget(defaultCtLabel);
+    generalTabLayout->addWidget(defaultCtLabel);
 
     auto* ctComboBox = new QComboBox(this);
     ctComboBox->setModel(CT_MODEL);
@@ -78,14 +94,13 @@ AppSettingsWindow::AppSettingsWindow(QWidget* parent)
     connect(ctComboBox, &QComboBox::currentIndexChanged, this, [](int index) {
         APP_SETTINGS->setDefaultCtPath(CT_MODEL->forIndex(index)->path());
     });
-    layout->addWidget(ctComboBox);
+    generalTabLayout->addWidget(ctComboBox);
 
-    auto* bottomCtLine = new QFrame(this);
-    bottomCtLine->setFrameShape(QFrame::HLine);
-    layout->addWidget(bottomCtLine);
+    auto* umuTab = new QWidget(this);
+    tabWidget->addTab(umuTab, "UMU");
 
-    auto* umuLabel = new QLabel("UMU", this);
-    layout->addWidget(umuLabel);
+    auto* umuTabLayout = new QVBoxLayout(umuTab);
+    umuTabLayout->setAlignment(Qt::AlignTop);
 
     auto* umuPathComboBox = new QComboBox(this);
     umuPathComboBox->addItem(tr("Built-in"), false);
@@ -95,12 +110,12 @@ AppSettingsWindow::AppSettingsWindow(QWidget* parent)
         APP_SETTINGS->setUseSystemUMU(umuPathComboBox->currentData().toBool());
     });
     umuPathComboBox->setDisabled(APP_SETTINGS->isFlatpak());
-    layout->addWidget(umuPathComboBox);
+    umuTabLayout->addWidget(umuPathComboBox);
 
     auto* runtimeAutoUpdateCheckBox = new QCheckBox(tr("Runtime auto-update"), this);
     runtimeAutoUpdateCheckBox->setChecked(APP_SETTINGS->runtimeAutoUpdate());
     connect(runtimeAutoUpdateCheckBox, &QCheckBox::clicked, this, [](bool checked) {
         APP_SETTINGS->setRuntimeAutoUpdate(checked);
     });
-    layout->addWidget(runtimeAutoUpdateCheckBox);
+    umuTabLayout->addWidget(runtimeAutoUpdateCheckBox);
 }

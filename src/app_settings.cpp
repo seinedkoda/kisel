@@ -24,6 +24,11 @@ const QDir& AppSettings::appDataDir()
     return dir;
 }
 
+const QString& AppSettings::logFilePath() {
+    static QString logFilePath = appDataDir().filePath("run.log");
+    return logFilePath;
+}
+
 const QDir& AppSettings::prefixesDir()
 {
     static QDir dir(appDataDir().filePath("prefixes/"_L1));
@@ -91,14 +96,22 @@ QString AppSettings::defaultCtPath() const
     return value("defaultCt"_L1).toString();
 }
 
-void AppSettings::setRuntimeAutoUpdate(bool enable)
+void AppSettings::setRuntimeAutoUpdate(bool enabled)
 {
-    setValue("runtimeAutoUpdate"_L1, enable);
+    setValue("runtimeAutoUpdate"_L1, enabled);
 }
 
 bool AppSettings::runtimeAutoUpdate() const
 {
     return value("runtimeAutoUpdate"_L1, true).toBool();
+}
+
+void AppSettings::setLoggingEnabled(bool enabled) {
+    setValue("logging"_L1, enabled);
+}
+
+bool AppSettings::loggingEnabled() const {
+    return value("logging"_L1, false).toBool();
 }
 
 const QDir& AppSettings::steamDir()
@@ -115,12 +128,12 @@ bool AppSettings::steamExists()
 
 void AppSettings::setUseSystemUMU(bool use)
 {
-    setValue("useSystemUmu", use);
+    setValue("useSystemUmu"_L1, use);
 }
 
 bool AppSettings::useSystemUMU() const
 {
-    return value("useSystemUmu", false).toBool();
+    return value("useSystemUmu"_L1, false).toBool();
 }
 
 QString AppSettings::umuPath() const

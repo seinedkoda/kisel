@@ -16,6 +16,7 @@ public:
     static AppSettings* instance();
 
     static const QDir& appDataDir();
+    static const QString& logFilePath();
     static const QDir& prefixesDir();
     static const QList<QDir>& ctsDirList();
 
@@ -34,8 +35,11 @@ public:
     void setDefaultCtPath(const QString& ctPath);
     [[nodiscard]] QString defaultCtPath() const;
 
-    void setRuntimeAutoUpdate(bool enable);
+    void setRuntimeAutoUpdate(bool enabled);
     [[nodiscard]] bool runtimeAutoUpdate() const;
+
+    void setLoggingEnabled(bool enabled);
+    [[nodiscard]] bool loggingEnabled() const;
 
     static const QDir& steamDir();
     static bool steamExists();
