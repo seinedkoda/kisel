@@ -363,7 +363,7 @@ void MainWindow::onExeSelectionClicked()
             this,
             tr("Select the executable file"),
             m_lastSearchPath,
-            tr("Executable files (*.exe);;All files (*.*)")));
+            tr("Executable files (*.exe *.msi *.bat);;All files (*.*)")));
 
     if (exeFileInfo.exists()) {
         m_lastSearchPath = exeFileInfo.dir().path();

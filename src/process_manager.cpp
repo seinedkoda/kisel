@@ -85,7 +85,15 @@ void ProcessManager::run(const ExecutableFile& exeFile, RunConfig* runConfig)
     } else {
         // Launching without of Steam
         m_process.setProgram(umuPath);
-        m_process.setArguments({ exeFile.path() });
+        QStringList args;
+        if (exeFile.isMsi()) {
+            args.append({ "msiexec", "/i", exeFile.path() });
+        } else if (exeFile.isCmd()) {
+            args.append({ "cmd", "/c", exeFile.path() });
+        } else {
+            args.append(exeFile.path());
+        }
+        m_process.setArguments(args);
 
         env.insert("PROTONPATH"_L1, ct->path());
         env.insert("UMU_RUNTIME_UPDATE"_L1, APP_SETTINGS->runtimeAutoUpdate() ? y : n);

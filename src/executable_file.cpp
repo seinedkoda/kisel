@@ -44,6 +44,24 @@ QString ExecutableFile::baseName() const
     return m_fileInfo.baseName();
 }
 
+bool ExecutableFile::isValid() const
+{
+    const QString& suffix = m_fileInfo.suffix().toLower();
+    return m_fileInfo.exists()
+        && (suffix == "exe"_L1 || suffix == "msi"_L1 || suffix == "bat"_L1 || suffix == "cmd"_L1);
+}
+
+bool ExecutableFile::isMsi() const
+{
+    return m_fileInfo.suffix().toLower() == "msi"_L1;
+}
+
+bool ExecutableFile::isCmd() const
+{
+    const QString& suffix = m_fileInfo.suffix().toLower();
+    return suffix == "bat"_L1 || suffix == "cmd"_L1;
+}
+
 const QIcon& ExecutableFile::icon()
 {
     if (m_needUpdateIcon) {
@@ -51,11 +69,6 @@ const QIcon& ExecutableFile::icon()
         m_needUpdateIcon = false;
     }
     return m_icon;
-}
-
-bool ExecutableFile::isValid() const
-{
-    return m_fileInfo.exists() && m_fileInfo.suffix().toLower() == "exe"_L1;
 }
 
 void ExecutableFile::loadIcon()

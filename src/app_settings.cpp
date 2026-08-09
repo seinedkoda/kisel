@@ -107,6 +107,9 @@ bool AppSettings::runtimeAutoUpdate() const
 }
 
 void AppSettings::setLoggingEnabled(bool enabled) {
+    if (!enabled && QFileInfo::exists(logFilePath())) {
+        QFile::remove(logFilePath());
+    }
     setValue("logging"_L1, enabled);
 }
 

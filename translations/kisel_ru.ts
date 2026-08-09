@@ -402,11 +402,6 @@
         <translation>Выберите исполняемый файл</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="366"/>
-        <source>Executable files (*.exe);;All files (*.*)</source>
-        <translation>Исполняемые файлы (*.exe);;Все файлы (*.*)</translation>
-    </message>
-    <message>
         <location filename="../src/main_window.cpp" line="406"/>
         <source>The required compatibility tool is missing, open window to manage?</source>
         <translation>Отсутствует необходимое средство совместимости, открыть окно для управления?</translation>
@@ -450,6 +445,11 @@
         <location filename="../src/main_window.cpp" line="251"/>
         <source>&lt;Select a program&gt;</source>
         <translation>&lt;Выберите программу&gt;</translation>
+    </message>
+    <message>
+        <location filename="../src/main_window.cpp" line="366"/>
+        <source>Executable files (*.exe *.msi *.bat);;All files (*.*)</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/main_window.cpp" line="394"/>
