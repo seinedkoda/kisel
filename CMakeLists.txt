@@ -145,8 +145,10 @@ set(CPACK_RPM_PACKAGE_SUGGESTS "winetricks, mangohud, obs-studio-plugin-vkcaptur
 
 # .deb (cpack -G DEB)
 set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "amd64")
-set(CPACK_DEBIAN_PACKAGE_DEPENDS "libqt6widgets6, icoutils")
-set(CPACK_DEBIAN_PACKAGE_SUGGESTS "winetricks, mangohud, obs-vkcapture")
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "libqt6widgets6, icoutils, libc6 (>= 2.34), libgcc-s1 (>= 4.2),
+    python3, python3-xlib (>= 0.33), apparmor-profiles, libgl1-mesa-dri:i386, libglx-mesa0:i386")
+set(CPACK_DEBIAN_PACKAGE_RECOMMENDS "mangohud")
+set(CPACK_DEBIAN_PACKAGE_SUGGESTS "winetricks, obs-vkcapture")
 set(CPACK_DEBIAN_PACKAGE_SECTION "utils")
 set(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
 
