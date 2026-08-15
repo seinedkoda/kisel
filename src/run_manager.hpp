@@ -2,11 +2,10 @@
 
 #include <QProcess>
 
-#include "executable_file.hpp"
 #include "run_config.hpp"
 
 namespace kisel {
-#define PROCESS_MANAGER ProcessManager::instance()
+#define RUN_MANAGER ProcessManager::instance()
 
 class ProcessManager : public QObject {
     Q_OBJECT
@@ -30,7 +29,7 @@ public:
 
     static ProcessManager* instance();
 
-    void run(const ExecutableFile& exeFile, RunConfig* runConfig);
+    void run(RunConfig* runConfig);
     void runWineCfg(const Prefix* prefix);
     void runExplorer(const Prefix* prefix);
     void runRegedit(const Prefix* prefix);
@@ -50,11 +49,15 @@ private slots:
 private:
     explicit ProcessManager(QObject* parent = nullptr);
 
-    bool preRunCheck(const ExecutableFile& exeFile, RunConfig* runConfig);
+    bool setupConfig(RunConfig* runConfig);
+    void setupProtonProcess();
+    void setupUmuProcess();
+    void setupLogging();
     void runWinetricksUtility(const QString& utilName, const Prefix* prefix);
     void showError(const QString& errorText, RunningError error, bool emitText = false);
 
     QProcess m_process;
     bool m_isRunning = false;
+    RunConfig* m_runConfig;
 };
 }

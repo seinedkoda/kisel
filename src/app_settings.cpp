@@ -24,7 +24,8 @@ const QDir& AppSettings::appDataDir()
     return dir;
 }
 
-const QString& AppSettings::logFilePath() {
+const QString& AppSettings::logFilePath()
+{
     static QString logFilePath = appDataDir().filePath("run.log");
     return logFilePath;
 }
@@ -106,14 +107,16 @@ bool AppSettings::runtimeAutoUpdate() const
     return value("runtimeAutoUpdate"_L1, true).toBool();
 }
 
-void AppSettings::setLoggingEnabled(bool enabled) {
+void AppSettings::setLoggingEnabled(bool enabled)
+{
     if (!enabled && QFileInfo::exists(logFilePath())) {
         QFile::remove(logFilePath());
     }
     setValue("logging"_L1, enabled);
 }
 
-bool AppSettings::loggingEnabled() const {
+bool AppSettings::loggingEnabled() const
+{
     return value("logging"_L1, false).toBool();
 }
 
@@ -159,12 +162,14 @@ const QString& AppSettings::winetricksPath()
     return winetricksPath;
 }
 
-const QString& AppSettings::mangoHudPath() {
+const QString& AppSettings::mangoHudPath()
+{
     static QString mangoHudPath = QStandardPaths::findExecutable("mangohud"_L1);
     return mangoHudPath;
 }
 
-const QString& AppSettings::obsVkCapturePath() {
+const QString& AppSettings::obsVkCapturePath()
+{
     static QString obsVkCapturePath = QStandardPaths::findExecutable("obs-gamecapture"_L1);
     return obsVkCapturePath;
 }

@@ -29,7 +29,7 @@ qt_add_executable(kisel
     src/shortcut_dialog.hpp src/shortcut_dialog.cpp
     src/prefix_settings.hpp src/prefix_settings.cpp
     src/prefix_settings_dialog.hpp src/prefix_settings_dialog.cpp
-    src/process_manager.hpp src/process_manager.cpp
+    src/run_manager.hpp src/run_manager.cpp
     src/tray_icon.hpp src/tray_icon.cpp
     src/prefix_components_dialog.hpp src/prefix_components_dialog.cpp
     src/run_config.hpp src/run_config.cpp
@@ -63,7 +63,6 @@ qt_add_resources(kisel "resources"
         "resources/icons/thirdparty/Papirus/16x16/actions/view-list.svg"
         "resources/icons/thirdparty/Papirus/16x16/actions/view-list-text.svg"
         "resources/icons/thirdparty/Papirus/16x16/actions/list-add.svg"
-        "resources/icons/thirdparty/Papirus/16x16/actions/list-remove.svg"
         "resources/icons/thirdparty/Papirus/16x16/actions/edit-clear.svg"
         "resources/icons/thirdparty/Papirus/16x16/actions/entry-delete.svg"
         "resources/icons/thirdparty/Papirus/16x16/actions/window-close.svg"

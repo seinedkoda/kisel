@@ -27,6 +27,10 @@ AppSettingsWindow::AppSettingsWindow(QWidget* parent)
     auto* titleLabel = new QLabel(tr("<h3>Global settings</h3>"));
     layout->addWidget(titleLabel);
 
+    auto* helpLabel = new QLabel(tr("<i>For detailed settings, go to the prefix context menu in the main window</i>"), this);
+    helpLabel->setWordWrap(true);
+    layout->addWidget(helpLabel);
+
     auto* tabWidget = new QTabWidget(this);
     layout->addWidget(tabWidget);
 

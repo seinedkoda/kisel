@@ -3,7 +3,6 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <QMap>
 #include <QNetworkReply>
 #include <QTemporaryFile>
 
@@ -182,6 +181,7 @@ void CtInstaller::addToInstallation(const QString& name, const QUrl& url, const 
         m_installList.removeOne(installItem);
         if (success) {
             CT_MODEL->setCtStatus(ct, Ct::Installed);
+            emit newInstalled();
         } else {
             CT_MODEL->removeRow(CT_MODEL->ctIndex(ct));
             emit installationError(errorText);

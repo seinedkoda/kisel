@@ -47,6 +47,7 @@ public:
 signals:
     void releasesLoaded(QObject* requester, const QMap<QString, QUrl>& releaseMap, bool success, const QString& errorText);
     void installationError(const QString& errorText);
+    void newInstalled();
 
 private:
     explicit CtInstaller(QObject* parent = nullptr);

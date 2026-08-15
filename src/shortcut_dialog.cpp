@@ -15,9 +15,9 @@
 using namespace Qt::StringLiterals;
 using namespace kisel;
 
-ShortcutDialog::ShortcutDialog(ExecutableFile* exeFile, const Prefix& prefix, QWidget* parent)
+ShortcutDialog::ShortcutDialog(RunConfig* runConfig, QWidget* parent)
     : QDialog(parent)
-    , m_currentPrefix(&prefix)
+    , m_currentPrefix(runConfig->prefix())
     , m_prefixComboBox(new QComboBox(this))
     , m_categoryComboBox(new QComboBox(this))
 {
@@ -26,10 +26,11 @@ ShortcutDialog::ShortcutDialog(ExecutableFile* exeFile, const Prefix& prefix, QW
     setWindowModality(Qt::ApplicationModal);
     setMinimumWidth(300);
 
+    auto* exeFile = runConfig->exeFile();
     const QString individualPrefixName = Prefix::generatePrefixNameFromFile(exeFile->path());
-    bool isIndividualPrefix = prefix.name() == individualPrefixName;
+    bool isIndividualPrefix = m_currentPrefix->name() == individualPrefixName;
     if (isIndividualPrefix) {
-        m_individualPrefix = &prefix;
+        m_individualPrefix = m_currentPrefix;
     } else {
         m_individualPrefix = new Prefix(individualPrefixName, this);
     }
@@ -77,8 +78,8 @@ ShortcutDialog::ShortcutDialog(ExecutableFile* exeFile, const Prefix& prefix, QW
     m_prefixComboBox->setPlaceholderText(individualPrefixName);
     m_prefixComboBox->setModel(PREFIX_MODEL);
     m_prefixComboBox->setDisabled(isIndividualPrefix);
-    if (PREFIX_MODEL->containsName(prefix.name())) {
-        m_prefixComboBox->setCurrentText(prefix.name());
+    if (PREFIX_MODEL->containsName(m_currentPrefix->name())) {
+        m_prefixComboBox->setCurrentText(m_currentPrefix->name());
     } else {
         m_prefixComboBox->setCurrentIndex(-1);
     }

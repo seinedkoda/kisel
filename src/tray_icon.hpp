@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QSystemTrayIcon>
 
-#include "process_manager.hpp"
+#include "run_manager.hpp"
 
 namespace kisel {
 class TrayIcon : public QObject {

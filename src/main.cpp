@@ -1,10 +1,8 @@
 #include <QApplication>
 #include <QCommandLineParser>
 
-#include "executable_file.hpp"
 #include "main_window.hpp"
-#include "process_manager.hpp"
-#include "run_config.hpp"
+#include "run_manager.hpp"
 #include "translator.hpp"
 #include "tray_icon.hpp"
 
@@ -28,17 +26,17 @@ int main(int argc, char* argv[])
     parser.addOption(prefixOption);
     parser.process(app);
 
-    kisel::TrayIcon trayIcon(kisel::PROCESS_MANAGER);
+    kisel::TrayIcon trayIcon(kisel::RUN_MANAGER);
 
     const QStringList positionalArgs = parser.positionalArguments();
     if (positionalArgs.isEmpty()) {
         auto* mainWindow = new kisel::MainWindow();
         mainWindow->show();
     } else if (parser.isSet(prefixOption)) {
-        kisel::ExecutableFile exeFile(positionalArgs.first());
         kisel::RunConfig runConfig;
+        runConfig.setExecutablePath(positionalArgs.first());
         runConfig.setPrefixName(parser.value(prefixOption));
-        kisel::PROCESS_MANAGER->run(exeFile, &runConfig);
+        kisel::RUN_MANAGER->run(&runConfig);
     } else {
         auto* mainWindow = new kisel::MainWindow(positionalArgs.first());
         mainWindow->show();

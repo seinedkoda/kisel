@@ -2,7 +2,6 @@
 
 #include <QAbstractListModel>
 #include <QSortFilterProxyModel>
-#include <qsortfilterproxymodel.h>
 
 #include "ct.hpp"
 
@@ -49,7 +48,7 @@ private:
 };
 
 class CtInstalledProxyModel : public QSortFilterProxyModel {
-Q_OBJECT
+    Q_OBJECT
 public:
     using QSortFilterProxyModel::QSortFilterProxyModel;
 

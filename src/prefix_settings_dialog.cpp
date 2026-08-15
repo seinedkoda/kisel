@@ -1,10 +1,10 @@
 #include "prefix_settings_dialog.hpp"
 
+#include <QComboBox>
 #include <QGroupBox>
 #include <QLabel>
 #include <QStandardPaths>
 #include <QVBoxLayout>
-#include <QComboBox>
 
 #include "app_settings.hpp"
 #include "ct_model.hpp"
@@ -154,6 +154,13 @@ PrefixSettingsDialog::PrefixSettingsDialog(Prefix* prefix, QWidget* parent)
     auto* useSteamBoxLayout = new QVBoxLayout(useSteamBox);
     useSteamBoxLayout->setAlignment(Qt::AlignTop);
     steamTabLayout->addWidget(useSteamBox);
+
+    auto* steamOverlayCheckBox = new QCheckBox(tr("Steam Overlay"));
+    steamOverlayCheckBox->setChecked(m_prefix->settings()->steamOverlayEnabled());
+    connect(steamOverlayCheckBox, &QCheckBox::clicked, this, [this](bool checked) {
+        m_prefix->settings()->setSteamOverlayEnabled(checked);
+    });
+    useSteamBoxLayout->addWidget(steamOverlayCheckBox);
 
     auto* onlineFixCheckBox = new QCheckBox(tr("Enable OnlineFix"));
     onlineFixCheckBox->setChecked(m_prefix->settings()->onlineFixEnabled());

@@ -27,7 +27,7 @@ CtWindow::CtWindow(QWidget* parent)
 
     auto* layout = new QVBoxLayout(centralWidget);
 
-    auto* listLabel = new QLabel(tr("Installed compatibility tools:"), this);
+    auto* listLabel = new QLabel(tr("<h3>Compatibility Tools</h3>"), this);
     layout->addWidget(listLabel);
 
     m_ctTableView->setModel(CT_MODEL);
@@ -35,7 +35,7 @@ CtWindow::CtWindow(QWidget* parent)
     m_ctTableView->setItemDelegateForColumn(1, delegate);
     m_ctTableView->resizeColumnsToContents();
     m_ctTableView->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
-    m_ctTableView->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Fixed);
+    m_ctTableView->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
     m_ctTableView->verticalHeader()->hide();
     m_ctTableView->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(m_ctTableView, &QTableView::customContextMenuRequested, this, &CtWindow::onContextMenuRequested);
@@ -75,7 +75,7 @@ void CtWindow::onContextMenuRequested(const QPoint& pos)
         QAction* openAction = menu->addAction(QIcon::fromTheme("document-open-folder"), tr("Open in files"));
         connect(openAction, &QAction::triggered, this, [ct]() { QDesktopServices::openUrl(QUrl::fromLocalFile(ct->path())); });
 
-        QAction* deleteAction = menu->addAction(QIcon::fromTheme("list-remove"), tr("Delete"));
+        QAction* deleteAction = menu->addAction(QIcon::fromTheme("entry-delete"), tr("Delete"));
         connect(deleteAction, &QAction::triggered, this, [this, ct, index]() {
             if (QMessageBox::question(this, tr("Confirmation required"), tr("Delete \"%1\"?").arg(ct->name())) == QMessageBox::Yes) {
                 CT_MODEL->removeRow(index.row());

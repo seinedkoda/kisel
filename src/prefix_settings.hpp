@@ -37,6 +37,8 @@ public:
     [[nodiscard]] bool steamEnabled() const;
     void setSteamEnvEnabled(bool enabled);
     [[nodiscard]] bool steamEnvEnabled() const;
+    void setSteamOverlayEnabled(bool enabled);
+    [[nodiscard]] bool steamOverlayEnabled() const;
     void setOnlineFixEnabled(bool enabled);
     [[nodiscard]] bool onlineFixEnabled() const;
 };
