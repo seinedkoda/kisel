@@ -1,8 +1,5 @@
 #include "ct_model.hpp"
 
-#include <QJsonArray>
-#include <QJsonDocument>
-#include <QJsonObject>
 #include <QTemporaryFile>
 
 #include "app_settings.hpp"
@@ -11,17 +8,9 @@ using namespace Qt::StringLiterals;
 using namespace kisel;
 
 CtModel::CtModel(QObject* parent)
-    : QAbstractListModel(parent)
-    , m_ctSourceName("Proton-GE (Github)"_L1)
+    : QAbstractTableModel(parent)
 {
     refreshList();
-}
-
-CtModel::~CtModel()
-{
-    if (m_installationIsRunning) {
-        cancelInstallation();
-    }
 }
 
 CtModel* CtModel::instance()
@@ -30,19 +19,16 @@ CtModel* CtModel::instance()
     return &instance;
 }
 
-const QMap<QString, QUrl>& CtModel::ctSourceMap()
-{
-    static QMap<QString, QUrl> map {
-        { "Proton-GE (Github)"_L1, QUrl("https://api.github.com/repos/GloriousEggroll/proton-ge-custom/releases?per_page=10"_L1) },
-        { "Proton-CachyOS (Github)"_L1, QUrl("https://api.github.com/repos/CachyOS/proton-cachyos/releases?per_page=10"_L1) }
-    };
-    return map;
-}
-
 int CtModel::rowCount(const QModelIndex& parent) const
 {
     Q_UNUSED(parent)
     return static_cast<int>(m_cts.count());
+}
+
+int CtModel::columnCount(const QModelIndex& parent) const
+{
+    Q_UNUSED(parent)
+    return 2;
 }
 
 Qt::ItemFlags CtModel::flags(const QModelIndex& index) const
@@ -63,27 +49,57 @@ QVariant CtModel::data(const QModelIndex& index, int role) const
 
     const Ct* ct = m_cts.at(row);
 
-    switch (role) {
-    case Qt::DisplayRole:
-    case NameRole:
-        return ct->name();
-    case PathRole:
-        return ct->path();
-    case Qt::DecorationRole:
-        return ct->icon();
-    default:
-        return { };
+    int column = index.column();
+    if (column == 0) {
+        switch (role) {
+        case Qt::DisplayRole:
+            return ct->name();
+        case Qt::DecorationRole:
+            return ct->icon();
+        default:
+            return { };
+        }
+    } else if (column == 1) {
+        switch (role) {
+        case Qt::DisplayRole:
+            return Ct::statusToString(ct->status());
+        case StatusRole:
+            return ct->status();
+        case ProgressRole:
+            return ct->progress();
+        default:
+            return { };
+        }
     }
+    return { };
 }
 
 QHash<int, QByteArray> CtModel::roleNames() const
 {
     static const QHash<int, QByteArray> roles {
         { NameRole, "name" },
-        { PathRole, "path" }
+        { PathRole, "path" },
+        { StatusRole, "status" },
+        { ProgressRole, "progress" }
     };
 
     return roles;
+}
+
+QVariant CtModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
+    if (role != Qt::DisplayRole || orientation != Qt::Horizontal) {
+        return { };
+    }
+
+    switch (section) {
+    case 0:
+        return tr("Name");
+    case 1:
+        return tr("Status");
+    default:
+        return { };
+    }
 }
 
 bool CtModel::removeRows(int row, int count, const QModelIndex& parent) // NOLINT(bugprone-easily-swappable-parameters)
@@ -93,7 +109,7 @@ bool CtModel::removeRows(int row, int count, const QModelIndex& parent) // NOLIN
     }
 
     Ct* ct = m_cts.at(row);
-    if (!ct->dir().removeRecursively()) {
+    if (ct->exists() && !ct->dir().removeRecursively()) {
         return false;
     }
 
@@ -137,21 +153,6 @@ Ct* CtModel::forPath(QStringView path) const
     return nullptr;
 }
 
-QStringList CtModel::availableReleasesList() const
-{
-    return m_sortedReleasesList;
-}
-
-QString CtModel::ctSourceName() const
-{
-    return m_ctSourceName;
-}
-
-bool CtModel::installationIsRunning() const
-{
-    return m_installationIsRunning;
-}
-
 void CtModel::refreshList()
 {
     for (const auto& ctsDir : CTS_DIR_LIST) {
@@ -173,7 +174,7 @@ void CtModel::refreshList()
         for (int i = rowCount() - 1; i >= 0; --i) {
             Ct* ct = m_cts.at(i);
 
-            if (!ct->exists()) {
+            if (ct->status() == Ct::Installed && !ct->exists()) {
                 beginRemoveRows(QModelIndex(), i, i);
                 m_cts.removeAt(i);
                 ct->deleteLater();
@@ -183,10 +184,10 @@ void CtModel::refreshList()
     }
 }
 
-void CtModel::add(const QString& path)
+Ct* CtModel::add(const QString& path)
 {
-    if (!QFileInfo::exists(path)) {
-        return;
+    if (path.isEmpty()) {
+        return nullptr;
     }
 
     Ct* ct = new Ct(path, this);
@@ -195,40 +196,12 @@ void CtModel::add(const QString& path)
     beginInsertRows(QModelIndex(), insertPos, insertPos);
     m_cts.insert(insertPos, ct);
     endInsertRows();
-}
-
-void CtModel::setCtSourceFromName(const QString& name)
-{
-    if (ctSourceMap().contains(name)) {
-        m_ctSourceName = name;
-    }
+    return ct;
 }
 
 bool CtModel::containsPath(QStringView path)
 {
     return std::ranges::any_of(m_cts, [&path](const QString& ctPath) { return ctPath == path; }, &Ct::path);
-}
-
-void CtModel::cancelInstallation()
-{
-    if (!m_installationIsRunning) {
-        return;
-    }
-
-    if (m_downloadReply != nullptr) {
-        m_downloadReply->abort();
-        m_downloadReply->deleteLater();
-    }
-
-    if (m_tarProcess != nullptr) {
-        m_tarProcess->terminate();
-        if (!m_tarProcess->waitForFinished()) {
-            m_tarProcess->kill();
-        }
-        m_tarProcess->deleteLater();
-    }
-
-    emit installationCanceled();
 }
 
 Ct* CtModel::defaultCt()
@@ -245,241 +218,30 @@ Ct* CtModel::defaultCt()
     return nullptr;
 }
 
-void CtModel::fetchAvailableReleases()
+void CtModel::setCtDownloadProgress(Ct* ct, qint64 bytesReceived, qint64 bytesTotal)
 {
-    if (!ctSourceMap().contains(m_ctSourceName)) {
-        qCritical() << "No suitable source to obtain releases";
-        return;
-    }
-
-    m_releaseUrlMap.clear();
-    m_sortedReleasesList.clear();
-
-    QNetworkRequest request(ctSourceMap().value(m_ctSourceName));
-    request.setHeader(QNetworkRequest::UserAgentHeader, "kisel"_L1);
-
-    QNetworkReply* reply = m_networkManager.get(request);
-    connect(reply, &QNetworkReply::finished, this, [this, reply]() { onReleasesFetched(reply); });
-
-    emit fetchReleasesStarted();
-}
-
-QString CtModel::deviceArchitecture()
-{
-    static QString arch = QSysInfo::currentCpuArchitecture().toLower();
-
-    if (arch == "x86_64"_L1 || arch == "amd64"_L1) {
-        return "x86_64";
-    }
-
-    if (arch == "arm64"_L1 || arch == "aarch64"_L1) {
-        return "aarch64"_L1;
-    }
-
-    return "unknown"_L1;
-}
-
-bool CtModel::deviceHasV3Exstensions()
-{
-    static QString arch = deviceArchitecture();
-
-    if (arch == "x86_64"_L1) {
-        if (__builtin_cpu_supports("avx2") && __builtin_cpu_supports("fma") && __builtin_cpu_supports("bmi2")) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-QString CtModel::getBaseArchitectureNameFromAsset(const QString& assetName)
-{
-    if (assetName.contains("x86_64_v3"_L1, Qt::CaseInsensitive)) {
-        return "x86_64_v3"_L1;
-    }
-
-    if (assetName.contains("aarch64"_L1, Qt::CaseInsensitive) || assetName.contains("arm64"_L1, Qt::CaseInsensitive)) {
-        return "aarch64"_L1;
-    }
-
-    return "x86_64"_L1;
-}
-
-void CtModel::onReleasesFetched(QNetworkReply* reply)
-{
-    if (reply->error() != QNetworkReply::NoError) {
-        emit fetchReleasesError(tr("Error loading releases: %1").arg(reply->errorString()));
-        reply->deleteLater();
-        return;
-    }
-
-    QJsonDocument jsonDoc = QJsonDocument::fromJson(reply->readAll());
-    reply->deleteLater();
-
-    if (!jsonDoc.isArray()) {
-        emit fetchReleasesError(tr("Invalid response format from Server API"));
-        return;
-    }
-
-    parseReleasesArray(jsonDoc.array());
-
-    emit fetchReleasesFinished();
-}
-
-void CtModel::parseReleasesArray(const QJsonArray& releasesArray)
-{
-    static const QString devArch = deviceArchitecture();
-    static const bool isDevAarch64 = (devArch == "aarch64"_L1);
-    static const bool isDevX86_64 = (devArch == "x86_64"_L1);
-    static const bool supportsV3 = isDevX86_64 && deviceHasV3Exstensions();
-
-    for (const auto& releaseVal : releasesArray) {
-        const QJsonObject release = releaseVal.toObject();
-        const QString tagName = release.value("tag_name"_L1).toString();
-        const QJsonArray assetsArray = release.value("assets"_L1).toArray();
-
-        const QUrl downloadUrl = findBestAssetUrl(assetsArray);
-
-        if (!downloadUrl.isEmpty()) {
-            m_releaseUrlMap.insert(tagName, downloadUrl);
-            m_sortedReleasesList.append(tagName);
-        }
-    }
-}
-
-QUrl CtModel::findBestAssetUrl(const QJsonArray& assetsArray)
-{
-    static const QString devArch = deviceArchitecture();
-    static const bool isDevAarch64 = (devArch == "aarch64"_L1);
-    static const bool isDevX86_64 = (devArch == "x86_64"_L1);
-    static const bool supportsV3 = isDevX86_64 && deviceHasV3Exstensions();
-
-    QUrl fallbackUrl;
-
-    for (const auto& assetVal : assetsArray) {
-        const QJsonObject assetObj = assetVal.toObject();
-        const QString assetName = assetObj.value("name"_L1).toString();
-
-        const bool isTarball = assetName.endsWith(".tar.gz"_L1) || assetName.endsWith(".tar.xz"_L1);
-        if (!isTarball) {
-            continue;
-        }
-
-        const QString assetArch = getBaseArchitectureNameFromAsset(assetName);
-        const QString assetUrl = assetObj.value("browser_download_url"_L1).toString();
-
-        if (isDevAarch64 && assetArch == "aarch64"_L1) {
-            return assetUrl;
-        }
-
-        if (isDevX86_64) {
-            if (assetArch == "x86_64_v3"_L1 && supportsV3) {
-                return assetUrl;
-            }
-
-            if (assetArch == "x86_64"_L1) {
-                fallbackUrl = assetUrl;
-            }
-        }
-    }
-
-    return fallbackUrl;
-}
-
-void CtModel::installRelease(const QString& name, const QString& installDir)
-{
-    if (m_installationIsRunning) {
-        return;
-    }
-
-    if (!m_releaseUrlMap.contains(name)) {
-        emit installationError(tr("No suitable release name found: %1").arg(name));
-        return;
-    }
-
-    if (!CTS_DIR_LIST.contains(installDir)) {
-        emit installationError(tr("No suitable installation path specified: %1").arg(installDir));
-        return;
-    }
-
-    QDir dir(installDir);
-    if (!dir.exists()) {
-        if (!dir.mkpath(installDir)) {
-            emit installationError(tr("Cannot create directory: %1").arg(installDir));
+    if (bytesTotal > 0) {
+        int percentage = static_cast<int>((bytesReceived * 100) / bytesTotal);
+        if (ct->progress() == percentage) {
             return;
         }
-    }
 
-    m_downloadableReleaseName = name;
-    m_ctInstallDir = installDir;
-    m_installationIsRunning = true;
-
-    QNetworkRequest request(m_releaseUrlMap.value(name));
-    request.setHeader(QNetworkRequest::UserAgentHeader, "kisel"_L1);
-
-    m_downloadReply = m_networkManager.get(request);
-
-    connect(m_downloadReply, &QNetworkReply::downloadProgress, this, &CtModel::downloadProgressChanged);
-    connect(m_downloadReply, &QNetworkReply::finished, this, &CtModel::onDownloadFinished);
-
-    emit downloadStarted();
-}
-
-void CtModel::onDownloadFinished()
-{
-    if (m_downloadReply->error() != QNetworkReply::NoError) {
-        emit installationError(m_downloadReply->errorString());
-        m_downloadReply->deleteLater();
-        m_installationIsRunning = false;
-        return;
-    }
-
-    auto* tempArchive = new QTemporaryFile(QDir::tempPath() % "/"_L1 % m_downloadableReleaseName % "_XXXXXX.tar.gz"_L1, this);
-
-    if (tempArchive->open()) {
-        tempArchive->setAutoRemove(false);
-        QString tempFilePath = tempArchive->fileName();
-
-        tempArchive->write(m_downloadReply->readAll());
-        tempArchive->close();
-
-        tempArchive->deleteLater();
-        m_downloadReply->deleteLater();
-
-        emit downloadFinished();
-
-        extractCt(tempFilePath);
-    } else {
-        emit installationError(tr("Cannot create temporary file"));
-        tempArchive->deleteLater();
-        m_downloadReply->deleteLater();
-        m_installationIsRunning = false;
+        ct->setProgress(percentage);
+        QModelIndex modelIndex = index(ctIndex(ct), 1);
+        emit dataChanged(modelIndex, modelIndex, { ProgressRole });
     }
 }
 
-void CtModel::extractCt(const QString& archivePath)
+void CtModel::setCtStatus(Ct* ct, Ct::Status status)
 {
-    emit extractStarted();
+    ct->setStatus(status);
+    QModelIndex modelIndex = index(ctIndex(ct), 1);
+    emit dataChanged(modelIndex, modelIndex, { Qt::DisplayRole, StatusRole });
+}
 
-    m_tarProcess = new QProcess(this);
-    m_tarProcess->setWorkingDirectory(m_ctInstallDir);
-
-    connect(m_tarProcess, &QProcess::finished, this, [this, archivePath](int exitCode) {
-        m_tarProcess->deleteLater();
-
-        if (QFile::exists(archivePath)) {
-            QFile::remove(archivePath);
-        }
-
-        if (exitCode == 0) {
-            emit extractFinished();
-            m_installationIsRunning = false;
-            refreshList();
-        } else {
-            emit installationError(tr("Archive extraction error: %1").arg(archivePath));
-            m_installationIsRunning = false;
-        }
-    });
-
-    m_tarProcess->start("tar"_L1, { "-xf"_L1, archivePath });
+bool CtInstalledProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
+{
+    QModelIndex index = sourceModel()->index(sourceRow, 1, sourceParent);
+    auto status = index.data(CtModel::StatusRole).value<Ct::Status>();
+    return status == Ct::Installed;
 }

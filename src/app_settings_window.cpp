@@ -87,7 +87,9 @@ AppSettingsWindow::AppSettingsWindow(QWidget* parent)
     generalTabLayout->addWidget(defaultCtLabel);
 
     auto* ctComboBox = new QComboBox(this);
-    ctComboBox->setModel(CT_MODEL);
+    auto* ctInstalledProxyModel = new CtInstalledProxyModel(this);
+    ctInstalledProxyModel->setSourceModel(CT_MODEL);
+    ctComboBox->setModel(ctInstalledProxyModel);
     if (CT_MODEL->defaultCt() != nullptr) {
         ctComboBox->setCurrentIndex(CT_MODEL->ctIndex(CT_MODEL->defaultCt()));
     }

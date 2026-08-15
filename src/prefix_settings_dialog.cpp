@@ -41,7 +41,9 @@ PrefixSettingsDialog::PrefixSettingsDialog(Prefix* prefix, QWidget* parent)
     compatibilityTabLayout->addWidget(ctLabel);
 
     auto* ctComboBox = new QComboBox(this);
-    ctComboBox->setModel(CT_MODEL);
+    auto* ctInstalledProxyModel = new CtInstalledProxyModel(this);
+    ctInstalledProxyModel->setSourceModel(CT_MODEL);
+    ctComboBox->setModel(ctInstalledProxyModel);
     Ct* prefixCt = CT_MODEL->forPath(prefix->settings()->ctPath());
     if (prefixCt != nullptr) {
         ctComboBox->setCurrentIndex(CT_MODEL->ctIndex(prefixCt));

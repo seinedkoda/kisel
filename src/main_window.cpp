@@ -161,11 +161,13 @@ MainWindow::MainWindow(const QString& exePath)
     auto* ctLabel = new QLabel(tr("Compatibility tool"), this);
     environmentBoxLayout->addWidget(ctLabel, 3, 0);
 
-    m_ctComboBox->setModel(CT_MODEL);
+    auto* ctInstalledProxyModel = new CtInstalledProxyModel(this);
+    ctInstalledProxyModel->setSourceModel(CT_MODEL);
+    m_ctComboBox->setModel(ctInstalledProxyModel);
     environmentBoxLayout->addWidget(m_ctComboBox, 4, 0);
 
     m_ctWindowButton->setToolTip(tr("Open the Compatibility Tools window"));
-    m_ctWindowButton->setIcon(QIcon::fromTheme("browser-download"));
+    m_ctWindowButton->setIcon(QIcon::fromTheme("view-list"));
     connect(m_ctWindowButton, &QToolButton::clicked, this, [this]() { openCtWindow(); });
     environmentBoxLayout->addWidget(m_ctWindowButton, 4, 1);
 

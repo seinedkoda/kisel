@@ -34,6 +34,7 @@ qt_add_executable(kisel
     src/prefix_components_dialog.hpp src/prefix_components_dialog.cpp
     src/run_config.hpp src/run_config.cpp
     src/about_dialog.hpp src/about_dialog.cpp
+    src/ct_installer.hpp src/ct_installer.cpp
 )
 
 qt_add_resources(kisel "resources"
@@ -59,6 +60,7 @@ qt_add_resources(kisel "resources"
         "resources/icons/thirdparty/Papirus/16x16/actions/plugins.svg"
         "resources/icons/thirdparty/Papirus/16x16/actions/tool-wizard.svg"
         "resources/icons/thirdparty/Papirus/16x16/actions/view-refresh.svg"
+        "resources/icons/thirdparty/Papirus/16x16/actions/view-list.svg"
         "resources/icons/thirdparty/Papirus/16x16/actions/view-list-text.svg"
         "resources/icons/thirdparty/Papirus/16x16/actions/list-add.svg"
         "resources/icons/thirdparty/Papirus/16x16/actions/list-remove.svg"
