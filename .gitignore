@@ -87,3 +87,4 @@ CMakeLists.txt.user*
 # Misc
 misc/*
 !misc/PKGBUILD
+!misc/io.github.seinedkoda.kisel.yml

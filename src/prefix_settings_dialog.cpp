@@ -41,6 +41,7 @@ PrefixSettingsDialog::PrefixSettingsDialog(Prefix* prefix, QWidget* parent)
     compatibilityTabLayout->addWidget(ctLabel);
 
     auto* ctComboBox = new QComboBox(this);
+    ctComboBox->setPlaceholderText(tr("<No installed>"));
     auto* ctInstalledProxyModel = new CtInstalledProxyModel(this);
     ctInstalledProxyModel->setSourceModel(CT_MODEL);
     ctComboBox->setModel(ctInstalledProxyModel);

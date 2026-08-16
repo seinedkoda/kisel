@@ -7,6 +7,7 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 
+using namespace Qt::StringLiterals;
 using namespace kisel;
 
 AboutDialog::AboutDialog(QWidget* parent)
@@ -25,7 +26,7 @@ AboutDialog::AboutDialog(QWidget* parent)
 
     auto* logoLabel = new QLabel(this);
     logoLabel->setFixedSize(64, 64);
-    QPixmap logoPixmap(":/icons/kisel.png");
+    QPixmap logoPixmap(":/icons/kisel.png"_L1);
     logoLabel->setPixmap(logoPixmap.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     aboutAppLayout->addWidget(logoLabel);
 
@@ -33,7 +34,8 @@ AboutDialog::AboutDialog(QWidget* parent)
     auto* aboutAppInfoLayout = new QVBoxLayout(aboutAppInfoWidget);
     aboutAppLayout->addWidget(aboutAppInfoWidget, Qt::AlignLeft);
 
-    auto* nameLabel = new QLabel(tr("<b>Kisel %1 ©%2</b>").arg(APP_VERSION, APP_AUTHOR), this);
+    const QString flatpakString = APP_SETTINGS->isFlatpak() ? "(Flatpak)"_L1 : ""_L1;
+    auto* nameLabel = new QLabel(tr("<b>Kisel %1 %2 ©%3</b>").arg(APP_VERSION, flatpakString, APP_AUTHOR), this);
     aboutAppInfoLayout->addWidget(nameLabel);
 
     auto* descriptionLabel = new QLabel(tr("<i>Efficient launch of Windows programs</i>"), this);

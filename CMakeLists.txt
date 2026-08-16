@@ -117,12 +117,13 @@ install(TARGETS kisel
 install(
     FILES "resources/icons/kisel.svg"
     DESTINATION share/icons/hicolor/scalable/apps
-    RENAME "kisel.svg"
+    RENAME "io.github.seinedkoda.kisel.svg" # Required for Flatpak
 )
 
 install(
     FILES "resources/kisel.desktop"
     DESTINATION share/applications
+    RENAME "io.github.seinedkoda.kisel.desktop" # Required for Flatpak
 )
 
 install(
@@ -140,8 +141,9 @@ set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${CM
 
 # .rpm (cpack -G RPM)
 set(CPACK_RPM_PACKAGE_ARCHITECTURE "x86_64")
-set(CPACK_RPM_PACKAGE_REQUIRES "qt6-qtbase, icoutils")
-set(CPACK_RPM_PACKAGE_SUGGESTS "winetricks, mangohud, obs-studio-plugin-vkcapture")
+set(CPACK_RPM_PACKAGE_REQUIRES "qt6-qtbase, icoutils, python3, python3-xlib, python3-pyzstd")
+set(CPACK_RPM_PACKAGE_RECOMMENDS "mangohud")
+set(CPACK_RPM_PACKAGE_SUGGESTS "winetricks, obs-studio-plugin-vkcapture")
 
 # .deb (cpack -G DEB)
 set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "amd64")

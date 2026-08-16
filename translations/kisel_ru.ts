@@ -17,33 +17,33 @@
 <context>
     <name>kisel::AboutDialog</name>
     <message>
-        <location filename="../src/about_dialog.cpp" line="15"/>
+        <location filename="../src/about_dialog.cpp" line="16"/>
         <source>Kisel — About the program</source>
         <translation>Кисель — О программе</translation>
     </message>
     <message>
-        <location filename="../src/about_dialog.cpp" line="36"/>
-        <source>&lt;b&gt;Kisel %1 ©%2&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Кисель %1 ©%2&lt;/b&gt;</translation>
+        <location filename="../src/about_dialog.cpp" line="38"/>
+        <source>&lt;b&gt;Kisel %1 %2 ©%3&lt;/b&gt;</source>
+        <translation>&lt;b&gt;Кисель %1 %2 ©%3&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/about_dialog.cpp" line="39"/>
+        <location filename="../src/about_dialog.cpp" line="41"/>
         <source>&lt;i&gt;Efficient launch of Windows programs&lt;/i&gt;</source>
         <translation>&lt;i&gt;Эффективный запуск Windows программ&lt;/i&gt;</translation>
     </message>
     <message>
-        <location filename="../src/about_dialog.cpp" line="42"/>
+        <location filename="../src/about_dialog.cpp" line="44"/>
         <source>&lt;a href=&apos;%1&apos;&gt;Source code (%2)&lt;/a&gt;</source>
         <translation>&lt;a href=&apos;%1&apos;&gt;Исходный код (%2)&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../src/about_dialog.cpp" line="56"/>
+        <location filename="../src/about_dialog.cpp" line="58"/>
         <source>&lt;b&gt;Components:&lt;/b&gt;</source>
         <translation>&lt;b&gt;Компоненты:&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/about_dialog.cpp" line="71"/>
-        <location filename="../src/about_dialog.cpp" line="72"/>
+        <location filename="../src/about_dialog.cpp" line="73"/>
+        <location filename="../src/about_dialog.cpp" line="74"/>
         <source>About Qt</source>
         <translation>О Qt</translation>
     </message>
@@ -127,57 +127,62 @@
         <translation>Кисель — Настройки</translation>
     </message>
     <message>
-        <location filename="../src/app_settings_window.cpp" line="27"/>
+        <location filename="../src/app_settings_window.cpp" line="28"/>
         <source>&lt;h3&gt;Global settings&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;Глобальные настройки&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../src/app_settings_window.cpp" line="30"/>
+        <location filename="../src/app_settings_window.cpp" line="31"/>
         <source>&lt;i&gt;For detailed settings, go to the prefix context menu in the main window&lt;/i&gt;</source>
         <translation>&lt;i&gt;Для детальной настройки перейдите в контекстное меню префикса на главном окне&lt;/i&gt;</translation>
     </message>
     <message>
-        <location filename="../src/app_settings_window.cpp" line="38"/>
+        <location filename="../src/app_settings_window.cpp" line="39"/>
         <source>General</source>
         <translation>Основное</translation>
     </message>
     <message>
-        <location filename="../src/app_settings_window.cpp" line="43"/>
+        <location filename="../src/app_settings_window.cpp" line="44"/>
         <source>Language</source>
         <translation>Язык</translation>
     </message>
     <message>
-        <location filename="../src/app_settings_window.cpp" line="65"/>
+        <location filename="../src/app_settings_window.cpp" line="66"/>
         <source>Default prefix</source>
         <translation>Префикс по умолчанию</translation>
     </message>
     <message>
-        <location filename="../src/app_settings_window.cpp" line="68"/>
+        <location filename="../src/app_settings_window.cpp" line="69"/>
         <source>Individual</source>
         <translation>Индивидуальный</translation>
     </message>
     <message>
-        <location filename="../src/app_settings_window.cpp" line="90"/>
+        <location filename="../src/app_settings_window.cpp" line="91"/>
         <source>Default compatibility tool</source>
         <translation>Средство совместимости по умолчанию</translation>
     </message>
     <message>
-        <location filename="../src/app_settings_window.cpp" line="112"/>
+        <location filename="../src/app_settings_window.cpp" line="95"/>
+        <source>&lt;No installed&gt;</source>
+        <translation>&lt;Нет установленных&gt;</translation>
+    </message>
+    <message>
+        <location filename="../src/app_settings_window.cpp" line="114"/>
         <source>Built-in</source>
         <translation>Встроенный</translation>
     </message>
     <message>
-        <location filename="../src/app_settings_window.cpp" line="113"/>
+        <location filename="../src/app_settings_window.cpp" line="115"/>
         <source>System</source>
         <translation>Системный</translation>
     </message>
     <message>
-        <location filename="../src/app_settings_window.cpp" line="121"/>
+        <location filename="../src/app_settings_window.cpp" line="123"/>
         <source>Runtime auto-update</source>
         <translation>Автоматическое обновление среды выполнения</translation>
     </message>
     <message>
-        <location filename="../src/app_settings_window.cpp" line="54"/>
+        <location filename="../src/app_settings_window.cpp" line="55"/>
         <source>Logging</source>
         <translation>Сохранение журнала запуска</translation>
     </message>
@@ -673,7 +678,7 @@
 <context>
     <name>kisel::PrefixSettingsDialog</name>
     <message>
-        <location filename="../src/prefix_settings_dialog.cpp" line="124"/>
+        <location filename="../src/prefix_settings_dialog.cpp" line="125"/>
         <source>Enable accessibility controls, such as controlling the application interface with a gamepad</source>
         <translation>Включить специальные возможности управления, такие как управление интерфейсом с помощью геймпада</translation>
     </message>
@@ -683,32 +688,32 @@
         <translation>Совместимость</translation>
     </message>
     <message>
-        <location filename="../src/prefix_settings_dialog.cpp" line="64"/>
+        <location filename="../src/prefix_settings_dialog.cpp" line="65"/>
         <source>Enable Wayland driver</source>
         <translation>Включить драйвер Wayland</translation>
     </message>
     <message>
-        <location filename="../src/prefix_settings_dialog.cpp" line="86"/>
+        <location filename="../src/prefix_settings_dialog.cpp" line="87"/>
         <source>SDL input instead of HIDRAW/Steam Input</source>
         <translation>SDL ввод вместо HIDRAW/Steam Input</translation>
     </message>
     <message>
-        <location filename="../src/prefix_settings_dialog.cpp" line="150"/>
+        <location filename="../src/prefix_settings_dialog.cpp" line="151"/>
         <source>Use Steam</source>
         <translation>Использовать Steam</translation>
     </message>
     <message>
-        <location filename="../src/prefix_settings_dialog.cpp" line="142"/>
+        <location filename="../src/prefix_settings_dialog.cpp" line="143"/>
         <source>Steam Environment</source>
         <translation>Окружение Steam</translation>
     </message>
     <message>
-        <location filename="../src/prefix_settings_dialog.cpp" line="143"/>
+        <location filename="../src/prefix_settings_dialog.cpp" line="144"/>
         <source>Using the Steam environment for better compatibility with some games</source>
         <translation>Использование окружения Steam для лучшей совместимости с некоторыми играми</translation>
     </message>
     <message>
-        <location filename="../src/prefix_settings_dialog.cpp" line="79"/>
+        <location filename="../src/prefix_settings_dialog.cpp" line="80"/>
         <source>Enable WOW64</source>
         <translation>Включить WOW64</translation>
     </message>
@@ -723,17 +728,17 @@
         <translation>&lt;i&gt;Наведите на опцию чтобы узнать больше&lt;/i&gt;</translation>
     </message>
     <message>
-        <location filename="../src/prefix_settings_dialog.cpp" line="103"/>
+        <location filename="../src/prefix_settings_dialog.cpp" line="104"/>
         <source>Services</source>
         <translation>Сервисы</translation>
     </message>
     <message>
-        <location filename="../src/prefix_settings_dialog.cpp" line="107"/>
+        <location filename="../src/prefix_settings_dialog.cpp" line="108"/>
         <source>Enable Performance Monitor (requires mangohud to be installed)</source>
         <translation>Включить монитор производительности (требуется установленный mangohud)</translation>
     </message>
     <message>
-        <location filename="../src/prefix_settings_dialog.cpp" line="116"/>
+        <location filename="../src/prefix_settings_dialog.cpp" line="117"/>
         <source>Enable Vulkan app screen capture for OBS (requires obs-vkcapture to be installed)</source>
         <translation>Включить захват экрана приложений на Vulkan для OBS (требуется установленный obs-vkcapture)</translation>
     </message>
@@ -743,37 +748,42 @@
         <translation>Средство совместимости</translation>
     </message>
     <message>
-        <location filename="../src/prefix_settings_dialog.cpp" line="57"/>
+        <location filename="../src/prefix_settings_dialog.cpp" line="44"/>
+        <source>&lt;No installed&gt;</source>
+        <translation>&lt;Нет установленных&gt;</translation>
+    </message>
+    <message>
+        <location filename="../src/prefix_settings_dialog.cpp" line="58"/>
         <source>Enable NVIDIA&apos;s NVAPI GPU support library</source>
         <translation>Включить поддержку библиотеки NVAPI для NVIDIA GPU</translation>
     </message>
     <message>
-        <location filename="../src/prefix_settings_dialog.cpp" line="72"/>
+        <location filename="../src/prefix_settings_dialog.cpp" line="73"/>
         <source>Enabling HDR auto-enables the wine-wayland driver as it is a requirement</source>
         <translation>Автоматически включает wine-wayland драйвер, поскольку это является обязательным требованием</translation>
     </message>
     <message>
-        <location filename="../src/prefix_settings_dialog.cpp" line="93"/>
+        <location filename="../src/prefix_settings_dialog.cpp" line="94"/>
         <source>OpenGL instead of Vulkan</source>
         <translation>OpenGL вместо Vulkan</translation>
     </message>
     <message>
-        <location filename="../src/prefix_settings_dialog.cpp" line="133"/>
+        <location filename="../src/prefix_settings_dialog.cpp" line="134"/>
         <source>Using Steam</source>
         <translation>Использование Steam</translation>
     </message>
     <message>
-        <location filename="../src/prefix_settings_dialog.cpp" line="135"/>
+        <location filename="../src/prefix_settings_dialog.cpp" line="136"/>
         <source>Don&apos;t use Steam</source>
         <translation>Не использовать Steam</translation>
     </message>
     <message>
-        <location filename="../src/prefix_settings_dialog.cpp" line="158"/>
+        <location filename="../src/prefix_settings_dialog.cpp" line="159"/>
         <source>Steam Overlay</source>
         <translation>Оверлей Steam</translation>
     </message>
     <message>
-        <location filename="../src/prefix_settings_dialog.cpp" line="165"/>
+        <location filename="../src/prefix_settings_dialog.cpp" line="166"/>
         <source>Enable OnlineFix</source>
         <translation>Включить OnlineFix</translation>
     </message>

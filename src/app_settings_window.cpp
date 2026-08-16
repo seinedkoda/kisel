@@ -18,6 +18,7 @@ AppSettingsWindow::AppSettingsWindow(QWidget* parent)
 {
     setWindowTitle(tr("Kisel — Settings"));
     setAttribute(Qt::WA_DeleteOnClose);
+    setMinimumWidth(400);
 
     auto* centralWidget = new QWidget(this);
     setCentralWidget(centralWidget);
@@ -91,6 +92,7 @@ AppSettingsWindow::AppSettingsWindow(QWidget* parent)
     generalTabLayout->addWidget(defaultCtLabel);
 
     auto* ctComboBox = new QComboBox(this);
+    ctComboBox->setPlaceholderText(tr("<No installed>"));
     auto* ctInstalledProxyModel = new CtInstalledProxyModel(this);
     ctInstalledProxyModel->setSourceModel(CT_MODEL);
     ctComboBox->setModel(ctInstalledProxyModel);
