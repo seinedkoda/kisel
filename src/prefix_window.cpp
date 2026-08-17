@@ -59,6 +59,7 @@ PrefixWindow::PrefixWindow(QWidget* parent)
     , m_prefixListView(new QListView(this))
 {
     setWindowTitle(tr("Kisel — Prefixes"));
+    setWindowIcon(QIcon(":/icons/kisel-256x256.png"));
     setAttribute(Qt::WA_DeleteOnClose);
 
     auto* centralWidget = new QWidget(this);

@@ -62,15 +62,6 @@ modules:
         sha256: 16a1b2b359ef3d90e9b83b8cf44ce58b11f097c023d02f3bf77745362a6f7247
         dest-filename: icoutils.deb
 
-  - name: winetricks
-    buildsystem: simple
-    build-commands:
-      - install -Dm755 src/winetricks /app/bin/winetricks
-    sources:
-      - type: archive
-        url: https://github.com/Winetricks/winetricks/archive/refs/tags/20260125.tar.gz
-        sha256: 2890bd9fbbade4638e58b4999a237273192df03b58516ae7b8771e09c22d2f56
-
   - name: kisel
     buildsystem: cmake-ninja
     build-options:

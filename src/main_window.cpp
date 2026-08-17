@@ -43,7 +43,7 @@ MainWindow::MainWindow(const QString& exePath)
     m_runConfig->setExecutablePath(exePath);
 
     setWindowTitle(tr("Kisel"));
-    setWindowIcon(QIcon(":/icons/kisel.svg"));
+    setWindowIcon(QIcon(":/icons/kisel-256x256.png"));
     setAttribute(Qt::WA_DeleteOnClose);
 
     auto* centralWidget = new QWidget(this);
@@ -205,8 +205,8 @@ MainWindow::MainWindow(const QString& exePath)
     versionLabel->setEnabled(false);
     bottomLayout->addWidget(versionLabel);
 
-    connect(RUN_MANAGER, &ProcessManager::runningError, this, &MainWindow::onRunningError);
-    connect(RUN_MANAGER, &ProcessManager::runningChanged, this, &MainWindow::onRunningChanged);
+    connect(RUN_MANAGER, &RunManager::runningError, this, &MainWindow::onRunningError);
+    connect(RUN_MANAGER, &RunManager::runningChanged, this, &MainWindow::onRunningChanged);
 
     setExecutablePath(exePath);
 
@@ -387,20 +387,20 @@ void MainWindow::onCreateShortcutTriggered()
     shortcutDialog->show();
 }
 
-void MainWindow::onRunningError(ProcessManager::RunningError error, const QString& errorText)
+void MainWindow::onRunningError(RunManager::RunningError error, const QString& errorText)
 {
     static QString errorTitle = tr("Running error");
     switch (error) {
-    case ProcessManager::RunningError::AlreadyRunning:
+    case RunManager::RunningError::AlreadyRunning:
         QMessageBox::critical(this, errorTitle, tr("The executable file is currently running"));
         break;
-    case ProcessManager::RunningError::InvalidExecutable:
+    case RunManager::RunningError::InvalidExecutable:
         QMessageBox::critical(this, errorTitle, tr("The executable file is not valid"));
         break;
-    case ProcessManager::RunningError::PrefixWriteError:
+    case RunManager::RunningError::PrefixWriteError:
         QMessageBox::critical(this, errorTitle, tr("Failed to write prefix"));
         break;
-    case ProcessManager::RunningError::InvalidCt: {
+    case RunManager::RunningError::InvalidCt: {
         auto answer = QMessageBox::question(
             this,
             errorTitle,
@@ -409,25 +409,25 @@ void MainWindow::onRunningError(ProcessManager::RunningError error, const QStrin
             openCtWindow();
         }
     } break;
-    case ProcessManager::RunningError::NoUmu:
+    case RunManager::RunningError::NoUmu:
         QMessageBox::critical(this, errorTitle, tr("\"umu-run\" not found"));
         break;
-    case ProcessManager::RunningError::NoWinetricks:
+    case RunManager::RunningError::NoWinetricks:
         QMessageBox::critical(this, errorTitle, tr("\"winetricks\" not found"));
         break;
-    case ProcessManager::RunningError::FailedToStart:
+    case RunManager::RunningError::FailedToStart:
         QMessageBox::critical(this, errorTitle, tr("Failed to start process: %1").arg(errorText));
         break;
-    case ProcessManager::RunningError::Crashed:
+    case RunManager::RunningError::Crashed:
         QMessageBox::critical(this, errorTitle, tr("Process error: %1").arg(errorText));
         break;
-    case ProcessManager::RunningError::Timedout:
+    case RunManager::RunningError::Timedout:
         QMessageBox::critical(this, errorTitle, tr("Process timeout: %1").arg(errorText));
         break;
-    case ProcessManager::RunningError::ReadError:
+    case RunManager::RunningError::ReadError:
         QMessageBox::critical(this, errorTitle, tr("Process read error: %1").arg(errorText));
         break;
-    case ProcessManager::RunningError::WriteError:
+    case RunManager::RunningError::WriteError:
         QMessageBox::critical(this, errorTitle, tr("Process write error: %1").arg(errorText));
         break;
     default:

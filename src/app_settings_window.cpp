@@ -5,6 +5,7 @@
 #include <QGroupBox>
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QStyleFactory>
 
 #include "app_settings.hpp"
 #include "ct_model.hpp"
@@ -17,6 +18,7 @@ AppSettingsWindow::AppSettingsWindow(QWidget* parent)
     : QMainWindow(parent)
 {
     setWindowTitle(tr("Kisel — Settings"));
+    setWindowIcon(QIcon(":/icons/kisel-256x256.png"));
     setAttribute(Qt::WA_DeleteOnClose);
     setMinimumWidth(400);
 
@@ -51,6 +53,15 @@ AppSettingsWindow::AppSettingsWindow(QWidget* parent)
         TRANSLATOR->saveLanguage(languageName);
     });
     generalTabLayout->addWidget(languageComboBox);
+
+    auto* styleLabel = new QLabel(tr("Style"), this);
+    generalTabLayout->addWidget(styleLabel);
+
+    auto* styleComboBox = new QComboBox(this);
+    styleComboBox->addItems(QStyleFactory::keys());
+    styleComboBox->setCurrentText(APP_SETTINGS->styleName());
+    connect(styleComboBox, &QComboBox::currentTextChanged, this, [](const QString& styleName) { APP_SETTINGS->setStyleName(styleName); });
+    generalTabLayout->addWidget(styleComboBox);
 
     auto* loggingCheckBox = new QCheckBox(tr("Logging"), this);
     loggingCheckBox->setChecked(APP_SETTINGS->loggingEnabled());

@@ -20,7 +20,7 @@ private slots:
     void onExeSelectionClicked();
     void onRunStopTriggered();
     void onCreateShortcutTriggered();
-    void onRunningError(kisel::ProcessManager::RunningError error, const QString& errorText);
+    void onRunningError(kisel::RunManager::RunningError error, const QString& errorText);
     void onRunningChanged(bool isRunning);
     void onCurrentPrefixTextChanged(const QString& prefixName);
     void onCurrentCtIndexChanged(int index);

@@ -1,6 +1,7 @@
 #include <QApplication>
 #include <QCommandLineParser>
 
+#include "app_settings.hpp"
 #include "main_window.hpp"
 #include "run_manager.hpp"
 #include "translator.hpp"
@@ -12,9 +13,7 @@ int main(int argc, char* argv[])
     QApplication::setApplicationName("kisel");
     QApplication::setApplicationVersion(APP_VERSION);
 
-    QIcon::setThemeSearchPaths(QIcon::themeSearchPaths() << ":/icons/thirdparty");
-    QIcon::setFallbackThemeName("Papirus");
-
+    kisel::APP_SETTINGS->applyCurrentStyle();
     kisel::TRANSLATOR->setLocaleFromSettings();
 
     QCommandLineParser parser;

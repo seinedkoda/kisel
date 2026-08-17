@@ -13,22 +13,22 @@ using namespace kisel;
 static const auto Y = "1"_L1;
 static const auto N = "0"_L1;
 
-ProcessManager::ProcessManager(QObject* parent)
+RunManager::RunManager(QObject* parent)
     : QObject(parent)
     , m_runConfig(nullptr)
 {
-    connect(&m_process, &QProcess::started, this, &ProcessManager::onProcessStarted);
-    connect(&m_process, &QProcess::finished, this, &ProcessManager::onProcessFinished);
-    connect(&m_process, &QProcess::errorOccurred, this, &ProcessManager::onProcessError);
+    connect(&m_process, &QProcess::started, this, &RunManager::onProcessStarted);
+    connect(&m_process, &QProcess::finished, this, &RunManager::onProcessFinished);
+    connect(&m_process, &QProcess::errorOccurred, this, &RunManager::onProcessError);
 }
 
-ProcessManager* ProcessManager::instance()
+RunManager* RunManager::instance()
 {
-    static ProcessManager instance;
+    static RunManager instance;
     return &instance;
 }
 
-void ProcessManager::run(RunConfig* runConfig)
+void RunManager::run(RunConfig* runConfig)
 {
     if (m_process.state() == QProcess::Running) {
         showError("The executable file is currently running", AlreadyRunning);
@@ -51,10 +51,11 @@ void ProcessManager::run(RunConfig* runConfig)
 
     m_process.setProcessEnvironment(runConfig->env());
     m_process.setWorkingDirectory(runConfig->exeFile()->dirPath());
+    m_currentTaskName = runConfig->exeName();
     m_process.start();
 }
 
-bool ProcessManager::setupConfig(RunConfig* runConfig)
+bool RunManager::setupConfig(RunConfig* runConfig)
 {
     m_runConfig = runConfig;
     Prefix* prefix = runConfig->prefix();
@@ -117,7 +118,7 @@ bool ProcessManager::setupConfig(RunConfig* runConfig)
     return true;
 }
 
-void ProcessManager::setupProtonProcess()
+void RunManager::setupProtonProcess()
 {
     const Prefix* prefix = m_runConfig->prefix();
     QProcessEnvironment& env = m_runConfig->env();
@@ -147,7 +148,7 @@ void ProcessManager::setupProtonProcess()
     }
 }
 
-void ProcessManager::setupUmuProcess()
+void RunManager::setupUmuProcess()
 {
     const ExecutableFile* exeFile = m_runConfig->exeFile();
     const PrefixSettings* prefixSettings = m_runConfig->prefix()->settings();
@@ -170,7 +171,7 @@ void ProcessManager::setupUmuProcess()
     env.insert("UMU_LOG"_L1, APP_SETTINGS->loggingEnabled() ? Y : N);
 }
 
-void ProcessManager::setupLogging()
+void RunManager::setupLogging()
 {
     QFile logFile(APP_SETTINGS->logFilePath());
     if (logFile.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate)) {
@@ -196,27 +197,27 @@ void ProcessManager::setupLogging()
     m_process.setStandardOutputFile(APP_SETTINGS->logFilePath(), QIODevice::Append);
 }
 
-void ProcessManager::runWineCfg(const Prefix* prefix)
+void RunManager::runWineCfg(const Prefix* prefix)
 {
     runWinetricksUtility("winecfg"_L1, prefix);
 }
 
-void ProcessManager::runExplorer(const Prefix* prefix)
+void RunManager::runExplorer(const Prefix* prefix)
 {
     runWinetricksUtility("explorer"_L1, prefix);
 }
 
-void ProcessManager::runRegedit(const Prefix* prefix)
+void RunManager::runRegedit(const Prefix* prefix)
 {
     runWinetricksUtility("regedit"_L1, prefix);
 }
 
-void ProcessManager::runUninstaller(const Prefix* prefix)
+void RunManager::runUninstaller(const Prefix* prefix)
 {
     runWinetricksUtility("uninstaller"_L1, prefix);
 }
 
-void ProcessManager::runWinetricksUtility(const QString& utilName, const Prefix* prefix)
+void RunManager::runWinetricksUtility(const QString& utilName, const Prefix* prefix)
 {
     if (APP_SETTINGS->winetricksPath().isEmpty()) {
         showError("\"winetricks\" not found", NoWinetricks);
@@ -242,10 +243,12 @@ void ProcessManager::runWinetricksUtility(const QString& utilName, const Prefix*
     m_process.setProgram(APP_SETTINGS->umuPath());
     m_process.setArguments({ "winetricks", utilName }); // Don't use winetricks path!
 
+    m_currentTaskName = utilName;
+
     m_process.start();
 }
 
-void ProcessManager::stop()
+void RunManager::stop()
 {
     if (m_process.state() == QProcess::NotRunning) {
         return;
@@ -260,25 +263,26 @@ void ProcessManager::stop()
     }
 }
 
-bool ProcessManager::isRunning() const
+bool RunManager::isRunning() const
 {
     return m_isRunning;
 }
 
-void ProcessManager::onProcessStarted()
+void RunManager::onProcessStarted()
 {
     m_isRunning = true;
     emit runningChanged(true);
 }
 
-void ProcessManager::onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
+void RunManager::onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
+    m_currentTaskName.clear();
     qDebug() << "The process terminated with the code:" << exitCode;
     m_isRunning = false;
     emit runningChanged(false);
 }
 
-void ProcessManager::onProcessError(QProcess::ProcessError error)
+void RunManager::onProcessError(QProcess::ProcessError error)
 {
     QString errorText = m_process.errorString();
     switch (error) {
@@ -303,8 +307,12 @@ void ProcessManager::onProcessError(QProcess::ProcessError error)
     }
 }
 
-void ProcessManager::showError(const QString& errorText, RunningError error, bool emitText)
+void RunManager::showError(const QString& errorText, RunningError error, bool emitText)
 {
     qCritical() << errorText;
     emit runningError(error, emitText ? errorText : "");
+}
+
+QString RunManager::taskName() const {
+    return m_currentTaskName;
 }

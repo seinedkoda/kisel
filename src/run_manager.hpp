@@ -5,9 +5,9 @@
 #include "run_config.hpp"
 
 namespace kisel {
-#define RUN_MANAGER ProcessManager::instance()
+#define RUN_MANAGER RunManager::instance()
 
-class ProcessManager : public QObject {
+class RunManager : public QObject {
     Q_OBJECT
 
 public:
@@ -27,7 +27,7 @@ public:
     };
     Q_ENUM(RunningError)
 
-    static ProcessManager* instance();
+    static RunManager* instance();
 
     void run(RunConfig* runConfig);
     void runWineCfg(const Prefix* prefix);
@@ -36,10 +36,11 @@ public:
     void runUninstaller(const Prefix* prefix);
     void stop();
     [[nodiscard]] bool isRunning() const;
+    [[nodiscard]] QString taskName() const;
 
 signals:
     void runningChanged(bool isRunning);
-    void runningError(kisel::ProcessManager::RunningError error, const QString& errorText = "");
+    void runningError(kisel::RunManager::RunningError error, const QString& errorText = "");
 
 private slots:
     void onProcessStarted();
@@ -47,7 +48,7 @@ private slots:
     void onProcessError(QProcess::ProcessError error);
 
 private:
-    explicit ProcessManager(QObject* parent = nullptr);
+    explicit RunManager(QObject* parent = nullptr);
 
     bool setupConfig(RunConfig* runConfig);
     void setupProtonProcess();
@@ -59,5 +60,6 @@ private:
     QProcess m_process;
     bool m_isRunning = false;
     RunConfig* m_runConfig;
+    QString m_currentTaskName;
 };
 }

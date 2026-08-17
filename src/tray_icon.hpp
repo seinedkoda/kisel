@@ -11,7 +11,7 @@ class TrayIcon : public QObject {
     Q_OBJECT
 
 public:
-    explicit TrayIcon(ProcessManager* processManager);
+    explicit TrayIcon(RunManager* runManager);
 
 private slots:
     void onRunningChanged(bool isRunning);

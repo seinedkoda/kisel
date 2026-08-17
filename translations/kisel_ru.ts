@@ -4,12 +4,12 @@
 <context>
     <name>cli</name>
     <message>
-        <location filename="../src/main.cpp" line="21"/>
+        <location filename="../src/main.cpp" line="20"/>
         <source>Efficient launch of Windows programs</source>
         <translation>Эффективный запуск Windows программ</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="25"/>
+        <location filename="../src/main.cpp" line="24"/>
         <source>Run immediately in &lt;PrefixName&gt;</source>
         <translation>Запустить немедленно в &lt;ИмяПрефикса&gt;</translation>
     </message>
@@ -51,42 +51,42 @@
 <context>
     <name>kisel::AddNewCtDialog</name>
     <message>
-        <location filename="../src/ct_window.cpp" line="126"/>
+        <location filename="../src/ct_window.cpp" line="127"/>
         <source>Add to installation</source>
         <translation>Добавить в установку</translation>
     </message>
     <message>
-        <location filename="../src/ct_window.cpp" line="128"/>
+        <location filename="../src/ct_window.cpp" line="129"/>
         <source>Install a new tool</source>
         <translation>Установить новое средство</translation>
     </message>
     <message>
-        <location filename="../src/ct_window.cpp" line="134"/>
+        <location filename="../src/ct_window.cpp" line="135"/>
         <source>Source:</source>
         <translation>Источник:</translation>
     </message>
     <message>
-        <location filename="../src/ct_window.cpp" line="138"/>
+        <location filename="../src/ct_window.cpp" line="139"/>
         <source>&lt;No data&gt;</source>
         <translation>&lt;Нет данных&gt;</translation>
     </message>
     <message>
-        <location filename="../src/ct_window.cpp" line="143"/>
+        <location filename="../src/ct_window.cpp" line="144"/>
         <source>Version:</source>
         <translation>Версия:</translation>
     </message>
     <message>
-        <location filename="../src/ct_window.cpp" line="159"/>
+        <location filename="../src/ct_window.cpp" line="160"/>
         <source>Installation location:</source>
         <translation>Место установки:</translation>
     </message>
     <message>
-        <location filename="../src/ct_window.cpp" line="207"/>
+        <location filename="../src/ct_window.cpp" line="208"/>
         <source>Update error</source>
         <translation>Ошибка обновления</translation>
     </message>
     <message>
-        <location filename="../src/ct_window.cpp" line="207"/>
+        <location filename="../src/ct_window.cpp" line="208"/>
         <source>Error loading releases: %1</source>
         <translation>Ошибка загрузки выпусков: %1</translation>
     </message>
@@ -122,67 +122,72 @@
 <context>
     <name>kisel::AppSettingsWindow</name>
     <message>
-        <location filename="../src/app_settings_window.cpp" line="19"/>
+        <location filename="../src/app_settings_window.cpp" line="20"/>
         <source>Kisel — Settings</source>
         <translation>Кисель — Настройки</translation>
     </message>
     <message>
-        <location filename="../src/app_settings_window.cpp" line="28"/>
+        <location filename="../src/app_settings_window.cpp" line="30"/>
         <source>&lt;h3&gt;Global settings&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;Глобальные настройки&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../src/app_settings_window.cpp" line="31"/>
+        <location filename="../src/app_settings_window.cpp" line="33"/>
         <source>&lt;i&gt;For detailed settings, go to the prefix context menu in the main window&lt;/i&gt;</source>
         <translation>&lt;i&gt;Для детальной настройки перейдите в контекстное меню префикса на главном окне&lt;/i&gt;</translation>
     </message>
     <message>
-        <location filename="../src/app_settings_window.cpp" line="39"/>
+        <location filename="../src/app_settings_window.cpp" line="41"/>
         <source>General</source>
         <translation>Основное</translation>
     </message>
     <message>
-        <location filename="../src/app_settings_window.cpp" line="44"/>
+        <location filename="../src/app_settings_window.cpp" line="46"/>
         <source>Language</source>
         <translation>Язык</translation>
     </message>
     <message>
-        <location filename="../src/app_settings_window.cpp" line="66"/>
+        <location filename="../src/app_settings_window.cpp" line="57"/>
+        <source>Style</source>
+        <translation>Стиль</translation>
+    </message>
+    <message>
+        <location filename="../src/app_settings_window.cpp" line="77"/>
         <source>Default prefix</source>
         <translation>Префикс по умолчанию</translation>
     </message>
     <message>
-        <location filename="../src/app_settings_window.cpp" line="69"/>
+        <location filename="../src/app_settings_window.cpp" line="80"/>
         <source>Individual</source>
         <translation>Индивидуальный</translation>
     </message>
     <message>
-        <location filename="../src/app_settings_window.cpp" line="91"/>
+        <location filename="../src/app_settings_window.cpp" line="102"/>
         <source>Default compatibility tool</source>
         <translation>Средство совместимости по умолчанию</translation>
     </message>
     <message>
-        <location filename="../src/app_settings_window.cpp" line="95"/>
+        <location filename="../src/app_settings_window.cpp" line="106"/>
         <source>&lt;No installed&gt;</source>
         <translation>&lt;Нет установленных&gt;</translation>
     </message>
     <message>
-        <location filename="../src/app_settings_window.cpp" line="114"/>
+        <location filename="../src/app_settings_window.cpp" line="125"/>
         <source>Built-in</source>
         <translation>Встроенный</translation>
     </message>
     <message>
-        <location filename="../src/app_settings_window.cpp" line="115"/>
+        <location filename="../src/app_settings_window.cpp" line="126"/>
         <source>System</source>
         <translation>Системный</translation>
     </message>
     <message>
-        <location filename="../src/app_settings_window.cpp" line="123"/>
+        <location filename="../src/app_settings_window.cpp" line="134"/>
         <source>Runtime auto-update</source>
         <translation>Автоматическое обновление среды выполнения</translation>
     </message>
     <message>
-        <location filename="../src/app_settings_window.cpp" line="55"/>
+        <location filename="../src/app_settings_window.cpp" line="66"/>
         <source>Logging</source>
         <translation>Сохранение журнала запуска</translation>
     </message>
@@ -267,48 +272,48 @@
         <translation>Кисель — Средства совместимости</translation>
     </message>
     <message>
-        <location filename="../src/ct_window.cpp" line="30"/>
+        <location filename="../src/ct_window.cpp" line="31"/>
         <source>&lt;h3&gt;Compatibility Tools&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;Средства совместимости&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../src/ct_window.cpp" line="44"/>
+        <location filename="../src/ct_window.cpp" line="45"/>
         <source>Install a new one</source>
         <translation>Установить новый</translation>
     </message>
     <message>
-        <location filename="../src/ct_window.cpp" line="59"/>
+        <location filename="../src/ct_window.cpp" line="60"/>
         <source>Installation error</source>
         <translation>Ошибка установки</translation>
     </message>
     <message>
-        <location filename="../src/ct_window.cpp" line="80"/>
-        <location filename="../src/ct_window.cpp" line="87"/>
+        <location filename="../src/ct_window.cpp" line="81"/>
+        <location filename="../src/ct_window.cpp" line="88"/>
         <source>Confirmation required</source>
         <translation>Необходимо подтверждение</translation>
     </message>
     <message>
-        <location filename="../src/ct_window.cpp" line="80"/>
+        <location filename="../src/ct_window.cpp" line="81"/>
         <source>Delete &quot;%1&quot;?</source>
         <translation>Удалить &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../src/ct_window.cpp" line="85"/>
+        <location filename="../src/ct_window.cpp" line="86"/>
         <source>Cancel</source>
         <translation>Отменить</translation>
     </message>
     <message>
-        <location filename="../src/ct_window.cpp" line="87"/>
+        <location filename="../src/ct_window.cpp" line="88"/>
         <source>Cancel the installation process of &quot;%1&quot;?</source>
         <translation>Отменить процесс установки &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../src/ct_window.cpp" line="75"/>
+        <location filename="../src/ct_window.cpp" line="76"/>
         <source>Open in files</source>
         <translation>Открыть в файлах</translation>
     </message>
     <message>
-        <location filename="../src/ct_window.cpp" line="78"/>
+        <location filename="../src/ct_window.cpp" line="79"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
@@ -801,77 +806,77 @@
         <translation>Кисель — Префиксы</translation>
     </message>
     <message>
-        <location filename="../src/prefix_window.cpp" line="127"/>
+        <location filename="../src/prefix_window.cpp" line="128"/>
         <source>Open in files</source>
         <translation>Открыть в файлах</translation>
     </message>
     <message>
-        <location filename="../src/prefix_window.cpp" line="96"/>
+        <location filename="../src/prefix_window.cpp" line="97"/>
         <source>Configure</source>
         <translation>Настроить</translation>
     </message>
     <message>
-        <location filename="../src/prefix_window.cpp" line="68"/>
+        <location filename="../src/prefix_window.cpp" line="69"/>
         <source>&lt;h3&gt;Prefixes&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;Префиксы&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../src/prefix_window.cpp" line="102"/>
+        <location filename="../src/prefix_window.cpp" line="103"/>
         <source>Tools</source>
         <translation>Инструменты</translation>
     </message>
     <message>
-        <location filename="../src/prefix_window.cpp" line="104"/>
+        <location filename="../src/prefix_window.cpp" line="105"/>
         <source>Install components</source>
         <translation>Установить компоненты</translation>
     </message>
     <message>
-        <location filename="../src/prefix_window.cpp" line="107"/>
+        <location filename="../src/prefix_window.cpp" line="108"/>
         <source>Opening error</source>
         <translation>Ошибка открытия</translation>
     </message>
     <message>
-        <location filename="../src/prefix_window.cpp" line="107"/>
+        <location filename="../src/prefix_window.cpp" line="108"/>
         <source>&quot;winetricks&quot; not found! Please install this package to open this window</source>
         <translation>&quot;winetricks&quot; не найден! Пожалуйста установите этот пакет для открытия этого окна</translation>
     </message>
     <message>
-        <location filename="../src/prefix_window.cpp" line="115"/>
+        <location filename="../src/prefix_window.cpp" line="116"/>
         <source>Wine settings</source>
         <translation>Настройки Wine</translation>
     </message>
     <message>
-        <location filename="../src/prefix_window.cpp" line="118"/>
+        <location filename="../src/prefix_window.cpp" line="119"/>
         <source>Explorer</source>
         <translation>Проводник</translation>
     </message>
     <message>
-        <location filename="../src/prefix_window.cpp" line="121"/>
+        <location filename="../src/prefix_window.cpp" line="122"/>
         <source>Registry</source>
         <translation>Реестр</translation>
     </message>
     <message>
-        <location filename="../src/prefix_window.cpp" line="124"/>
+        <location filename="../src/prefix_window.cpp" line="125"/>
         <source>Remove programs</source>
         <translation>Удаление программ</translation>
     </message>
     <message>
-        <location filename="../src/prefix_window.cpp" line="132"/>
+        <location filename="../src/prefix_window.cpp" line="133"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../src/prefix_window.cpp" line="76"/>
+        <location filename="../src/prefix_window.cpp" line="77"/>
         <source>Add new</source>
         <translation>Добавить новый</translation>
     </message>
     <message>
-        <location filename="../src/prefix_window.cpp" line="134"/>
+        <location filename="../src/prefix_window.cpp" line="135"/>
         <source>Confirm</source>
         <translation>Подтвердить</translation>
     </message>
     <message>
-        <location filename="../src/prefix_window.cpp" line="134"/>
+        <location filename="../src/prefix_window.cpp" line="135"/>
         <source>Remove the &quot;%1&quot; prefix?</source>
         <translation>Удалить префикс &quot;%1&quot;?</translation>
     </message>
@@ -1009,14 +1014,24 @@
 <context>
     <name>kisel::TrayIcon</name>
     <message>
-        <location filename="../src/tray_icon.cpp" line="12"/>
+        <location filename="../src/tray_icon.cpp" line="37"/>
+        <source>Kisel</source>
+        <translation>Кисель</translation>
+    </message>
+    <message>
+        <location filename="../src/tray_icon.cpp" line="13"/>
         <source>Terminate the process</source>
         <translation>Завершить процесс</translation>
     </message>
     <message>
-        <location filename="../src/tray_icon.cpp" line="18"/>
+        <location filename="../src/tray_icon.cpp" line="19"/>
         <source>Exit</source>
         <translation>Выход</translation>
+    </message>
+    <message>
+        <location filename="../src/tray_icon.cpp" line="35"/>
+        <source>Kisel: %1</source>
+        <translation>Кисель: %1</translation>
     </message>
 </context>
 </TS>

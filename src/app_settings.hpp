@@ -25,6 +25,10 @@ public:
 
     static bool isFlatpak();
 
+    void setStyleName(const QString& styleName);
+    QString styleName();
+    void applyCurrentStyle();
+
     void setUseIndividualPrefix(bool useIndividualPrefix);
     [[nodiscard]] bool useIndividualPrefix() const;
 

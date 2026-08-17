@@ -1,8 +1,11 @@
 #include "app_settings.hpp"
 
+#include <QApplication>
 #include <QFileInfo>
 #include <QProcessEnvironment>
 #include <QStandardPaths>
+#include <QStyle>
+#include <QStyleFactory>
 
 using namespace Qt::StringLiterals;
 using namespace kisel;
@@ -10,6 +13,8 @@ using namespace kisel;
 AppSettings::AppSettings(QObject* parent)
     : QSettings(QDir::homePath() % "/.config/kisel/kisel.conf"_L1, QSettings::IniFormat, parent)
 {
+    QIcon::setThemeSearchPaths(QIcon::themeSearchPaths() << ":/icons/thirdparty");
+    QIcon::setFallbackThemeName("Papirus");
 }
 
 AppSettings* AppSettings::instance()
@@ -58,6 +63,22 @@ QString AppSettings::locale() const
 bool AppSettings::isFlatpak()
 {
     return QProcessEnvironment::systemEnvironment().contains("FLATPAK_ID"_L1);
+}
+
+void AppSettings::setStyleName(const QString& styleName)
+{
+    QApplication::setStyle(QStyleFactory::create(styleName));
+    setValue("style"_L1, styleName);
+}
+
+QString AppSettings::styleName()
+{
+    return value("style"_L1, QApplication::style()->objectName()).toString();
+}
+
+void AppSettings::applyCurrentStyle()
+{
+    QApplication::setStyle(QStyleFactory::create(styleName()));
 }
 
 void AppSettings::setUseIndividualPrefix(bool useIndividualPrefix)

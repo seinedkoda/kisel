@@ -19,6 +19,7 @@ CtWindow::CtWindow(QWidget* parent)
     , m_ctTableView(new QTableView(this))
 {
     setWindowTitle(tr("Kisel — Compatibility Tools"));
+    setWindowIcon(QIcon(":/icons/kisel-256x256.png"));
     setAttribute(Qt::WA_DeleteOnClose);
     resize(400, height());
 

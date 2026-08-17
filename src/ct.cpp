@@ -11,7 +11,7 @@ Ct::Ct(const QString& path, QObject* parent)
     if (m_dir.absolutePath().contains(QStringLiteral("steam"))) {
         m_icon = QIcon::fromTheme("steam");
     } else {
-        m_icon = QIcon(":/icons/kisel.svg");
+        m_icon = QIcon(":/icons/kisel-256x256.png");
     }
 }
 

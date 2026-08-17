@@ -26,7 +26,7 @@ AboutDialog::AboutDialog(QWidget* parent)
 
     auto* logoLabel = new QLabel(this);
     logoLabel->setFixedSize(64, 64);
-    QPixmap logoPixmap(":/icons/kisel.png"_L1);
+    QPixmap logoPixmap(":/icons/kisel.svg"_L1);
     logoLabel->setPixmap(logoPixmap.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     aboutAppLayout->addWidget(logoLabel);
 
