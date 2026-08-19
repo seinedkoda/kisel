@@ -152,42 +152,42 @@
         <translation>Стиль</translation>
     </message>
     <message>
-        <location filename="../src/app_settings_window.cpp" line="77"/>
+        <location filename="../src/app_settings_window.cpp" line="83"/>
         <source>Default prefix</source>
         <translation>Префикс по умолчанию</translation>
     </message>
     <message>
-        <location filename="../src/app_settings_window.cpp" line="80"/>
+        <location filename="../src/app_settings_window.cpp" line="86"/>
         <source>Individual</source>
         <translation>Индивидуальный</translation>
     </message>
     <message>
-        <location filename="../src/app_settings_window.cpp" line="102"/>
+        <location filename="../src/app_settings_window.cpp" line="108"/>
         <source>Default compatibility tool</source>
         <translation>Средство совместимости по умолчанию</translation>
     </message>
     <message>
-        <location filename="../src/app_settings_window.cpp" line="106"/>
+        <location filename="../src/app_settings_window.cpp" line="112"/>
         <source>&lt;No installed&gt;</source>
         <translation>&lt;Нет установленных&gt;</translation>
     </message>
     <message>
-        <location filename="../src/app_settings_window.cpp" line="125"/>
+        <location filename="../src/app_settings_window.cpp" line="131"/>
         <source>Built-in</source>
         <translation>Встроенный</translation>
     </message>
     <message>
-        <location filename="../src/app_settings_window.cpp" line="126"/>
+        <location filename="../src/app_settings_window.cpp" line="132"/>
         <source>System</source>
         <translation>Системный</translation>
     </message>
     <message>
-        <location filename="../src/app_settings_window.cpp" line="134"/>
+        <location filename="../src/app_settings_window.cpp" line="140"/>
         <source>Runtime auto-update</source>
         <translation>Автоматическое обновление среды выполнения</translation>
     </message>
     <message>
-        <location filename="../src/app_settings_window.cpp" line="66"/>
+        <location filename="../src/app_settings_window.cpp" line="72"/>
         <source>Logging</source>
         <translation>Сохранение журнала запуска</translation>
     </message>
@@ -327,7 +327,7 @@
     </message>
     <message>
         <location filename="../src/main_window.cpp" line="33"/>
-        <location filename="../src/main_window.cpp" line="234"/>
+        <location filename="../src/main_window.cpp" line="235"/>
         <source>The program is not selected</source>
         <translation>Программа не выбрана</translation>
     </message>
@@ -363,7 +363,7 @@
     </message>
     <message>
         <location filename="../src/main_window.cpp" line="34"/>
-        <location filename="../src/main_window.cpp" line="443"/>
+        <location filename="../src/main_window.cpp" line="445"/>
         <source>Run</source>
         <translation>Запустить</translation>
     </message>
@@ -423,13 +423,13 @@
         <translation>Настройки приложения</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="450"/>
-        <location filename="../src/main_window.cpp" line="454"/>
+        <location filename="../src/main_window.cpp" line="452"/>
+        <location filename="../src/main_window.cpp" line="456"/>
         <source>Unable to open</source>
         <translation>Невозможно открыть</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="450"/>
+        <location filename="../src/main_window.cpp" line="452"/>
         <source>Logging is disabled in the settings</source>
         <translation>Журнал запуска отключен в настройках</translation>
     </message>
@@ -439,17 +439,17 @@
         <translation>Версия: %1</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="365"/>
+        <location filename="../src/main_window.cpp" line="367"/>
         <source>Select the executable file</source>
         <translation>Выберите исполняемый файл</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="407"/>
+        <location filename="../src/main_window.cpp" line="409"/>
         <source>The required compatibility tool is missing, open window to manage?</source>
         <translation>Отсутствует необходимое средство совместимости, открыть окно для управления?</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="392"/>
+        <location filename="../src/main_window.cpp" line="394"/>
         <source>Running error</source>
         <translation>Ошибка запуска</translation>
     </message>
@@ -484,77 +484,77 @@
         <translation>Открыть журнал запуска</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="252"/>
+        <location filename="../src/main_window.cpp" line="253"/>
         <source>&lt;Select a program&gt;</source>
         <translation>&lt;Выберите программу&gt;</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="367"/>
+        <location filename="../src/main_window.cpp" line="369"/>
         <source>Executable files (*.exe *.msi *.bat);;All files (*.*)</source>
         <translation>Исполняемыеф файлы (*.exe *.msi *.bat);;Все файлы (*.*)</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="395"/>
+        <location filename="../src/main_window.cpp" line="397"/>
         <source>The executable file is currently running</source>
         <translation>Исполняемый файл уже запущен</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="398"/>
+        <location filename="../src/main_window.cpp" line="400"/>
         <source>The executable file is not valid</source>
         <translation>Не подходящий исполняемый файл</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="401"/>
+        <location filename="../src/main_window.cpp" line="403"/>
         <source>Failed to write prefix</source>
         <translation>Не удалось записать префикс</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="413"/>
+        <location filename="../src/main_window.cpp" line="415"/>
         <source>&quot;umu-run&quot; not found</source>
         <translation>Не найден &quot;umu-run&quot;</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="416"/>
+        <location filename="../src/main_window.cpp" line="418"/>
         <source>&quot;winetricks&quot; not found</source>
         <translation>Не найден &quot;winetricks&quot;</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="419"/>
+        <location filename="../src/main_window.cpp" line="421"/>
         <source>Failed to start process: %1</source>
         <translation>Не удалось запустить процесс: %1</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="422"/>
+        <location filename="../src/main_window.cpp" line="424"/>
         <source>Process error: %1</source>
         <translation>Ошибка процесса: %1</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="425"/>
+        <location filename="../src/main_window.cpp" line="427"/>
         <source>Process timeout: %1</source>
         <translation>Истекло время ожидания процесса: %1</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="428"/>
+        <location filename="../src/main_window.cpp" line="430"/>
         <source>Process read error: %1</source>
         <translation>Ошибка чтения процесса: %1</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="431"/>
+        <location filename="../src/main_window.cpp" line="433"/>
         <source>Process write error: %1</source>
         <translation>Ошибка записи процесса: %1</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="434"/>
+        <location filename="../src/main_window.cpp" line="436"/>
         <source>Unknown error: %1</source>
         <translation>Неизвестная ошибка: %1</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="443"/>
+        <location filename="../src/main_window.cpp" line="445"/>
         <source>Stop</source>
         <translation>Остановить</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="454"/>
+        <location filename="../src/main_window.cpp" line="456"/>
         <source>There is no run log, please run the executable file first</source>
         <translation>Нет журнала запуска, сначала запустите исполняемый файл</translation>
     </message>
@@ -683,7 +683,7 @@
 <context>
     <name>kisel::PrefixSettingsDialog</name>
     <message>
-        <location filename="../src/prefix_settings_dialog.cpp" line="125"/>
+        <location filename="../src/prefix_settings_dialog.cpp" line="126"/>
         <source>Enable accessibility controls, such as controlling the application interface with a gamepad</source>
         <translation>Включить специальные возможности управления, такие как управление интерфейсом с помощью геймпада</translation>
     </message>
@@ -698,22 +698,22 @@
         <translation>Включить драйвер Wayland</translation>
     </message>
     <message>
-        <location filename="../src/prefix_settings_dialog.cpp" line="87"/>
+        <location filename="../src/prefix_settings_dialog.cpp" line="88"/>
         <source>SDL input instead of HIDRAW/Steam Input</source>
         <translation>SDL ввод вместо HIDRAW/Steam Input</translation>
     </message>
     <message>
-        <location filename="../src/prefix_settings_dialog.cpp" line="151"/>
+        <location filename="../src/prefix_settings_dialog.cpp" line="152"/>
         <source>Use Steam</source>
         <translation>Использовать Steam</translation>
     </message>
     <message>
-        <location filename="../src/prefix_settings_dialog.cpp" line="143"/>
+        <location filename="../src/prefix_settings_dialog.cpp" line="144"/>
         <source>Steam Environment</source>
         <translation>Окружение Steam</translation>
     </message>
     <message>
-        <location filename="../src/prefix_settings_dialog.cpp" line="144"/>
+        <location filename="../src/prefix_settings_dialog.cpp" line="145"/>
         <source>Using the Steam environment for better compatibility with some games</source>
         <translation>Использование окружения Steam для лучшей совместимости с некоторыми играми</translation>
     </message>
@@ -733,17 +733,17 @@
         <translation>&lt;i&gt;Наведите на опцию чтобы узнать больше&lt;/i&gt;</translation>
     </message>
     <message>
-        <location filename="../src/prefix_settings_dialog.cpp" line="104"/>
+        <location filename="../src/prefix_settings_dialog.cpp" line="105"/>
         <source>Services</source>
         <translation>Сервисы</translation>
     </message>
     <message>
-        <location filename="../src/prefix_settings_dialog.cpp" line="108"/>
+        <location filename="../src/prefix_settings_dialog.cpp" line="109"/>
         <source>Enable Performance Monitor (requires mangohud to be installed)</source>
         <translation>Включить монитор производительности (требуется установленный mangohud)</translation>
     </message>
     <message>
-        <location filename="../src/prefix_settings_dialog.cpp" line="117"/>
+        <location filename="../src/prefix_settings_dialog.cpp" line="118"/>
         <source>Enable Vulkan app screen capture for OBS (requires obs-vkcapture to be installed)</source>
         <translation>Включить захват экрана приложений на Vulkan для OBS (требуется установленный obs-vkcapture)</translation>
     </message>
@@ -768,27 +768,32 @@
         <translation>Автоматически включает wine-wayland драйвер, поскольку это является обязательным требованием</translation>
     </message>
     <message>
-        <location filename="../src/prefix_settings_dialog.cpp" line="94"/>
+        <location filename="../src/prefix_settings_dialog.cpp" line="81"/>
+        <source>Compatibility with 32-bit applications</source>
+        <translation>Совместимость с 32-битными приложениями</translation>
+    </message>
+    <message>
+        <location filename="../src/prefix_settings_dialog.cpp" line="95"/>
         <source>OpenGL instead of Vulkan</source>
         <translation>OpenGL вместо Vulkan</translation>
     </message>
     <message>
-        <location filename="../src/prefix_settings_dialog.cpp" line="134"/>
+        <location filename="../src/prefix_settings_dialog.cpp" line="135"/>
         <source>Using Steam</source>
         <translation>Использование Steam</translation>
     </message>
     <message>
-        <location filename="../src/prefix_settings_dialog.cpp" line="136"/>
+        <location filename="../src/prefix_settings_dialog.cpp" line="137"/>
         <source>Don&apos;t use Steam</source>
         <translation>Не использовать Steam</translation>
     </message>
     <message>
-        <location filename="../src/prefix_settings_dialog.cpp" line="159"/>
+        <location filename="../src/prefix_settings_dialog.cpp" line="160"/>
         <source>Steam Overlay</source>
         <translation>Оверлей Steam</translation>
     </message>
     <message>
-        <location filename="../src/prefix_settings_dialog.cpp" line="166"/>
+        <location filename="../src/prefix_settings_dialog.cpp" line="167"/>
         <source>Enable OnlineFix</source>
         <translation>Включить OnlineFix</translation>
     </message>

@@ -85,7 +85,7 @@ void PrefixSettings::setWow64Enabled(bool enabled)
 
 bool PrefixSettings::wow64Enabled() const
 {
-    return value("wow64"_L1, false).toBool();
+    return value("wow64"_L1, true).toBool();
 }
 
 void PrefixSettings::setSdlInputEnabled(bool enabled)

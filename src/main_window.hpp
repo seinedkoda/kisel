@@ -39,6 +39,7 @@ private:
     const QSize m_exeIconSize { 64, 64 };
     const QPixmap m_unknownExePixmap { QIcon::fromTheme("unknown").pixmap(m_exeIconSize) };
     QString m_lastSearchPath = QDir::homePath();
+    bool m_manuallyCheckedIndividual = false;
     RunConfig* m_runConfig;
     QString m_individualPrefixName;
     QLabel* m_exeIconLabel;

@@ -217,6 +217,7 @@ MainWindow::MainWindow(const QString& exePath)
 
 void MainWindow::individualPrefixStateChanged(bool checked)
 {
+    m_manuallyCheckedIndividual = checked;
     if (checked) {
         setPrefix(m_individualPrefix);
     } else {
@@ -260,6 +261,7 @@ void MainWindow::setPreferredPrefix()
     if (m_runConfig->exeFile()->isValid()) {
         // Prefer individual prefix if it exists
         if (PREFIX_MODEL->containsName(m_individualPrefixName)) {
+            m_manuallyCheckedIndividual = false;
             setPrefix(m_individualPrefix);
             return;
         }
@@ -274,7 +276,7 @@ void MainWindow::setPreferredPrefix()
         }
     }
 
-    if (m_individualPrefixCheckBox->isChecked()) {
+    if (m_manuallyCheckedIndividual || APP_SETTINGS->useIndividualPrefix()) {
         setPrefix(m_individualPrefix);
     } else {
         setPrefix(PREFIX_MODEL->defaultPrefix());

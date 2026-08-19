@@ -98,7 +98,7 @@ include(FetchContent)
 FetchContent_Declare(
     umu_launcher_pkg
     URL "https://github.com/Open-Wine-Components/umu-launcher/releases/download/${UMU_VERSION}/umu-launcher-${UMU_VERSION}-zipapp.tar"
-    DOWNLOAD_EXTRACT_TIMESTAMP  TRUE
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
 )
 FetchContent_MakeAvailable(umu_launcher_pkg)
 
@@ -141,14 +141,13 @@ set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${CM
 
 # .rpm (cpack -G RPM)
 set(CPACK_RPM_PACKAGE_ARCHITECTURE "x86_64")
-set(CPACK_RPM_PACKAGE_REQUIRES "qt6-qtbase, icoutils, python3, python3-xlib, python3-pyzstd")
+set(CPACK_RPM_PACKAGE_REQUIRES "qt6-qtbase, icoutils, python3")
 set(CPACK_RPM_PACKAGE_RECOMMENDS "mangohud")
 set(CPACK_RPM_PACKAGE_SUGGESTS "winetricks, obs-studio-plugin-vkcapture")
 
 # .deb (cpack -G DEB)
 set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "amd64")
-set(CPACK_DEBIAN_PACKAGE_DEPENDS "libqt6widgets6, icoutils, libc6 (>= 2.34), libgcc-s1 (>= 4.2),
-    python3, python3-xlib (>= 0.33), apparmor-profiles, libgl1-mesa-dri:i386, libglx-mesa0:i386")
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "libqt6widgets6, icoutils, python3")
 set(CPACK_DEBIAN_PACKAGE_RECOMMENDS "mangohud")
 set(CPACK_DEBIAN_PACKAGE_SUGGESTS "winetricks, obs-vkcapture")
 set(CPACK_DEBIAN_PACKAGE_SECTION "utils")

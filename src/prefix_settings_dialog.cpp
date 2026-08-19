@@ -78,6 +78,7 @@ PrefixSettingsDialog::PrefixSettingsDialog(Prefix* prefix, QWidget* parent)
     compatibilityTabLayout->addWidget(hdrCheckBox);
 
     auto* wow64CheckBox = new QCheckBox(tr("Enable WOW64"));
+    wow64CheckBox->setToolTip(tr("Compatibility with 32-bit applications"));
     wow64CheckBox->setChecked(m_prefix->settings()->wow64Enabled());
     connect(wow64CheckBox, &QCheckBox::clicked, this, [this](bool checked) {
         m_prefix->settings()->setWow64Enabled(checked);

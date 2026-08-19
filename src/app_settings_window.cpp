@@ -58,8 +58,14 @@ AppSettingsWindow::AppSettingsWindow(QWidget* parent)
     generalTabLayout->addWidget(styleLabel);
 
     auto* styleComboBox = new QComboBox(this);
-    styleComboBox->addItems(QStyleFactory::keys());
-    styleComboBox->setCurrentText(APP_SETTINGS->styleName());
+    static QStringList styles = QStyleFactory::keys();
+    styleComboBox->addItems(styles);
+    const QString savedStyle = APP_SETTINGS->styleName();
+    if (styles.contains(savedStyle)) {
+        styleComboBox->setCurrentText(savedStyle);
+    } else {
+        styleComboBox->setCurrentText(QStringLiteral("Fusion"));
+    }
     connect(styleComboBox, &QComboBox::currentTextChanged, this, [](const QString& styleName) { APP_SETTINGS->setStyleName(styleName); });
     generalTabLayout->addWidget(styleComboBox);
 

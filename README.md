@@ -49,8 +49,6 @@ sudo pacman -U kisel-*.pkg.tar.zst
 ### Debian
 **[Download the latest version of deb](https://github.com/seinedkoda/kisel/releases/latest)**
 ```bash
-sudo dpkg --add-architecture i386
-sudo apt update
 sudo apt install ./kisel-*.deb
 ```
 
