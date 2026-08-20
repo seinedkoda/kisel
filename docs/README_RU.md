@@ -39,20 +39,26 @@
 
 ## Установка 📦
 
+### Flatpak (Универсальный)
+**[Загрузите последнюю версию .flatpak](https://github.com/seinedkoda/kisel/releases/latest)**
+```bash
+sudo flatpak install kisel-*.flatpak
+```
+
 ### Arch Linux
-**[Загрузите последнюю версию pkg.tar.zst](https://github.com/seinedkoda/kisel/releases/latest)**
+**[Загрузите последнюю версию .pacman](https://github.com/seinedkoda/kisel/releases/latest)**
 ```bash
 sudo pacman -U kisel-*.pkg.tar.zst
 ```
 
 ### Debian
-**[Загрузите последнюю версию deb](https://github.com/seinedkoda/kisel/releases/latest)**
+**[Загрузите последнюю версию .deb](https://github.com/seinedkoda/kisel/releases/latest)**
 ```bash
 sudo apt install ./kisel-*.deb
 ```
 
 ### Fedora
-**[Загрузите последнюю версию rpm](https://github.com/seinedkoda/kisel/releases/latest)**
+**[Загрузите последнюю версию .rpm](https://github.com/seinedkoda/kisel/releases/latest)**
 ```bash
 sudo dnf install ./kisel-*.rpm
 ```

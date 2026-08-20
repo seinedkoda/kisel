@@ -1,6 +1,6 @@
 # Maintainer: Seined Koda <seinedk@gmail.com>
 pkgname=kisel
-pkgver=1.2.0
+pkgver=1.3.0
 pkgrel=1
 pkgdesc="Efficient launch of Windows programs"
 arch=('x86_64')
@@ -27,7 +27,7 @@ makedepends=(
 )
 
 source=("${pkgname}-${pkgver}.tar.gz::${url}/archive/v${pkgver}.tar.gz")
-sha256sums=('9b9493ddf22678bc367d37b7ab542d2e07ada5d34c70a5a959eca5ee9b9b673f')
+sha256sums=('270805a68626112c98222fd1edc00e160f1c7346880bb0b5a20aa1c899fe9393')
 
 build() {
   cmake -B build -S "${pkgname}-${pkgver}" \
@@ -35,7 +35,7 @@ build() {
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_INSTALL_PREFIX=/usr
 
-  cmake --build build
+  cmake --build build -j $(nproc)
 }
 
 package() {

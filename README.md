@@ -41,20 +41,26 @@ Efficient launch of Windows programs
 
 ## Installation 📦
 
+### Flatpak (Universal)
+**[Download the latest version of .flatpak](https://github.com/seinedkoda/kisel/releases/latest)**
+```bash
+sudo flatpak install kisel-*.flatpak
+```
+
 ### Arch Linux
-**[Download the latest version of pkg.tar.zst](https://github.com/seinedkoda/kisel/releases/latest)**
+**[Download the latest version of .pacman](https://github.com/seinedkoda/kisel/releases/latest)**
 ```bash
 sudo pacman -U kisel-*.pkg.tar.zst
 ```
 
 ### Debian
-**[Download the latest version of deb](https://github.com/seinedkoda/kisel/releases/latest)**
+**[Download the latest version of .deb](https://github.com/seinedkoda/kisel/releases/latest)**
 ```bash
 sudo apt install ./kisel-*.deb
 ```
 
 ### Fedora
-**[Download the latest version of rpm](https://github.com/seinedkoda/kisel/releases/latest)**
+**[Download the latest version of .rpm](https://github.com/seinedkoda/kisel/releases/latest)**
 ```bash
 sudo dnf install ./kisel-*.rpm
 ```
