@@ -1,6 +1,10 @@
 #pragma once
 
-#include "run_config.hpp"
+#include <QObject>
+#include <QFileInfo>
+#include <QIcon>
+
+#include "prefix.hpp"
 
 namespace kisel {
 class ExecutableFile : public QObject {
@@ -21,6 +25,8 @@ public:
     [[nodiscard]] QString name() const;
     [[nodiscard]] QString baseName() const;
     [[nodiscard]] bool isValid() const;
+    [[nodiscard]] bool isMsi() const;
+    [[nodiscard]] bool isCmd() const;
     const QIcon& icon();
     void createShortcut(
         const Prefix& prefix,

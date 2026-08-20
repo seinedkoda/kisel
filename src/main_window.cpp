@@ -11,25 +11,23 @@
 #include <QSizePolicy>
 #include <QVBoxLayout>
 
+#include "about_dialog.hpp"
 #include "app_settings.hpp"
 #include "app_settings_window.hpp"
+#include "ct_installer.hpp"
 #include "ct_model.hpp"
 #include "ct_window.hpp"
-#include "executable_file.hpp"
-#include "prefix.hpp"
 #include "prefix_components_dialog.hpp"
 #include "prefix_model.hpp"
 #include "prefix_settings.hpp"
 #include "prefix_settings_dialog.hpp"
 #include "prefix_window.hpp"
-#include "run_config.hpp"
 #include "shortcut_dialog.hpp"
 
 using namespace kisel;
 
 MainWindow::MainWindow(const QString& exePath)
     : QMainWindow(nullptr)
-    , m_exeFile(new ExecutableFile(exePath, this))
     , m_runConfig(new RunConfig(this))
     , m_exeIconLabel(new QLabel(this))
     , m_exeNameLabel(new QLabel(tr("The program is not selected"), this))
@@ -41,10 +39,11 @@ MainWindow::MainWindow(const QString& exePath)
     , m_prefixMenuButton(new QToolButton(this))
     , m_ctComboBox(new QComboBox(this))
     , m_ctWindowButton(new QToolButton(this))
-    , m_appSettingsWindowButton(new QToolButton(this))
 {
+    m_runConfig->setExecutablePath(exePath);
+
     setWindowTitle(tr("Kisel"));
-    setWindowIcon(QIcon(":/icons/kisel.svg"));
+    setWindowIcon(QIcon(":/icons/kisel-256x256.png"));
     setAttribute(Qt::WA_DeleteOnClose);
 
     auto* centralWidget = new QWidget(this);
@@ -133,16 +132,16 @@ MainWindow::MainWindow(const QString& exePath)
     });
 
     auto* winecfgAction = m_prefixToolsMenu->addAction(QIcon::fromTheme("wine-symbolic"), tr("Wine settings"));
-    connect(winecfgAction, &QAction::triggered, this, [this]() { PROCESS_MANAGER->runWineCfg(m_runConfig->prefix()); });
+    connect(winecfgAction, &QAction::triggered, this, [this]() { RUN_MANAGER->runWineCfg(m_runConfig->prefix()); });
 
     auto* explorerAction = m_prefixToolsMenu->addAction(QIcon::fromTheme("document-open-folder"), tr("Explorer"));
-    connect(explorerAction, &QAction::triggered, this, [this]() { PROCESS_MANAGER->runExplorer(m_runConfig->prefix()); });
+    connect(explorerAction, &QAction::triggered, this, [this]() { RUN_MANAGER->runExplorer(m_runConfig->prefix()); });
 
     auto* regeditAction = m_prefixToolsMenu->addAction(QIcon::fromTheme("view-list-text"), tr("Registry"));
-    connect(regeditAction, &QAction::triggered, this, [this]() { PROCESS_MANAGER->runRegedit(m_runConfig->prefix()); });
+    connect(regeditAction, &QAction::triggered, this, [this]() { RUN_MANAGER->runRegedit(m_runConfig->prefix()); });
 
     auto* uninstallerAction = m_prefixToolsMenu->addAction(QIcon::fromTheme("entry-delete"), tr("Remove programs"));
-    connect(uninstallerAction, &QAction::triggered, this, [this]() { PROCESS_MANAGER->runUninstaller(m_runConfig->prefix()); });
+    connect(uninstallerAction, &QAction::triggered, this, [this]() { RUN_MANAGER->runUninstaller(m_runConfig->prefix()); });
 
     m_prefixOpenAction = prefixMenu->addAction(QIcon::fromTheme("document-open-folder"), tr("Open in files"));
     connect(m_prefixOpenAction, &QAction::triggered, this, [this]() { QDesktopServices::openUrl(QUrl::fromLocalFile(m_runConfig->prefix()->path())); });
@@ -161,11 +160,19 @@ MainWindow::MainWindow(const QString& exePath)
     auto* ctLabel = new QLabel(tr("Compatibility tool"), this);
     environmentBoxLayout->addWidget(ctLabel, 3, 0);
 
-    m_ctComboBox->setModel(CT_MODEL);
+    auto* ctInstalledProxyModel = new CtInstalledProxyModel(this);
+    m_ctComboBox->setPlaceholderText(tr("Install a new one →"));
+    ctInstalledProxyModel->setSourceModel(CT_MODEL);
+    m_ctComboBox->setModel(ctInstalledProxyModel);
+    connect(CT_INSTALLER, &CtInstaller::newInstalled, this, [this]() {
+        if (m_ctComboBox->currentIndex() == -1) {
+            m_ctComboBox->setCurrentIndex(0);
+        }
+    });
     environmentBoxLayout->addWidget(m_ctComboBox, 4, 0);
 
     m_ctWindowButton->setToolTip(tr("Open the Compatibility Tools window"));
-    m_ctWindowButton->setIcon(QIcon::fromTheme("browser-download"));
+    m_ctWindowButton->setIcon(QIcon::fromTheme("view-list"));
     connect(m_ctWindowButton, &QToolButton::clicked, this, [this]() { openCtWindow(); });
     environmentBoxLayout->addWidget(m_ctWindowButton, 4, 1);
 
@@ -174,17 +181,32 @@ MainWindow::MainWindow(const QString& exePath)
     bottomLayout->setContentsMargins(0, 0, 0, 0);
     layout->addWidget(bottomWidget);
 
-    m_appSettingsWindowButton->setToolTip(tr("Application settings"));
-    m_appSettingsWindowButton->setIcon(QIcon::fromTheme("configure"));
-    connect(m_appSettingsWindowButton, &QToolButton::clicked, this, []() { openAppSettingsWindow(); });
-    bottomLayout->addWidget(m_appSettingsWindowButton);
+    auto* appSettingsWindowButton = new QToolButton(this);
+    appSettingsWindowButton->setToolTip(tr("Application settings"));
+    appSettingsWindowButton->setIcon(QIcon::fromTheme("configure"));
+    connect(appSettingsWindowButton, &QToolButton::clicked, this, []() { openAppSettingsWindow(); });
+    bottomLayout->addWidget(appSettingsWindowButton);
+
+    auto* openLogFileButton = new QToolButton(this);
+    openLogFileButton->setToolTip(tr("Open log file"));
+    openLogFileButton->setIcon(QIcon::fromTheme("text-x-log"));
+    connect(openLogFileButton, &QToolButton::clicked, this, &MainWindow::openLogFile);
+    bottomLayout->addWidget(openLogFileButton);
+
+    auto* aboutAppButton = new QToolButton(this);
+    aboutAppButton->setIcon(QIcon::fromTheme("help-about"));
+    connect(aboutAppButton, &QToolButton::clicked, this, [this]() {
+        auto* aboutDialog = new AboutDialog(this);
+        aboutDialog->exec();
+    });
+    bottomLayout->addWidget(aboutAppButton);
 
     auto* versionLabel = new QLabel(tr("Version: %1").arg(APP_VERSION), this);
     versionLabel->setEnabled(false);
     bottomLayout->addWidget(versionLabel);
 
-    connect(PROCESS_MANAGER, &ProcessManager::runningError, this, &MainWindow::onRunningError);
-    connect(PROCESS_MANAGER, &ProcessManager::runningChanged, this, &MainWindow::onRunningChanged);
+    connect(RUN_MANAGER, &RunManager::runningError, this, &MainWindow::onRunningError);
+    connect(RUN_MANAGER, &RunManager::runningChanged, this, &MainWindow::onRunningChanged);
 
     setExecutablePath(exePath);
 
@@ -195,6 +217,7 @@ MainWindow::MainWindow(const QString& exePath)
 
 void MainWindow::individualPrefixStateChanged(bool checked)
 {
+    m_manuallyCheckedIndividual = checked;
     if (checked) {
         setPrefix(m_individualPrefix);
     } else {
@@ -204,16 +227,16 @@ void MainWindow::individualPrefixStateChanged(bool checked)
 
 void MainWindow::setExecutablePath(const QString& exePath)
 {
-    m_exeFile->setPath(exePath);
+    m_runConfig->setExecutablePath(exePath);
 
-    bool exeIsValid = m_exeFile->isValid();
+    bool exeIsValid = m_runConfig->exeFile()->isValid();
     m_exeNameLabel->setEnabled(exeIsValid);
     m_runStopAction->setEnabled(exeIsValid);
-    m_exeNameLabel->setText(exeIsValid ? m_exeFile->name() : tr("The program is not selected"));
-    if (!exeIsValid || m_exeFile->icon().isNull()) {
+    m_exeNameLabel->setText(exeIsValid ? m_runConfig->exeName() : tr("The program is not selected"));
+    if (!exeIsValid || m_runConfig->exeIcon().isNull()) {
         m_exeIconLabel->setPixmap(m_unknownExePixmap);
     } else {
-        m_exeIconLabel->setPixmap(m_exeFile->icon().pixmap(m_exeIconSize));
+        m_exeIconLabel->setPixmap(m_runConfig->exeIcon().pixmap(m_exeIconSize));
     }
 
     if (m_individualPrefix) {
@@ -223,7 +246,7 @@ void MainWindow::setExecutablePath(const QString& exePath)
     }
 
     if (exeIsValid) {
-        m_individualPrefixName = Prefix::generatePrefixNameFromFile(m_exeFile->path());
+        m_individualPrefixName = Prefix::generatePrefixNameFromFile(m_runConfig->exePath());
         m_individualPrefix = new Prefix(m_individualPrefixName, this);
         m_prefixComboBox->setPlaceholderText(m_individualPrefixName);
     } else {
@@ -235,15 +258,16 @@ void MainWindow::setExecutablePath(const QString& exePath)
 
 void MainWindow::setPreferredPrefix()
 {
-    if (m_exeFile->isValid()) {
+    if (m_runConfig->exeFile()->isValid()) {
         // Prefer individual prefix if it exists
         if (PREFIX_MODEL->containsName(m_individualPrefixName)) {
+            m_manuallyCheckedIndividual = false;
             setPrefix(m_individualPrefix);
             return;
         }
 
         // If the executable file is inside the prefix, then prefer it
-        const QString& exePath = m_exeFile->path();
+        const QString& exePath = m_runConfig->exePath();
         for (const auto& prefix : PREFIX_MODEL->list()) {
             if (exePath.startsWith(prefix->path())) {
                 setPrefix(prefix);
@@ -252,7 +276,7 @@ void MainWindow::setPreferredPrefix()
         }
     }
 
-    if (m_individualPrefixCheckBox->isChecked()) {
+    if (m_manuallyCheckedIndividual || APP_SETTINGS->useIndividualPrefix()) {
         setPrefix(m_individualPrefix);
     } else {
         setPrefix(PREFIX_MODEL->defaultPrefix());
@@ -342,7 +366,7 @@ void MainWindow::onExeSelectionClicked()
             this,
             tr("Select the executable file"),
             m_lastSearchPath,
-            tr("Executable files (*.exe);;All files (*.*)")));
+            tr("Executable files (*.exe *.msi *.bat);;All files (*.*)")));
 
     if (exeFileInfo.exists()) {
         m_lastSearchPath = exeFileInfo.dir().path();
@@ -352,33 +376,33 @@ void MainWindow::onExeSelectionClicked()
 
 void MainWindow::onRunStopTriggered()
 {
-    if (PROCESS_MANAGER->isRunning()) {
-        PROCESS_MANAGER->stop();
+    if (RUN_MANAGER->isRunning()) {
+        RUN_MANAGER->stop();
     } else {
-        PROCESS_MANAGER->run(*m_exeFile, m_runConfig);
+        RUN_MANAGER->run(m_runConfig);
     }
 }
 
 void MainWindow::onCreateShortcutTriggered()
 {
-    auto* shortcutDialog = new ShortcutDialog(m_exeFile, *m_runConfig->prefix(), this);
+    auto* shortcutDialog = new ShortcutDialog(m_runConfig, this);
     shortcutDialog->show();
 }
 
-void MainWindow::onRunningError(ProcessManager::RunningError error, const QString& errorText)
+void MainWindow::onRunningError(RunManager::RunningError error, const QString& errorText)
 {
     static QString errorTitle = tr("Running error");
     switch (error) {
-    case ProcessManager::RunningError::AlreadyRunning:
+    case RunManager::RunningError::AlreadyRunning:
         QMessageBox::critical(this, errorTitle, tr("The executable file is currently running"));
         break;
-    case ProcessManager::RunningError::InvalidExecutable:
+    case RunManager::RunningError::InvalidExecutable:
         QMessageBox::critical(this, errorTitle, tr("The executable file is not valid"));
         break;
-    case ProcessManager::RunningError::PrefixWriteError:
+    case RunManager::RunningError::PrefixWriteError:
         QMessageBox::critical(this, errorTitle, tr("Failed to write prefix"));
         break;
-    case ProcessManager::RunningError::InvalidCt: {
+    case RunManager::RunningError::InvalidCt: {
         auto answer = QMessageBox::question(
             this,
             errorTitle,
@@ -387,25 +411,25 @@ void MainWindow::onRunningError(ProcessManager::RunningError error, const QStrin
             openCtWindow();
         }
     } break;
-    case ProcessManager::RunningError::NoUmu:
+    case RunManager::RunningError::NoUmu:
         QMessageBox::critical(this, errorTitle, tr("\"umu-run\" not found"));
         break;
-    case ProcessManager::RunningError::NoWinetricks:
+    case RunManager::RunningError::NoWinetricks:
         QMessageBox::critical(this, errorTitle, tr("\"winetricks\" not found"));
         break;
-    case ProcessManager::RunningError::FailedToStart:
+    case RunManager::RunningError::FailedToStart:
         QMessageBox::critical(this, errorTitle, tr("Failed to start process: %1").arg(errorText));
         break;
-    case ProcessManager::RunningError::Crashed:
+    case RunManager::RunningError::Crashed:
         QMessageBox::critical(this, errorTitle, tr("Process error: %1").arg(errorText));
         break;
-    case ProcessManager::RunningError::Timedout:
+    case RunManager::RunningError::Timedout:
         QMessageBox::critical(this, errorTitle, tr("Process timeout: %1").arg(errorText));
         break;
-    case ProcessManager::RunningError::ReadError:
+    case RunManager::RunningError::ReadError:
         QMessageBox::critical(this, errorTitle, tr("Process read error: %1").arg(errorText));
         break;
-    case ProcessManager::RunningError::WriteError:
+    case RunManager::RunningError::WriteError:
         QMessageBox::critical(this, errorTitle, tr("Process write error: %1").arg(errorText));
         break;
     default:
@@ -420,4 +444,15 @@ void MainWindow::onRunningChanged(bool isRunning)
     m_runStopButton->setIcon(isRunning ? QIcon::fromTheme("media-playback-stop") : QIcon::fromTheme("media-playback-start"));
     m_runStopAction->setText(isRunning ? tr("Stop") : tr("Run"));
     setHidden(isRunning);
+}
+
+void MainWindow::openLogFile()
+{
+    if (!APP_SETTINGS->loggingEnabled()) {
+        QMessageBox::information(this, tr("Unable to open"), tr("Logging is disabled in the settings"));
+    } else if (QFileInfo::exists(APP_SETTINGS->logFilePath())) {
+        QDesktopServices::openUrl(QUrl::fromLocalFile(APP_SETTINGS->logFilePath()));
+    } else {
+        QMessageBox::information(this, tr("Unable to open"), tr("There is no run log, please run the executable file first"));
+    }
 }

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.19)
-project(Kisel VERSION 1.2.0 LANGUAGES CXX)
+project(Kisel VERSION 1.3.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -29,18 +29,20 @@ qt_add_executable(kisel
     src/shortcut_dialog.hpp src/shortcut_dialog.cpp
     src/prefix_settings.hpp src/prefix_settings.cpp
     src/prefix_settings_dialog.hpp src/prefix_settings_dialog.cpp
-    src/process_manager.hpp src/process_manager.cpp
+    src/run_manager.hpp src/run_manager.cpp
     src/tray_icon.hpp src/tray_icon.cpp
     src/prefix_components_dialog.hpp src/prefix_components_dialog.cpp
     src/run_config.hpp src/run_config.cpp
+    src/about_dialog.hpp src/about_dialog.cpp
+    src/ct_installer.hpp src/ct_installer.cpp
 )
 
 qt_add_resources(kisel "resources"
     PREFIX "/"
     BASE "resources"
     FILES
-        "resources/icons/kisel.png"
         "resources/icons/kisel.svg"
+        "resources/icons/kisel-256x256.png"
         "resources/icons/thirdparty/Papirus/index.theme"
         "resources/icons/thirdparty/Papirus/64x64/mimetypes/unknown.svg"
         "resources/icons/thirdparty/Papirus/16x16/actions/media-playback-start.svg"
@@ -49,19 +51,22 @@ qt_add_resources(kisel "resources"
         "resources/icons/thirdparty/Papirus/16x16/actions/configure.svg"
         "resources/icons/thirdparty/Papirus/16x16/actions/document-open.svg"
         "resources/icons/thirdparty/Papirus/16x16/actions/document-open-folder.svg"
+        "resources/icons/thirdparty/Papirus/16x16/actions/document-save.svg"
         "resources/icons/thirdparty/Papirus/16x16/actions/browser-download.svg"
         "resources/icons/thirdparty/Papirus/16x16/actions/flag.svg"
         "resources/icons/thirdparty/Papirus/16x16/actions/link.svg"
+        "resources/icons/thirdparty/Papirus/16x16/actions/help-about.svg"
         "resources/icons/thirdparty/Papirus/16x16/actions/tools.svg"
         "resources/icons/thirdparty/Papirus/16x16/actions/plugins.svg"
         "resources/icons/thirdparty/Papirus/16x16/actions/tool-wizard.svg"
         "resources/icons/thirdparty/Papirus/16x16/actions/view-refresh.svg"
+        "resources/icons/thirdparty/Papirus/16x16/actions/view-list.svg"
         "resources/icons/thirdparty/Papirus/16x16/actions/view-list-text.svg"
         "resources/icons/thirdparty/Papirus/16x16/actions/list-add.svg"
-        "resources/icons/thirdparty/Papirus/16x16/actions/list-remove.svg"
         "resources/icons/thirdparty/Papirus/16x16/actions/edit-clear.svg"
         "resources/icons/thirdparty/Papirus/16x16/actions/entry-delete.svg"
         "resources/icons/thirdparty/Papirus/16x16/actions/window-close.svg"
+        "resources/icons/thirdparty/Papirus/16x16/mimetypes/text-x-log.svg"
         "resources/icons/thirdparty/Papirus/16x16/apps/steam.svg"
         "resources/icons/thirdparty/Papirus/16x16/symbolic/apps/wine-symbolic.svg"
 )
@@ -93,7 +98,7 @@ include(FetchContent)
 FetchContent_Declare(
     umu_launcher_pkg
     URL "https://github.com/Open-Wine-Components/umu-launcher/releases/download/${UMU_VERSION}/umu-launcher-${UMU_VERSION}-zipapp.tar"
-    DOWNLOAD_EXTRACT_TIMESTAMP  TRUE
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
 )
 FetchContent_MakeAvailable(umu_launcher_pkg)
 
@@ -112,12 +117,13 @@ install(TARGETS kisel
 install(
     FILES "resources/icons/kisel.svg"
     DESTINATION share/icons/hicolor/scalable/apps
-    RENAME "kisel.svg"
+    RENAME "io.github.seinedkoda.kisel.svg" # Required for Flatpak
 )
 
 install(
     FILES "resources/kisel.desktop"
     DESTINATION share/applications
+    RENAME "io.github.seinedkoda.kisel.desktop" # Required for Flatpak
 )
 
 install(
@@ -135,13 +141,15 @@ set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${CM
 
 # .rpm (cpack -G RPM)
 set(CPACK_RPM_PACKAGE_ARCHITECTURE "x86_64")
-set(CPACK_RPM_PACKAGE_REQUIRES "qt6-qtbase, icoutils")
-set(CPACK_RPM_PACKAGE_SUGGESTS "winetricks, mangohud, obs-studio-plugin-vkcapture")
+set(CPACK_RPM_PACKAGE_REQUIRES "qt6-qtbase, icoutils, python3")
+set(CPACK_RPM_PACKAGE_RECOMMENDS "mangohud")
+set(CPACK_RPM_PACKAGE_SUGGESTS "winetricks, obs-studio-plugin-vkcapture")
 
 # .deb (cpack -G DEB)
 set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "amd64")
-set(CPACK_DEBIAN_PACKAGE_DEPENDS "libqt6widgets6, icoutils")
-set(CPACK_DEBIAN_PACKAGE_SUGGESTS "winetricks, mangohud, obs-vkcapture")
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "libqt6widgets6, icoutils, python3")
+set(CPACK_DEBIAN_PACKAGE_RECOMMENDS "mangohud")
+set(CPACK_DEBIAN_PACKAGE_SUGGESTS "winetricks, obs-vkcapture")
 set(CPACK_DEBIAN_PACKAGE_SECTION "utils")
 set(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
 

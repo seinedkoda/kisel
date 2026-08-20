@@ -68,11 +68,13 @@ bool PrefixSettings::waylandEnabled() const
     return value("wayland"_L1, false).toBool();
 }
 
-void PrefixSettings::setHdrEnabled(bool enabled) {
+void PrefixSettings::setHdrEnabled(bool enabled)
+{
     setValue("hdr"_L1, enabled);
 }
 
-bool PrefixSettings::hdrEnabled() const {
+bool PrefixSettings::hdrEnabled() const
+{
     return value("hdr"_L1, false).toBool();
 }
 
@@ -83,7 +85,7 @@ void PrefixSettings::setWow64Enabled(bool enabled)
 
 bool PrefixSettings::wow64Enabled() const
 {
-    return value("wow64"_L1, false).toBool();
+    return value("wow64"_L1, true).toBool();
 }
 
 void PrefixSettings::setSdlInputEnabled(bool enabled)
@@ -116,12 +118,24 @@ bool PrefixSettings::steamEnabled() const
     return value("steam"_L1, false).toBool();
 }
 
-void PrefixSettings::setSteamEnvEnabled(bool enabled) {
+void PrefixSettings::setSteamEnvEnabled(bool enabled)
+{
     setValue("steamEnv"_L1, enabled);
 }
 
-bool PrefixSettings::steamEnvEnabled() const {
+bool PrefixSettings::steamEnvEnabled() const
+{
     return value("steamEnv"_L1, true).toBool();
+}
+
+void PrefixSettings::setSteamOverlayEnabled(bool enabled)
+{
+    setValue("steamOverlay"_L1, enabled);
+}
+
+bool PrefixSettings::steamOverlayEnabled() const
+{
+    return value("steamOverlay"_L1, true).toBool();
 }
 
 void PrefixSettings::setOnlineFixEnabled(bool enabled)

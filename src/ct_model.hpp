@@ -1,85 +1,57 @@
 #pragma once
 
 #include <QAbstractListModel>
-#include <QDir>
-#include <QNetworkReply>
-#include <QProcess>
+#include <QSortFilterProxyModel>
 
 #include "ct.hpp"
 
 namespace kisel {
 #define CT_MODEL CtModel::instance()
 
-class CtModel : public QAbstractListModel { // NOLINT(cppcoreguidelines-virtual-class-destructor)
+class CtModel : public QAbstractTableModel {
     Q_OBJECT
-    Q_DISABLE_COPY_MOVE(CtModel)
 
 public:
     enum Roles {
         NameRole = Qt::UserRole + 1,
-        PathRole
+        PathRole,
+        StatusRole,
+        ProgressRole
     };
     Q_ENUM(Roles);
 
     static CtModel* instance();
 
     [[nodiscard]] int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+    [[nodiscard]] int columnCount(const QModelIndex& parent = QModelIndex()) const override;
     [[nodiscard]] Qt::ItemFlags flags(const QModelIndex& index) const override;
     [[nodiscard]] QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
     [[nodiscard]] QHash<int, QByteArray> roleNames() const override;
+    [[nodiscard]] QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
     bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex()) override;
 
     [[nodiscard]] int ctIndex(Ct* ct) const;
     [[nodiscard]] Ct* forIndex(int index) const;
     [[nodiscard]] Ct* forPath(QStringView path) const;
-    [[nodiscard]] QStringList availableReleasesList() const;
-    [[nodiscard]] QString ctSourceName() const;
-    [[nodiscard]] bool installationIsRunning() const;
     void refreshList();
-    void add(const QString& path);
-    void setCtSourceFromName(const QString& name);
-    void fetchAvailableReleases();
-    void installRelease(const QString& name, const QString& installDir);
-    void cancelInstallation();
+    Ct* add(const QString& path);
     Ct* defaultCt();
-    static const QMap<QString, QUrl>& ctSourceMap();
-
-signals:
-    void fetchReleasesStarted();
-    void fetchReleasesFinished();
-    void fetchReleasesError(const QString& errorText);
-    void installationError(const QString& errorText);
-    void installationCanceled();
-    void downloadStarted();
-    void downloadProgressChanged(qint64 bytesReceived, qint64 bytesTotal);
-    void downloadFinished();
-    void extractStarted();
-    void extractFinished();
-private slots:
-    void onReleasesFetched(QNetworkReply* reply);
-    void onDownloadFinished();
+    void setCtDownloadProgress(Ct* ct, qint64 bytesReceived, qint64 bytesTotal);
+    void setCtStatus(Ct* ct, Ct::Status status);
 
 private:
     explicit CtModel(QObject* parent = nullptr);
-    ~CtModel() override;
 
-    static QString deviceArchitecture();
-    static bool deviceHasV3Exstensions();
-    static QString getBaseArchitectureNameFromAsset(const QString& assetName);
-    void parseReleasesArray(const QJsonArray& releasesArray);
-    static QUrl findBestAssetUrl(const QJsonArray& assetsArray);
     bool containsPath(QStringView path);
-    void extractCt(const QString& archivePath);
 
-    QNetworkAccessManager m_networkManager;
-    QMap<QString, QUrl> m_releaseUrlMap;
     QList<Ct*> m_cts;
-    QStringList m_sortedReleasesList;
-    QNetworkReply* m_downloadReply { };
-    QProcess* m_tarProcess { };
-    QString m_ctSourceName;
-    QString m_ctInstallDir;
-    QString m_downloadableReleaseName;
-    bool m_installationIsRunning = false;
+};
+
+class CtInstalledProxyModel : public QSortFilterProxyModel {
+    Q_OBJECT
+public:
+    using QSortFilterProxyModel::QSortFilterProxyModel;
+
+    [[nodiscard]] bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const override;
 };
 }

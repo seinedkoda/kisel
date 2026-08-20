@@ -1,41 +1,54 @@
 #pragma once
 
 #include <QComboBox>
-#include <QListView>
+#include <QDialog>
 #include <QMainWindow>
-#include <QProgressBar>
 #include <QPushButton>
+#include <QStyledItemDelegate>
+#include <QTableView>
 #include <QToolButton>
 
 namespace kisel {
 class CtWindow : public QMainWindow {
     Q_OBJECT
+
 public:
     explicit CtWindow(QWidget* parent = nullptr);
 
-protected:
-    void closeEvent(QCloseEvent* event) override;
 private slots:
-    void onFetchReleasesStarted();
-    void onFetchReleasesFinished();
-    void onFetchReleasesError(const QString& errorText);
-    void onDownloadStarted();
-    void onDownloadProgressChanged(qint64 bytesReceived, qint64 bytesTotal);
-    void onExtractionStarted();
-    void onExtractionFinished();
+    void openAddNewCtDialog();
     void onInstallationError(const QString& errorText);
-    void onInstallationCanceled();
     void onContextMenuRequested(const QPoint& pos);
 
 private:
-    QListView* m_ctListView;
+    QTableView* m_ctTableView;
+};
+
+class ProgressBarDelegate : public QStyledItemDelegate {
+    Q_OBJECT
+
+public:
+    using QStyledItemDelegate::QStyledItemDelegate;
+
+    void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const override;
+};
+
+class AddNewCtDialog : public QDialog {
+    Q_OBJECT
+
+public:
+    explicit AddNewCtDialog(QWidget* parent = nullptr);
+
+private slots:
+    void fetchAvailableReleases();
+    void onReleasesLoaded(QObject* requester, const QMap<QString, QUrl>& releaseMap, bool success, const QString& errorText);
+    void onInstallClicked();
+
+private:
     QComboBox* m_ctSourceComboBox;
     QComboBox* m_releasesComboBox;
     QToolButton* m_refreshReleasesButton;
     QComboBox* m_installationLocationsComboBox;
-    QPushButton* m_installCancelButton;
-    QProgressBar* m_progressBar;
-
-    void resetInstallationWidgetsState();
+    QPushButton* m_addToInstallationButton;
 };
 }

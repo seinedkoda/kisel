@@ -16,30 +16,47 @@ public:
     static AppSettings* instance();
 
     static const QDir& appDataDir();
+    static const QString& logFilePath();
     static const QDir& prefixesDir();
     static const QList<QDir>& ctsDirList();
 
     void setLocale(const QString& localeName);
-    QString locale();
+    [[nodiscard]] QString locale() const;
+
+    static bool isFlatpak();
+
+    void setStyleName(const QString& styleName);
+    QString styleName();
+    void applyCurrentStyle();
 
     void setUseIndividualPrefix(bool useIndividualPrefix);
-    bool useIndividualPrefix();
+    [[nodiscard]] bool useIndividualPrefix() const;
 
     void setDefaultPrefixPath(const QString& prefixPath);
-    QString defaultPrefixPath();
-    QString defaultPrefixName();
+    [[nodiscard]] QString defaultPrefixPath() const;
+    [[nodiscard]] QString defaultPrefixName() const;
 
     void setDefaultCtPath(const QString& ctPath);
-    QString defaultCtPath();
+    [[nodiscard]] QString defaultCtPath() const;
 
-    void setRuntimeAutoUpdate(bool enable);
-    bool runtimeAutoUpdate();
+    void setRuntimeAutoUpdate(bool enabled);
+    [[nodiscard]] bool runtimeAutoUpdate() const;
+
+    void setLoggingEnabled(bool enabled);
+    [[nodiscard]] bool loggingEnabled() const;
 
     static const QDir& steamDir();
     static bool steamExists();
 
-    static const QString& umuPath();
+    void setUseSystemUMU(bool use);
+    [[nodiscard]] bool useSystemUMU() const;
+    [[nodiscard]] QString umuPath() const;
+
     static const QString& winetricksPath();
+
+    static const QString& mangoHudPath();
+
+    static const QString& obsVkCapturePath();
 
 private:
     explicit AppSettings(QObject* parent = nullptr);

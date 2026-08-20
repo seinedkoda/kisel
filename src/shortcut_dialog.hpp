@@ -5,13 +5,13 @@
 #include <QDialog>
 #include <QLineEdit>
 
-#include "executable_file.hpp"
+#include "run_config.hpp"
 
 namespace kisel {
 class ShortcutDialog : public QDialog {
     Q_OBJECT
 public:
-    ShortcutDialog(ExecutableFile* exeFile, const Prefix& prefix, QWidget* parent = nullptr);
+    ShortcutDialog(RunConfig* runConfig, QWidget* parent = nullptr);
 
 private:
     static const QMap<QString, QString>& categoryMap();

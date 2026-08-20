@@ -87,3 +87,9 @@ CMakeLists.txt.user*
 # Misc
 misc/*
 !misc/PKGBUILD
+!misc/io.github.seinedkoda.kisel.yml
+!misc/build.sh
+!misc/build-deb.sh
+!misc/build-rpm.sh
+!misc/build-flatpak.sh
+!misc/build-and-install-flatpak.sh

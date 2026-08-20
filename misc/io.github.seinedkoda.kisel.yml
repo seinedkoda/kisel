@@ -1,0 +1,58 @@
+app-id: io.github.seinedkoda.kisel
+sdk: org.kde.Sdk
+runtime: org.kde.Platform
+runtime-version: '6.11'
+command: kisel
+
+finish-args:
+  - --socket=x11
+  - --socket=wayland
+  - --device=dri # Hardware acceleration
+  - --share=ipc # For Qt
+  - --share=network
+  - --socket=pulseaudio
+  - --allow=bluetooth
+  - --allow=multiarch # Enable 32-bit libs support
+  - --allow=per-app-dev-shm # Shared memory
+  - --device=all
+  - --talk-name=org.kde.StatusNotifierWatcher # Tray icon
+  - --system-talk-name=org.freedesktop.UDisks2 # Mounted Devices
+  - --filesystem=home
+  - --filesystem=/mnt
+  - --filesystem=/media
+  - --filesystem=/run/media
+  - --env=PATH=/app/bin:/usr/bin:/usr/lib/extensions/vulkan/MangoHud/bin:/usr/lib/extensions/vulkan/OBSVkCapture/bin
+  - --filesystem=xdg-config/MangoHud:ro
+
+modules:
+  - name: icoutils
+    buildsystem: simple
+    build-commands:
+      - ar x icoutils.deb
+      - tar xf data.tar.*
+      - cp -r usr/bin /app/
+    sources:
+      - type: file
+        url: http://ftp.us.debian.org/debian/pool/main/i/icoutils/icoutils_0.32.3-6_amd64.deb
+        sha256: 16a1b2b359ef3d90e9b83b8cf44ce58b11f097c023d02f3bf77745362a6f7247
+        dest-filename: icoutils.deb
+
+  - name: winetricks
+    buildsystem: simple
+    build-commands:
+      - install -Dm755 src/winetricks /app/bin/winetricks
+    sources:
+      - type: archive
+        url: https://github.com/Winetricks/winetricks/archive/refs/tags/20260125.tar.gz
+        sha256: 2890bd9fbbade4638e58b4999a237273192df03b58516ae7b8771e09c22d2f56
+
+  - name: kisel
+    buildsystem: cmake-ninja
+    build-options:
+      build-args:
+        - --share=network
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+    sources:
+      - type: dir
+        path: ..

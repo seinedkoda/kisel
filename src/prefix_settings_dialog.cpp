@@ -1,10 +1,10 @@
 #include "prefix_settings_dialog.hpp"
 
+#include <QComboBox>
 #include <QGroupBox>
 #include <QLabel>
 #include <QStandardPaths>
 #include <QVBoxLayout>
-#include <QComboBox>
 
 #include "app_settings.hpp"
 #include "ct_model.hpp"
@@ -41,7 +41,10 @@ PrefixSettingsDialog::PrefixSettingsDialog(Prefix* prefix, QWidget* parent)
     compatibilityTabLayout->addWidget(ctLabel);
 
     auto* ctComboBox = new QComboBox(this);
-    ctComboBox->setModel(CT_MODEL);
+    ctComboBox->setPlaceholderText(tr("<No installed>"));
+    auto* ctInstalledProxyModel = new CtInstalledProxyModel(this);
+    ctInstalledProxyModel->setSourceModel(CT_MODEL);
+    ctComboBox->setModel(ctInstalledProxyModel);
     Ct* prefixCt = CT_MODEL->forPath(prefix->settings()->ctPath());
     if (prefixCt != nullptr) {
         ctComboBox->setCurrentIndex(CT_MODEL->ctIndex(prefixCt));
@@ -75,6 +78,7 @@ PrefixSettingsDialog::PrefixSettingsDialog(Prefix* prefix, QWidget* parent)
     compatibilityTabLayout->addWidget(hdrCheckBox);
 
     auto* wow64CheckBox = new QCheckBox(tr("Enable WOW64"));
+    wow64CheckBox->setToolTip(tr("Compatibility with 32-bit applications"));
     wow64CheckBox->setChecked(m_prefix->settings()->wow64Enabled());
     connect(wow64CheckBox, &QCheckBox::clicked, this, [this](bool checked) {
         m_prefix->settings()->setWow64Enabled(checked);
@@ -101,7 +105,7 @@ PrefixSettingsDialog::PrefixSettingsDialog(Prefix* prefix, QWidget* parent)
     tabWidget->addTab(serviceTab, QIcon::fromTheme("flag"), tr("Services"));
 
     auto* mangohudCheckBox = new QCheckBox("MangoHud"_L1, this);
-    mangohudCheckBox->setEnabled(!QStandardPaths::findExecutable("mangohud"_L1).isEmpty());
+    mangohudCheckBox->setDisabled(APP_SETTINGS->mangoHudPath().isEmpty());
     mangohudCheckBox->setToolTip(tr("Enable Performance Monitor (requires mangohud to be installed)"));
     mangohudCheckBox->setChecked(m_prefix->settings()->mangoHudEnabled());
     connect(mangohudCheckBox, &QCheckBox::clicked, this, [this](bool checked) {
@@ -110,7 +114,7 @@ PrefixSettingsDialog::PrefixSettingsDialog(Prefix* prefix, QWidget* parent)
     serviceTabLayout->addWidget(mangohudCheckBox);
 
     auto* obsVkCaptureCheckBox = new QCheckBox("OBS Vulkan Capture"_L1, this);
-    obsVkCaptureCheckBox->setEnabled(!QStandardPaths::findExecutable("obs-vkcapture"_L1).isEmpty());
+    obsVkCaptureCheckBox->setDisabled(APP_SETTINGS->obsVkCapturePath().isEmpty());
     obsVkCaptureCheckBox->setToolTip(tr("Enable Vulkan app screen capture for OBS (requires obs-vkcapture to be installed)"));
     obsVkCaptureCheckBox->setChecked(m_prefix->settings()->obsVkCaptureEnabled());
     connect(obsVkCaptureCheckBox, &QCheckBox::clicked, this, [this](bool checked) {
@@ -152,6 +156,13 @@ PrefixSettingsDialog::PrefixSettingsDialog(Prefix* prefix, QWidget* parent)
     auto* useSteamBoxLayout = new QVBoxLayout(useSteamBox);
     useSteamBoxLayout->setAlignment(Qt::AlignTop);
     steamTabLayout->addWidget(useSteamBox);
+
+    auto* steamOverlayCheckBox = new QCheckBox(tr("Steam Overlay"));
+    steamOverlayCheckBox->setChecked(m_prefix->settings()->steamOverlayEnabled());
+    connect(steamOverlayCheckBox, &QCheckBox::clicked, this, [this](bool checked) {
+        m_prefix->settings()->setSteamOverlayEnabled(checked);
+    });
+    useSteamBoxLayout->addWidget(steamOverlayCheckBox);
 
     auto* onlineFixCheckBox = new QCheckBox(tr("Enable OnlineFix"));
     onlineFixCheckBox->setChecked(m_prefix->settings()->onlineFixEnabled());

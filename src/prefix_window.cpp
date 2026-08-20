@@ -11,7 +11,7 @@
 #include "prefix_components_dialog.hpp"
 #include "prefix_model.hpp"
 #include "prefix_settings_dialog.hpp"
-#include "process_manager.hpp"
+#include "run_manager.hpp"
 
 using namespace kisel;
 
@@ -59,13 +59,14 @@ PrefixWindow::PrefixWindow(QWidget* parent)
     , m_prefixListView(new QListView(this))
 {
     setWindowTitle(tr("Kisel — Prefixes"));
+    setWindowIcon(QIcon(":/icons/kisel-256x256.png"));
     setAttribute(Qt::WA_DeleteOnClose);
 
     auto* centralWidget = new QWidget(this);
     auto* layout = new QVBoxLayout(centralWidget);
     setCentralWidget(centralWidget);
 
-    auto* listLabel = new QLabel(tr("Detected prefixes:"), this);
+    auto* listLabel = new QLabel(tr("<h3>Prefixes</h3>"), this);
     layout->addWidget(listLabel);
 
     m_prefixListView->setModel(PREFIX_MODEL);
@@ -113,23 +114,23 @@ void PrefixWindow::onContextMenuRequested(const QPoint& pos)
     });
 
     QAction* winecfgAction = toolsMenu->addAction(QIcon::fromTheme("wine-symbolic"), tr("Wine settings"));
-    connect(winecfgAction, &QAction::triggered, this, [prefix]() { PROCESS_MANAGER->runWineCfg(prefix); });
+    connect(winecfgAction, &QAction::triggered, this, [prefix]() { RUN_MANAGER->runWineCfg(prefix); });
 
     QAction* explorerAction = toolsMenu->addAction(QIcon::fromTheme("document-open-folder"), tr("Explorer"));
-    connect(explorerAction, &QAction::triggered, this, [prefix]() { PROCESS_MANAGER->runExplorer(prefix); });
+    connect(explorerAction, &QAction::triggered, this, [prefix]() { RUN_MANAGER->runExplorer(prefix); });
 
     QAction* regeditAction = toolsMenu->addAction(QIcon::fromTheme("view-list-text"), tr("Registry"));
-    connect(regeditAction, &QAction::triggered, this, [prefix]() { PROCESS_MANAGER->runRegedit(prefix); });
+    connect(regeditAction, &QAction::triggered, this, [prefix]() { RUN_MANAGER->runRegedit(prefix); });
 
     QAction* uninstallerAction = toolsMenu->addAction(QIcon::fromTheme("entry-delete"), tr("Remove programs"));
-    connect(uninstallerAction, &QAction::triggered, this, [prefix]() { PROCESS_MANAGER->runUninstaller(prefix); });
+    connect(uninstallerAction, &QAction::triggered, this, [prefix]() { RUN_MANAGER->runUninstaller(prefix); });
 
     QAction* openAction = menu->addAction(QIcon::fromTheme("document-open-folder"), tr("Open in files"));
     connect(openAction, &QAction::triggered, this, [prefix]() { QDesktopServices::openUrl(QUrl::fromLocalFile(prefix->path())); });
 
     menu->addSeparator();
 
-    QAction* removeAction = menu->addAction(QIcon::fromTheme("list-remove"), tr("Delete"));
+    QAction* removeAction = menu->addAction(QIcon::fromTheme("entry-delete"), tr("Delete"));
     connect(removeAction, &QAction::triggered, this, [this, prefix, index]() {
         if (QMessageBox::question(this, tr("Confirm"), tr("Remove the \"%1\" prefix?").arg(prefix->name())) == QMessageBox::Yes) {
             PREFIX_MODEL->removeRow(index.row());

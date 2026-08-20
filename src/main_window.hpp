@@ -7,10 +7,7 @@
 #include <QPushButton>
 #include <QToolButton>
 
-#include "executable_file.hpp"
-#include "prefix.hpp"
-#include "process_manager.hpp"
-#include "run_config.hpp"
+#include "run_manager.hpp"
 
 namespace kisel {
 class MainWindow : public QMainWindow {
@@ -23,11 +20,12 @@ private slots:
     void onExeSelectionClicked();
     void onRunStopTriggered();
     void onCreateShortcutTriggered();
-    void onRunningError(kisel::ProcessManager::RunningError error, const QString& errorText);
+    void onRunningError(kisel::RunManager::RunningError error, const QString& errorText);
     void onRunningChanged(bool isRunning);
     void onCurrentPrefixTextChanged(const QString& prefixName);
     void onCurrentCtIndexChanged(int index);
     void individualPrefixStateChanged(bool checked);
+    void openLogFile();
 
 private:
     static void openPrefixWindow();
@@ -41,9 +39,9 @@ private:
     const QSize m_exeIconSize { 64, 64 };
     const QPixmap m_unknownExePixmap { QIcon::fromTheme("unknown").pixmap(m_exeIconSize) };
     QString m_lastSearchPath = QDir::homePath();
-    ExecutableFile* m_exeFile;
-    QString m_individualPrefixName;
+    bool m_manuallyCheckedIndividual = false;
     RunConfig* m_runConfig;
+    QString m_individualPrefixName;
     QLabel* m_exeIconLabel;
     QLabel* m_exeNameLabel;
     QAction* m_runStopAction;
@@ -59,6 +57,5 @@ private:
     QToolButton* m_prefixMenuButton;
     QComboBox* m_ctComboBox;
     QToolButton* m_ctWindowButton;
-    QToolButton* m_appSettingsWindowButton;
 };
 };

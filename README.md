@@ -37,6 +37,7 @@ Efficient launch of Windows programs
     - Steam Environment
     - WOW64
     - OnlineFix
+    - And some others...
 
 ## Installation 📦
 

@@ -4,14 +4,14 @@
 #include <QObject>
 #include <QSystemTrayIcon>
 
-#include "process_manager.hpp"
+#include "run_manager.hpp"
 
 namespace kisel {
 class TrayIcon : public QObject {
     Q_OBJECT
 
 public:
-    explicit TrayIcon(ProcessManager* processManager);
+    explicit TrayIcon(RunManager* runManager);
 
 private slots:
     void onRunningChanged(bool isRunning);
