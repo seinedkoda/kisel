@@ -7,19 +7,25 @@
 ![C++](https://img.shields.io/badge/c++-%2300599C.svg?style=for-the-badge&logo=c%2B%2B&logoColor=white)
 ![Qt](https://img.shields.io/badge/Qt-%23217346.svg?style=for-the-badge&logo=Qt&logoColor=white)
 ![CMake](https://img.shields.io/badge/CMake-%23008FBA.svg?style=for-the-badge&logo=cmake&logoColor=white)
+![Flatpak](https://img.shields.io/badge/flatpak-%234A90D9.svg?style=for-the-badge&logo=flatpak&logoColor=white)
 ![Arch](https://img.shields.io/badge/Arch%20Linux-1793D1?logo=arch-linux&logoColor=fff&style=for-the-badge)
 ![Debian](https://img.shields.io/badge/Debian-D70A53?style=for-the-badge&logo=debian&logoColor=white)
 ![Fedora](https://img.shields.io/badge/Fedora-294172?style=for-the-badge&logo=fedora&logoColor=white)
 
+## Цель проекта 🚩
+Предоставить программу моментального запуска exe на компилируемом языке с минимальными зависимостями, не превращая её в ещё один лаунчер с добавлением exe через множество меню со своей специфичной игровой библиотекой. Просто выбрать exe и запуск. А для сохранения запуска exe файла используется встроенная функция создания ярлыков на рабочем столе
+
 ## Основное🍒
-- Возможность запуска игр без Steam с помощью [umu-launcher](https://github.com/Open-Wine-Components/umu-launcher), а также с ним
-- Совместимость со средой Steam
 - Код на C++ и минимальные действия для запуска exe-файлов
-- Возможность создания ярлыков на рабочем столе вместо отображения списка добавленных приложений
-- Управление префиксами и инструментами совместимости (Proton)
-- Установка дополнительных DLL-файлов в префиксы
-- Поддержка OnlineFix (по умолчанию отключено)
-- Поддержка загрузки инструментов совместимости:
+- Запуск игр без Steam через [umu-launcher](https://github.com/Open-Wine-Components/umu-launcher)
+- Совместимость со средой Steam
+- Настройка и управление префиксами
+- Меню загрузки средств совместимости
+- Ярлыки для рабочего стола
+- Установка дополнительных dll для префикса
+- WOW64 по умолчанию и отсутствие 32-битных зависимостей
+- Поддержка OnlineFix (Отключено по умолчанию)
+- Доступные для загрузки средства совместимости:
     - [Proton-GE]([Proton-GE](https://github.com/GloriousEggroll/proton-ge-custom)) (по умолчанию)
     - [Proton-CachyOS]([Proton-CachyOS](https://github.com/CachyOS/proton-cachyos))
 - Настройка следующих параметров:
@@ -48,7 +54,7 @@ sudo flatpak install kisel-*.flatpak
 ### Arch Linux
 **[Загрузите последнюю версию .pacman](https://github.com/seinedkoda/kisel/releases/latest)**
 ```bash
-sudo pacman -U kisel-*.pkg.tar.zst
+sudo pacman -U kisel-*.pacman
 ```
 
 ### Debian

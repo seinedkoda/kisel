@@ -9,19 +9,25 @@ Efficient launch of Windows programs
 ![C++](https://img.shields.io/badge/c++-%2300599C.svg?style=for-the-badge&logo=c%2B%2B&logoColor=white)
 ![Qt](https://img.shields.io/badge/Qt-%23217346.svg?style=for-the-badge&logo=Qt&logoColor=white)
 ![CMake](https://img.shields.io/badge/CMake-%23008FBA.svg?style=for-the-badge&logo=cmake&logoColor=white)
+![Flatpak](https://img.shields.io/badge/flatpak-%234A90D9.svg?style=for-the-badge&logo=flatpak&logoColor=white)
 ![Arch](https://img.shields.io/badge/Arch%20Linux-1793D1?logo=arch-linux&logoColor=fff&style=for-the-badge)
 ![Debian](https://img.shields.io/badge/Debian-D70A53?style=for-the-badge&logo=debian&logoColor=white)
 ![Fedora](https://img.shields.io/badge/Fedora-294172?style=for-the-badge&logo=fedora&logoColor=white)
 
+## Project goal 🚩
+Provide an instant-run exe file program in a compiled language with minimal dependencies, without turning it into yet another launcher with multiple menus for adding a exe with its own specific game library. Just select the exe and run. And to save the exe file launcher, use the built-in desktop shortcut feature
+
 ## Highlights 🍒
-- It can run games without Steam using [umu-launcher](https://github.com/Open-Wine-Components/umu-launcher), and with it
-- Compatibility with the Steam environment
 - C++ code and minimal actions to run exe
-- Ability to create desktop shortcuts instead of displaying the list of added applications
-- Managing Prefixes and Compatibility Tools (Proton)
+- Launching games without Steam using [umu-launcher](https://github.com/Open-Wine-Components/umu-launcher)
+- Compatibility with the Steam environment
+- Configuring and managing prefixes
+- Compatibility Tools Download Menu
+- Desktop shortcuts
 - Installing additional prefix dlls
+- WOW64 by default and no 32-bit dependencies
 - OnlineFix Support (Disabled by default)
-- Support for downloading compatibility tools:
+- Supported compatibility tools for download:
     - [Proton-GE](https://github.com/GloriousEggroll/proton-ge-custom) (Default)
     - [Proton-CachyOS](https://github.com/CachyOS/proton-cachyos)
 - Configure the following parameters:
@@ -50,7 +56,7 @@ sudo flatpak install kisel-*.flatpak
 ### Arch Linux
 **[Download the latest version of .pacman](https://github.com/seinedkoda/kisel/releases/latest)**
 ```bash
-sudo pacman -U kisel-*.pkg.tar.zst
+sudo pacman -U kisel-*.pacman
 ```
 
 ### Debian

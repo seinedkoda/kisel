@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.19)
-project(Kisel VERSION 1.3.0 LANGUAGES CXX)
+project(Kisel VERSION 1.3.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -115,15 +115,13 @@ install(TARGETS kisel
 )
 
 install(
-    FILES "resources/icons/kisel.svg"
+    FILES ${CMAKE_SOURCE_DIR}/resources/icons/kisel.svg
     DESTINATION share/icons/hicolor/scalable/apps
-    RENAME "io.github.seinedkoda.kisel.svg" # Required for Flatpak
 )
 
 install(
-    FILES "resources/kisel.desktop"
+    FILES ${CMAKE_SOURCE_DIR}/resources/kisel.desktop
     DESTINATION share/applications
-    RENAME "io.github.seinedkoda.kisel.desktop" # Required for Flatpak
 )
 
 install(

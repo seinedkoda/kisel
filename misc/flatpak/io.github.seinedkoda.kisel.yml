@@ -3,10 +3,12 @@ sdk: org.kde.Sdk
 runtime: org.kde.Platform
 runtime-version: '6.11'
 command: kisel
+rename-icon: kisel
+rename-desktop-file: kisel.desktop
 
 finish-args:
-  - --socket=x11
   - --socket=wayland
+  - --socket=x11
   - --device=dri # Hardware acceleration
   - --share=ipc # For Qt
   - --share=network

@@ -83,7 +83,3 @@ CMakeLists.txt.user*
 /build*/
 /.qtcreator/
 /.idea/
-
-# Misc
-misc/build/
-misc/packages/
