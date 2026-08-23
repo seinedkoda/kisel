@@ -159,4 +159,13 @@ set(CPACK_DEBIAN_PACKAGE_SUGGESTS "winetricks, obs-vkcapture")
 set(CPACK_DEBIAN_PACKAGE_SECTION "utils")
 set(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
 
+add_custom_target(flatpak-package
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+    COMMAND flatpak-builder --repo=repo --force-clean
+        flatpack-build "${CMAKE_SOURCE_DIR}/misc/flatpak/io.github.seinedkoda.kisel.yml"
+    COMMAND flatpak build-bundle repo 
+        "${CMAKE_BINARY_DIR}/packages/kisel-${PROJECT_VERSION}-x86_64.flatpak"
+        io.github.seinedkoda.kisel
+)
+
 include(CPack)

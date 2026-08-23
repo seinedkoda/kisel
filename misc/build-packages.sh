@@ -41,9 +41,7 @@ sh -c "cp /src/build/kisel-*.rpm /output/"
 
 
 echo "Building Flatpak package..."
-cd $BUILD_DIR
-flatpak-builder --repo=repo --force-clean flatpak-build "${SCRIPT_DIR}/flatpak/io.github.seinedkoda.kisel.yml" && \
-flatpak build-bundle repo "${PACKAGES_DIR}/kisel.flatpak" io.github.seinedkoda.kisel
+cmake --build $BUILD_DIR --target flatpak-package
 
 
 cd $PACKAGES_DIR
