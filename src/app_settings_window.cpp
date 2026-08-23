@@ -128,13 +128,17 @@ AppSettingsWindow::AppSettingsWindow(QWidget* parent)
     umuTabLayout->setAlignment(Qt::AlignTop);
 
     auto* umuPathComboBox = new QComboBox(this);
-    umuPathComboBox->addItem(tr("Built-in"), false);
-    umuPathComboBox->addItem(tr("System"), true);
-    umuPathComboBox->setCurrentIndex(APP_SETTINGS->useSystemUMU() ? 1 : 0);
-    connect(umuPathComboBox, &QComboBox::activated, this, [umuPathComboBox]() {
-        APP_SETTINGS->setUseSystemUMU(umuPathComboBox->currentData().toBool());
-    });
-    umuPathComboBox->setDisabled(APP_SETTINGS->isFlatpak());
+    if (APP_SETTINGS->isFlatpak()) {
+        umuPathComboBox->addItem(tr("Built-in (Flatpak)"), false);
+        umuPathComboBox->setDisabled(true);
+    } else {
+        umuPathComboBox->addItem(tr("Built-in"), false);
+        umuPathComboBox->addItem(tr("System"), true);
+        umuPathComboBox->setCurrentIndex(APP_SETTINGS->useSystemUMU() ? 1 : 0);
+        connect(umuPathComboBox, &QComboBox::activated, this, [umuPathComboBox]() {
+            APP_SETTINGS->setUseSystemUMU(umuPathComboBox->currentData().toBool());
+        });
+    }
     umuTabLayout->addWidget(umuPathComboBox);
 
     auto* runtimeAutoUpdateCheckBox = new QCheckBox(tr("Runtime auto-update"), this);

@@ -166,10 +166,10 @@ bool AppSettings::useSystemUMU() const
 QString AppSettings::umuPath() const
 {
     if (isFlatpak()) {
-        return "/app/libexec/kisel/umu-run"_L1;
+        return "/app/bin/umu-run"_L1;
     }
 
-    if (!useSystemUMU()) {
+    if (!useSystemUMU() && QFileInfo::exists("/usr/libexec/kisel/umu-run"_L1)) {
         return "/usr/libexec/kisel/umu-run"_L1;
     }
 

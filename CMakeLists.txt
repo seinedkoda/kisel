@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.19)
-project(Kisel VERSION 1.3.1 LANGUAGES CXX)
+project(Kisel VERSION 1.3.2 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -8,6 +8,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
+option(INSTALL_UMU "Download and install umu from source" ON)
 set(UMU_VERSION "1.4.4")
 
 find_package(Qt6 6.5 REQUIRED COMPONENTS Core Widgets Network LinguistTools)
@@ -94,14 +95,6 @@ target_link_libraries(kisel
         Qt::Network
 )
 
-include(FetchContent)
-FetchContent_Declare(
-    umu_launcher_pkg
-    URL "https://github.com/Open-Wine-Components/umu-launcher/releases/download/${UMU_VERSION}/umu-launcher-${UMU_VERSION}-zipapp.tar"
-    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
-)
-FetchContent_MakeAvailable(umu_launcher_pkg)
-
 install(TARGETS kisel
     BUNDLE  DESTINATION .
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
@@ -109,6 +102,23 @@ install(TARGETS kisel
 )
 
 include(GNUInstallDirs)
+
+if (INSTALL_UMU)
+    include(FetchContent)
+
+    FetchContent_Declare(
+        umu_launcher_zipapp
+        URL "https://github.com/Open-Wine-Components/umu-launcher/releases/download/${UMU_VERSION}/umu-launcher-${UMU_VERSION}-zipapp.tar"
+        URL_HASH SHA256=eb590691841f7fad3fc3ad8fd5db4ccb87849fe7948e62b28ece7a4ee48cc851
+        DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+    )
+    FetchContent_MakeAvailable(umu_launcher_zipapp)
+
+    install(
+        PROGRAMS "${umu_launcher_zipapp_SOURCE_DIR}/umu-run"
+        DESTINATION libexec/kisel
+    )
+endif()
 
 install(TARGETS kisel
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
@@ -124,11 +134,6 @@ install(
     FILES ${CMAKE_SOURCE_DIR}/resources/kisel.desktop
     DESTINATION share/applications
     RENAME io.github.seinedkoda.kisel.desktop
-)
-
-install(
-    PROGRAMS "${umu_launcher_pkg_SOURCE_DIR}/umu-run"
-    DESTINATION libexec/kisel
 )
 
 install(
@@ -162,7 +167,7 @@ set(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
 add_custom_target(flatpak-package
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
     COMMAND flatpak-builder --repo=repo --force-clean
-        flatpack-build "${CMAKE_SOURCE_DIR}/misc/flatpak/io.github.seinedkoda.kisel.yml"
+        flatpak-build "${CMAKE_SOURCE_DIR}/misc/flatpak/io.github.seinedkoda.kisel.yml"
     COMMAND flatpak build-bundle repo 
         "${CMAKE_BINARY_DIR}/packages/kisel-${PROJECT_VERSION}-x86_64.flatpak"
         io.github.seinedkoda.kisel
