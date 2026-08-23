@@ -899,119 +899,119 @@
         <translation>Внешний вид</translation>
     </message>
     <message>
-        <location filename="../src/shortcut_dialog.cpp" line="61"/>
-        <location filename="../src/shortcut_dialog.cpp" line="65"/>
+        <location filename="../src/shortcut_dialog.cpp" line="62"/>
+        <location filename="../src/shortcut_dialog.cpp" line="66"/>
         <source>Shortcut name</source>
         <translation>Имя ярлыка</translation>
     </message>
     <message>
-        <location filename="../src/shortcut_dialog.cpp" line="69"/>
+        <location filename="../src/shortcut_dialog.cpp" line="70"/>
         <source>Prefix</source>
         <translation>Префикс</translation>
     </message>
     <message>
-        <location filename="../src/shortcut_dialog.cpp" line="104"/>
+        <location filename="../src/shortcut_dialog.cpp" line="105"/>
         <source>Menu</source>
         <translation>Меню</translation>
     </message>
     <message>
-        <location filename="../src/shortcut_dialog.cpp" line="111"/>
-        <location filename="../src/shortcut_dialog.cpp" line="148"/>
+        <location filename="../src/shortcut_dialog.cpp" line="112"/>
+        <location filename="../src/shortcut_dialog.cpp" line="149"/>
         <source>Other</source>
         <translation>Прочее</translation>
     </message>
     <message>
-        <location filename="../src/shortcut_dialog.cpp" line="149"/>
+        <location filename="../src/shortcut_dialog.cpp" line="150"/>
         <source>AudioVideo</source>
         <translation>Мультимедиа</translation>
     </message>
     <message>
-        <location filename="../src/shortcut_dialog.cpp" line="150"/>
+        <location filename="../src/shortcut_dialog.cpp" line="151"/>
         <source>Audio</source>
         <translation>Аудио</translation>
     </message>
     <message>
-        <location filename="../src/shortcut_dialog.cpp" line="151"/>
+        <location filename="../src/shortcut_dialog.cpp" line="152"/>
         <source>Video</source>
         <translation>Видео</translation>
     </message>
     <message>
-        <location filename="../src/shortcut_dialog.cpp" line="152"/>
+        <location filename="../src/shortcut_dialog.cpp" line="153"/>
         <source>Development</source>
         <translation>Разработка</translation>
     </message>
     <message>
-        <location filename="../src/shortcut_dialog.cpp" line="153"/>
+        <location filename="../src/shortcut_dialog.cpp" line="154"/>
         <source>Education</source>
         <translation>Образование</translation>
     </message>
     <message>
-        <location filename="../src/shortcut_dialog.cpp" line="154"/>
+        <location filename="../src/shortcut_dialog.cpp" line="155"/>
         <source>HealthFitness</source>
         <translation>Здоровье</translation>
     </message>
     <message>
-        <location filename="../src/shortcut_dialog.cpp" line="155"/>
+        <location filename="../src/shortcut_dialog.cpp" line="156"/>
         <source>Game</source>
         <translation>Игры</translation>
     </message>
     <message>
-        <location filename="../src/shortcut_dialog.cpp" line="156"/>
+        <location filename="../src/shortcut_dialog.cpp" line="157"/>
         <source>Graphics</source>
         <translation>Графика</translation>
     </message>
     <message>
-        <location filename="../src/shortcut_dialog.cpp" line="157"/>
+        <location filename="../src/shortcut_dialog.cpp" line="158"/>
         <source>Network</source>
         <translation>Интернет</translation>
     </message>
     <message>
-        <location filename="../src/shortcut_dialog.cpp" line="158"/>
+        <location filename="../src/shortcut_dialog.cpp" line="159"/>
         <source>Office</source>
         <translation>Офис</translation>
     </message>
     <message>
-        <location filename="../src/shortcut_dialog.cpp" line="159"/>
+        <location filename="../src/shortcut_dialog.cpp" line="160"/>
         <source>Science</source>
         <translation>Наука</translation>
     </message>
     <message>
-        <location filename="../src/shortcut_dialog.cpp" line="160"/>
+        <location filename="../src/shortcut_dialog.cpp" line="161"/>
         <source>Settings</source>
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="../src/shortcut_dialog.cpp" line="161"/>
+        <location filename="../src/shortcut_dialog.cpp" line="162"/>
         <source>System</source>
         <translation>Система</translation>
     </message>
     <message>
-        <location filename="../src/shortcut_dialog.cpp" line="162"/>
+        <location filename="../src/shortcut_dialog.cpp" line="163"/>
         <source>Utility</source>
         <translation>Служебные</translation>
     </message>
     <message>
-        <location filename="../src/shortcut_dialog.cpp" line="114"/>
+        <location filename="../src/shortcut_dialog.cpp" line="115"/>
         <source>Desktop</source>
         <translation>Рабочий стол</translation>
     </message>
     <message>
-        <location filename="../src/shortcut_dialog.cpp" line="74"/>
+        <location filename="../src/shortcut_dialog.cpp" line="75"/>
         <source>Individual</source>
         <translation>Индивидуальный</translation>
     </message>
     <message>
-        <location filename="../src/shortcut_dialog.cpp" line="99"/>
+        <location filename="../src/shortcut_dialog.cpp" line="100"/>
         <source>Location</source>
         <translation>Расположение</translation>
     </message>
     <message>
-        <location filename="../src/shortcut_dialog.cpp" line="121"/>
+        <location filename="../src/shortcut_dialog.cpp" line="122"/>
         <source>Add</source>
         <translation>Добавить</translation>
     </message>
     <message>
-        <location filename="../src/shortcut_dialog.cpp" line="122"/>
+        <location filename="../src/shortcut_dialog.cpp" line="123"/>
         <source>Cancel</source>
         <translation>Отменить</translation>
     </message>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.seinedkoda.kisel</id>
+
+  <name>Kisel</name>
+  <developer id="io.github.seinedkoda">
+    <name translate="no">Seined Koda</name>
+  </developer>
+  <summary>Efficient launch of Windows programs</summary>
+  <url type="homepage">https://github.com/seinedkoda/kisel</url>
+  <url type="bugtracker">https://github.com/seinedkoda/kisel/issues</url>
+  <url type="donation">https://boosty.to/seinedk/donate</url>
+
+  <metadata_license>FSFAP</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+
+  <description>
+    <p>
+      Instant-run exe file program in a compiled language with minimal dependencies
+    </p>
+  </description>
+
+  <content_rating type="oars-1.1"/>
+  <categories>
+    <category>Utility</category>
+    <category>Game</category>
+  </categories>
+  <provides>
+    <mediatype>application/x-ms-dos-executable</mediatype>
+    <mediatype>application/x-msi</mediatype>
+    <mediatype>application/x-bat</mediatype>
+  </provides>
+
+  <suggests>
+    <id type="extension">org.freedesktop.Platform.VulkanLayer.MangoHud</id>
+    <id type="extension">org.freedesktop.Platform.VulkanLayer.OBSVkCapture</id>
+  </suggests>
+
+  <icon type="stock">io.github.seinedkoda.kisel</icon>
+  <launchable type="desktop-id">io.github.seinedkoda.kisel.desktop</launchable>
+  
+  <screenshots>
+    <screenshot type="default">
+      <image>https://raw.githubusercontent.com/seinedkoda/kisel/refs/heads/master/resources/screenshots/main-window.png</image>
+      <caption>Main Window</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/seinedkoda/kisel/refs/heads/master/resources/screenshots/prefix-settings-dialog.png</image>
+      <caption>Prefix settings dialog</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/seinedkoda/kisel/refs/heads/master/resources/screenshots/compatibility-tools-window.png</image>
+      <caption>Compatibility tools window</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/seinedkoda/kisel/refs/heads/master/resources/screenshots/add-new-compatibility-tool-dialog.png</image>
+      <caption>Add new compatibility tool dialog</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/seinedkoda/kisel/refs/heads/master/resources/screenshots/prefix-components-dialog.png</image>
+      <caption>Prefix components dialog</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/seinedkoda/kisel/refs/heads/master/resources/screenshots/shortcut-dialog.png</image>
+      <caption>Shortcut dialog</caption>
+    </screenshot>
+  </screenshots>
+  <releases>
+    <release version="1.3.1" date="2026-08-23">
+      <description translate="no">
+        <ul>
+          <li>Added metadata for packages</li>
+        </ul>
+      </description>
+    </release>
+  </releases>
+</component>

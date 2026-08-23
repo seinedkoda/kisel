@@ -117,16 +117,24 @@ install(TARGETS kisel
 install(
     FILES ${CMAKE_SOURCE_DIR}/resources/icons/kisel.svg
     DESTINATION share/icons/hicolor/scalable/apps
+    RENAME io.github.seinedkoda.kisel.svg
 )
 
 install(
     FILES ${CMAKE_SOURCE_DIR}/resources/kisel.desktop
     DESTINATION share/applications
+    RENAME io.github.seinedkoda.kisel.desktop
 )
 
 install(
     PROGRAMS "${umu_launcher_pkg_SOURCE_DIR}/umu-run"
     DESTINATION libexec/kisel
+)
+
+install(
+    FILES ${CMAKE_SOURCE_DIR}/resources/kisel.metainfo.xml
+    RENAME io.github.seinedkoda.kisel.metainfo.xml
+    DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/metainfo
 )
 
 set(CPACK_PACKAGE_NAME "kisel")

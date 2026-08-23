@@ -3,8 +3,6 @@ sdk: org.kde.Sdk
 runtime: org.kde.Platform
 runtime-version: '6.11'
 command: kisel
-rename-icon: kisel
-rename-desktop-file: kisel.desktop
 
 finish-args:
   - --socket=wayland

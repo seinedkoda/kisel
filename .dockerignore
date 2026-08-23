@@ -1,9 +1,7 @@
 build/
-misc/
 docs/
 .git/
 .gitignore
 README.md
 .idea/
 .qtcreator/
-!misc/archlinux/PKGBUILD
