@@ -46,10 +46,9 @@
 ## Установка 📦
 
 ### Flatpak (Универсальный)
-**[Загрузите последнюю версию .flatpak](https://github.com/seinedkoda/kisel/releases/latest)**
-```bash
-sudo flatpak install kisel-*.flatpak
-```
+<a href='https://flathub.org/apps/io.github.seinedkoda.kisel'>
+    <img width='240' alt='Get it on Flathub' src='https://flathub.org/api/badge?locale=ru'/>
+</a>
 
 ### Arch Linux
 **[Загрузите последнюю версию .pacman](https://github.com/seinedkoda/kisel/releases/latest)**

@@ -48,10 +48,9 @@ Provide an instant-run exe file program in a compiled language with minimal depe
 ## Installation 📦
 
 ### Flatpak (Universal)
-**[Download the latest version of .flatpak](https://github.com/seinedkoda/kisel/releases/latest)**
-```bash
-sudo flatpak install kisel-*.flatpak
-```
+<a href='https://flathub.org/apps/io.github.seinedkoda.kisel'>
+    <img width='240' alt='Get it on Flathub' src='https://flathub.org/api/badge?locale=en'/>
+</a>
 
 ### Arch Linux
 **[Download the latest version of .pacman](https://github.com/seinedkoda/kisel/releases/latest)**
