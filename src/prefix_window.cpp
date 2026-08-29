@@ -109,7 +109,7 @@ void PrefixWindow::onContextMenuRequested(const QPoint& pos)
             return;
         }
 
-        auto* prefixComponentsDialog = new PrefixComponentsDialog(*prefix, this);
+        auto* prefixComponentsDialog = new PrefixComponentsDialog(prefix, this);
         prefixComponentsDialog->exec();
     });
 

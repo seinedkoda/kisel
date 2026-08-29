@@ -54,7 +54,7 @@ private:
     void setupProtonProcess();
     void setupUmuProcess();
     void setupLogging();
-    void runWinetricksUtility(const QString& utilName, const Prefix* prefix);
+    void runWinetricksUtility(const Prefix* prefix, const QString& utilName);
     void showError(const QString& errorText, RunningError error, bool emitText = false);
 
     QProcess m_process;

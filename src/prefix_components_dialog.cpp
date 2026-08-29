@@ -11,10 +11,11 @@
 using namespace Qt::StringLiterals;
 using namespace kisel;
 
-PrefixComponentsDialog::PrefixComponentsDialog(const Prefix& prefix, QWidget* parent)
+PrefixComponentsDialog::PrefixComponentsDialog(const Prefix* prefix, QWidget* parent)
     : QDialog(parent)
     , m_prefix(prefix)
-    , m_updateProcess(new QProcess(this))
+    , m_componentsListProcess(new QProcess(this))
+    , m_installedListProcess(new QProcess(this))
     , m_installProcess(new QProcess(this))
     , m_categoryList(new QComboBox(this))
     , m_componentsListWidget(new QListWidget(this))
@@ -29,7 +30,7 @@ PrefixComponentsDialog::PrefixComponentsDialog(const Prefix& prefix, QWidget* pa
 
     auto* layout = new QVBoxLayout(this);
 
-    auto* prefixTitleLabel = new QLabel(tr("<h3>Prefix \"%1\"</h3>").arg(prefix.name()));
+    auto* prefixTitleLabel = new QLabel(tr("<h3>Prefix \"%1\"</h3>").arg(prefix->name()));
     layout->addWidget(prefixTitleLabel);
 
     auto* titleLabel = new QLabel(tr("Available components for installation:"), this);
@@ -65,7 +66,25 @@ PrefixComponentsDialog::PrefixComponentsDialog(const Prefix& prefix, QWidget* pa
     connect(m_searchLineEdit, &QLineEdit::textChanged, this, &PrefixComponentsDialog::filterItems);
     connect(m_installButton, &QPushButton::clicked, this, &PrefixComponentsDialog::onInstallCancelButtonClicked);
     connect(m_closeButton, &QPushButton::clicked, this, &PrefixComponentsDialog::close);
-    connect(m_updateProcess, &QProcess::finished, this, &PrefixComponentsDialog::onUpdateFinished);
+
+    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+    env.insert("UMU_RUNTIME_UPDATE"_L1, APP_SETTINGS->runtimeAutoUpdate() ? "1"_L1 : "0"_L1);
+    env.insert("WINEPREFIX"_L1, m_prefix->path());
+    env.insert("PROTONPATH"_L1, m_prefix->settings()->ctPath());
+
+    // Don't use pure winetricks!
+
+    m_componentsListProcess->setProcessEnvironment(env);
+    m_componentsListProcess->setProgram(APP_SETTINGS->umuPath());
+    connect(m_componentsListProcess, &QProcess::finished, this, &PrefixComponentsDialog::onComponentsListLoaded);
+
+    m_installedListProcess->setProcessEnvironment(env);
+    m_installedListProcess->setProgram(APP_SETTINGS->umuPath());
+    m_installedListProcess->setArguments({ "winetricks"_L1, "list-installed"_L1 });
+    connect(m_installedListProcess, &QProcess::finished, this, &PrefixComponentsDialog::onInstalledListLoaded);
+
+    m_installProcess->setProcessEnvironment(env);
+    m_installProcess->setProgram(APP_SETTINGS->umuPath());
     connect(m_installProcess, &QProcess::finished, this, &PrefixComponentsDialog::onInstallFinished);
 
     loadComponents();
@@ -80,28 +99,61 @@ void PrefixComponentsDialog::loadComponents()
     m_searchLineEdit->setEnabled(false);
     m_progressBar->show();
 
-    m_updateProcess->start(APP_SETTINGS->winetricksPath(), { m_categoryList->currentData().toString(), "list"_L1 });
+    m_componentsListProcess->setArguments({ "winetricks"_L1, m_categoryList->currentData().toString(), "list"_L1 });
+    m_componentsListProcess->start();
 }
 
-void PrefixComponentsDialog::onUpdateFinished(int exitCode, QProcess::ExitStatus exitStatus)
+void PrefixComponentsDialog::onComponentsListLoaded(int exitCode, QProcess::ExitStatus exitStatus)
 {
-    m_componentsListWidget->setEnabled(true);
-    m_categoryList->setEnabled(true);
-    m_installButton->setEnabled(true);
-    m_searchLineEdit->setEnabled(true);
-    m_progressBar->hide();
-
     if (exitStatus != QProcess::NormalExit || exitCode != 0) {
-        QMessageBox::critical(this, tr("Update error"), tr("Unable to get list of components to install using winetricks"));
+        resetWidgetsState();
+        QMessageBox::critical(this, tr("Update error"),
+            tr("Failed to get list of components available for installation: %1").arg(m_componentsListProcess->errorString()));
         return;
     }
 
-    QString output = QString::fromUtf8(m_updateProcess->readAllStandardOutput());
+    QString output = QString::fromUtf8(m_componentsListProcess->readAllStandardOutput());
     const QStringList& lines = output.split(u'\n', Qt::SkipEmptyParts);
 
     for (const QString& line : lines) {
         parseAndAddLine(line.trimmed());
     }
+
+    m_installedListProcess->start();
+}
+
+void PrefixComponentsDialog::onInstalledListLoaded(int exitCode, QProcess::ExitStatus exitStatus)
+{
+    if (exitStatus != QProcess::NormalExit || exitCode != 0) {
+        resetWidgetsState();
+        QMessageBox::critical(this, tr("Update error"),
+            tr("Failed to get list of installed components: %1").arg(m_installedListProcess->errorString()));
+        return;
+    }
+
+    QString output = QString::fromUtf8(m_installedListProcess->readAllStandardOutput());
+    QStringList lines = output.split(u'\n', Qt::SkipEmptyParts);
+
+    for (int i = 0; i < m_componentsListWidget->count(); ++i) {
+        QListWidgetItem* item = m_componentsListWidget->item(i);
+        if (lines.contains(item->text())) {
+            item->setCheckState(Qt::Checked);
+            item->setFlags(item->flags() & ~Qt::ItemIsEnabled);
+        }
+    }
+
+    resetWidgetsState();
+    m_installButton->setEnabled(true);
+}
+
+void PrefixComponentsDialog::resetWidgetsState()
+{
+    m_componentsListWidget->setEnabled(true);
+    m_categoryList->setEnabled(true);
+    m_searchLineEdit->setEnabled(true);
+    m_installButton->setText(tr("Install selected"));
+    m_installButton->setIcon(QIcon::fromTheme("browser-download"));
+    m_progressBar->hide();
 }
 
 void PrefixComponentsDialog::parseAndAddLine(const QString& line)
@@ -137,33 +189,33 @@ void PrefixComponentsDialog::onInstallCancelButtonClicked()
         }
     }
 
-    auto answer = QMessageBox::question(this, tr("Confirmation"), tr("Install selected components?"));
+    updateSelectedComponents();
+
+    if (m_selectedComponents.isEmpty()) {
+        QMessageBox::information(this, tr("There is nothing to install"), tr("Mark the components to install in the prefix"));
+        return;
+    }
+
+    auto answer = QMessageBox::question(this, tr("Confirmation"),
+        tr("Install selected components?\n%1").arg(m_selectedComponents.join("\n")));
     if (answer == QMessageBox::Yes) {
         installSelected();
     }
 }
 
-QStringList PrefixComponentsDialog::selectedComponents() const
+void PrefixComponentsDialog::updateSelectedComponents()
 {
-    QStringList selectedItems;
+    m_selectedComponents.clear();
     for (int i = 0; i < m_componentsListWidget->count(); ++i) {
         QListWidgetItem* item = m_componentsListWidget->item(i);
-        if (item->checkState() == Qt::Checked) {
-            selectedItems << item->text();
+        if (item->checkState() == Qt::Checked && item->flags().testFlag(Qt::ItemIsEnabled)) {
+            m_selectedComponents << item->text();
         }
     }
-    return selectedItems;
 }
 
 void PrefixComponentsDialog::installSelected()
 {
-    const QStringList& selectedItems = selectedComponents();
-
-    if (selectedItems.isEmpty()) {
-        QMessageBox::information(this, tr("There is nothing to install"), tr("Mark the components to install in the prefix"));
-        return;
-    }
-
     m_componentsListWidget->setEnabled(false);
     m_categoryList->setEnabled(false);
     m_searchLineEdit->setEnabled(false);
@@ -171,35 +223,42 @@ void PrefixComponentsDialog::installSelected()
     m_installButton->setIcon(QIcon::fromTheme("media-playback-stop"));
     m_progressBar->show();
 
-    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-    env.insert("WINEPREFIX"_L1, m_prefix.path());
-    m_installProcess->setProcessEnvironment(env);
-
-    m_installProcess->start(APP_SETTINGS->winetricksPath(), QStringList() << "-q"_L1 << selectedItems);
+    m_installProcess->setArguments(QStringList() << "winetricks"_L1 << "-q"_L1 << m_selectedComponents); // Don't use pure winetricks!
+    m_installProcess->start();
 }
 
 void PrefixComponentsDialog::onInstallFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
-    m_componentsListWidget->setEnabled(true);
-    m_categoryList->setEnabled(true);
-    m_searchLineEdit->setEnabled(true);
-    m_installButton->setText(tr("Install selected"));
-    m_installButton->setIcon(QIcon::fromTheme("browser-download"));
-    m_progressBar->hide();
-
+    resetWidgetsState();
     if (exitStatus != QProcess::NormalExit || exitCode != 0) {
-        QMessageBox::critical(this, tr("Installation error"), tr("Failed to install the selected components using winetricks"));
+        QMessageBox::critical(this, tr("Installation error"),
+            tr("Failed to install the selected components: %1").arg(m_installProcess->errorString()));
     } else {
+        for (int i = 0; i < m_componentsListWidget->count(); ++i) {
+            QListWidgetItem* item = m_componentsListWidget->item(i);
+            if (m_selectedComponents.contains(item->text())) {
+                item->setCheckState(Qt::Checked);
+                item->setFlags(item->flags() & ~Qt::ItemIsEnabled);
+            }
+        }
+
         QMessageBox::information(this, tr("Completed"), tr("Successfully installed!"));
     }
 }
 
 void PrefixComponentsDialog::closeEvent(QCloseEvent* event)
 {
-    if (m_updateProcess->state() == QProcess::Running) {
-        m_updateProcess->terminate();
-        if (!m_updateProcess->waitForFinished()) {
-            m_updateProcess->kill();
+    if (m_componentsListProcess->state() == QProcess::Running) {
+        m_componentsListProcess->terminate();
+        if (!m_componentsListProcess->waitForFinished()) {
+            m_componentsListProcess->kill();
+        }
+    }
+
+    if (m_installedListProcess->state() == QProcess::Running) {
+        m_installedListProcess->terminate();
+        if (!m_installedListProcess->waitForFinished()) {
+            m_installedListProcess->kill();
         }
     }
 

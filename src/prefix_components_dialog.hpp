@@ -15,7 +15,7 @@ namespace kisel {
 class PrefixComponentsDialog : public QDialog {
     Q_OBJECT
 public:
-    PrefixComponentsDialog(const Prefix& prefix, QWidget* parent = nullptr);
+    PrefixComponentsDialog(const Prefix* prefix, QWidget* parent = nullptr);
 
 protected:
     void closeEvent(QCloseEvent* event) override;
@@ -23,18 +23,22 @@ protected:
 private slots:
     void filterItems(const QString& text);
     void onInstallCancelButtonClicked();
-    void onUpdateFinished(int exitCode, QProcess::ExitStatus exitStatus);
+    void onComponentsListLoaded(int exitCode, QProcess::ExitStatus exitStatus);
+    void onInstalledListLoaded(int exitCode, QProcess::ExitStatus exitStatus);
     void onInstallFinished(int exitCode, QProcess::ExitStatus exitStatus);
 
 private:
     void loadComponents();
     void parseAndAddLine(const QString& line);
-    [[nodiscard]] QStringList selectedComponents() const;
+    void resetWidgetsState();
+    void updateSelectedComponents();
     void installSelected();
     void cancelInstallation();
 
-    const Prefix& m_prefix;
-    QProcess* m_updateProcess;
+    QStringList m_selectedComponents;
+    const Prefix* m_prefix;
+    QProcess* m_componentsListProcess;
+    QProcess* m_installedListProcess;
     QProcess* m_installProcess;
     QComboBox* m_categoryList;
     QListWidget* m_componentsListWidget;

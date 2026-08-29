@@ -127,7 +127,7 @@ MainWindow::MainWindow(const QString& exePath)
             return;
         }
 
-        auto* prefixComponentsDialog = new PrefixComponentsDialog(*m_runConfig->prefix(), this);
+        auto* prefixComponentsDialog = new PrefixComponentsDialog(m_runConfig->prefix(), this);
         prefixComponentsDialog->exec();
     });
 

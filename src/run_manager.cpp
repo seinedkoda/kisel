@@ -199,25 +199,25 @@ void RunManager::setupLogging()
 
 void RunManager::runWineCfg(const Prefix* prefix)
 {
-    runWinetricksUtility("winecfg"_L1, prefix);
+    runWinetricksUtility(prefix, "winecfg"_L1);
 }
 
 void RunManager::runExplorer(const Prefix* prefix)
 {
-    runWinetricksUtility("explorer"_L1, prefix);
+    runWinetricksUtility(prefix, "explorer"_L1);
 }
 
 void RunManager::runRegedit(const Prefix* prefix)
 {
-    runWinetricksUtility("regedit"_L1, prefix);
+    runWinetricksUtility(prefix, "regedit"_L1);
 }
 
 void RunManager::runUninstaller(const Prefix* prefix)
 {
-    runWinetricksUtility("uninstaller"_L1, prefix);
+    runWinetricksUtility(prefix, "uninstaller"_L1);
 }
 
-void RunManager::runWinetricksUtility(const QString& utilName, const Prefix* prefix)
+void RunManager::runWinetricksUtility(const Prefix* prefix, const QString& utilName)
 {
     if (APP_SETTINGS->winetricksPath().isEmpty()) {
         showError("\"winetricks\" not found", NoWinetricks);
@@ -237,11 +237,13 @@ void RunManager::runWinetricksUtility(const QString& utilName, const Prefix* pre
     }
 
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+    env.insert("UMU_RUNTIME_UPDATE"_L1, APP_SETTINGS->runtimeAutoUpdate() ? Y : N);
     env.insert("WINEPREFIX"_L1, prefix->path());
+    env.insert("PROTONPATH"_L1, prefix->settings()->ctPath());
 
     m_process.setProcessEnvironment(env);
-    m_process.setProgram(APP_SETTINGS->umuPath());
-    m_process.setArguments({ "winetricks", utilName }); // Don't use winetricks path!
+    m_process.setProgram(APP_SETTINGS->umuPath()); // Don't use pure winetricks!
+    m_process.setArguments({ "winetricks", utilName });
 
     m_currentTaskName = utilName;
 
@@ -313,6 +315,7 @@ void RunManager::showError(const QString& errorText, RunningError error, bool em
     emit runningError(error, emitText ? errorText : "");
 }
 
-QString RunManager::taskName() const {
+QString RunManager::taskName() const
+{
     return m_currentTaskName;
 }

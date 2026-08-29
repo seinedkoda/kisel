@@ -64,6 +64,5 @@ modules:
       - -DCMAKE_BUILD_TYPE=Release
       - -DINSTALL_UMU=OFF
     sources:
-      - type: archive
-        url: https://github.com/seinedkoda/kisel/archive/refs/tags/v1.3.3.tar.gz
-        sha256: 7e06516dbd6b316cf3f7ce0d268f58b0be30893d980afb50f131d81eeb39775b
+      - type: dir
+        path: ../../..
