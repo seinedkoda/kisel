@@ -48,7 +48,7 @@ modules:
   - name: umu-launcher
     buildsystem: simple
     build-commands:
-      - install -Dm755 umu-run /app/bin/umu-run
+      - install -Dm755 umu-run /app/lib/kisel/umu-run
       - install -Dm644 LICENSE /app/share/licenses/umu-launcher/LICENSE
     sources:
       - type: archive

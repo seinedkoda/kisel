@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.19)
-project(Kisel VERSION 1.3.4 LANGUAGES CXX)
+project(Kisel VERSION 1.4.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -116,7 +116,7 @@ if (INSTALL_UMU)
 
     install(
         PROGRAMS "${umu_launcher_zipapp_SOURCE_DIR}/umu-run"
-        DESTINATION libexec/kisel
+        DESTINATION lib/kisel
     )
 endif()
 
