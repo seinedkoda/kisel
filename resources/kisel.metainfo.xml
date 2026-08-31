@@ -115,6 +115,13 @@
     </screenshot>
   </screenshots>
   <releases>
+   <release version="1.3.5" date="2026-08-31">
+      <description translate="no">
+        <ul>
+          <li>Fixed creation and launch of shortcuts</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.3.4" date="2026-08-29">
       <description translate="no">
         <ul>

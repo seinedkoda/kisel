@@ -45,7 +45,13 @@ void RunConfig::setPrefix(Prefix* prefix)
 
 void RunConfig::setPrefixName(const QString& prefixName)
 {
-    m_prefix = PREFIX_MODEL->forName(prefixName);
+    Prefix* prefix = PREFIX_MODEL->forName(prefixName);
+    if (prefix == nullptr) {
+        qWarning() << "Prefix" << prefixName << "not found, default prefix used";
+        m_prefix = PREFIX_MODEL->defaultPrefix();
+    } else {
+        m_prefix = prefix;
+    }
 }
 
 Prefix* RunConfig::prefix() const
