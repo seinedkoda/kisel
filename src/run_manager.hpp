@@ -51,6 +51,8 @@ private:
     explicit RunManager(QObject* parent = nullptr);
 
     bool setupConfig(RunConfig* runConfig);
+    bool setupPrefix();
+    bool setupCt();
     void setupProtonProcess();
     void setupUmuProcess();
     void setupLogging();

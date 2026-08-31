@@ -8,6 +8,8 @@
 #include <QStandardPaths>
 #include <QTemporaryFile>
 
+#include "app_settings.hpp"
+
 using namespace Qt::StringLiterals;
 using namespace kisel;
 
@@ -153,17 +155,21 @@ void ExecutableFile::createShortcut(
         qWarning() << "Failed to save icon for shortcut";
     }
 
-    QStandardPaths::StandardLocation outputLocation { };
+    QString destDirPath;
     if (shortcutDest == Menu) {
-        outputLocation = QStandardPaths::ApplicationsLocation;
+        if (APP_SETTINGS->isFlatpak()) {
+            destDirPath = QDir::homePath() + "/.local/share/applications";
+            // or "--filesystem=xdg-data/applications"
+        } else {
+            destDirPath = QStandardPaths::writableLocation(QStandardPaths::ApplicationsLocation);
+        }
     } else if (shortcutDest == Desktop) {
-        outputLocation = QStandardPaths::DesktopLocation;
+        destDirPath = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
     } else {
         qCritical() << "Invalid shortcut destination";
         return;
     }
 
-    const QString destDirPath = QStandardPaths::writableLocation(outputLocation);
     if (destDirPath.isEmpty()) {
         qCritical() << "Could not determine writable location for shortcut";
         return;
@@ -201,7 +207,11 @@ void ExecutableFile::createShortcut(
     stream << "[Desktop Entry]\n"_L1;
     stream << "Type=Application\n"_L1;
     stream << "Name="_L1 << shortcutName << u'\n';
-    stream << "Exec=kisel -p \""_L1 << escapedPrefixName << "\" \""_L1 << escapedExePath << "\"\n"_L1;
+    if (APP_SETTINGS->isFlatpak()) {
+        stream << "Exec=flatpak run --file-forwarding io.github.seinedkoda.kisel -p \""_L1 << escapedPrefixName << "\" @@ \""_L1 << escapedExePath << "\" @@\n"_L1;
+    } else {
+        stream << "Exec=kisel -p \""_L1 << escapedPrefixName << "\" \""_L1 << escapedExePath << "\"\n"_L1;
+    }
     stream << "Icon="_L1 << iconPath << u'\n';
     stream << "Categories="_L1 << category << ";\n"_L1;
     stream << "StartupNotify=true\n"_L1;

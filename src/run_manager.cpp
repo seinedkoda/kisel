@@ -58,15 +58,9 @@ void RunManager::run(RunConfig* runConfig)
 bool RunManager::setupConfig(RunConfig* runConfig)
 {
     m_runConfig = runConfig;
-    Prefix* prefix = runConfig->prefix();
 
     if (!runConfig->exeFile()->isValid()) {
         showError("The executable file is not valid", InvalidExecutable);
-        return false;
-    }
-
-    if (m_process.state() == QProcess::Running) {
-        showError("The executable file is currently running", AlreadyRunning);
         return false;
     }
 
@@ -75,36 +69,18 @@ bool RunManager::setupConfig(RunConfig* runConfig)
         return false;
     }
 
-    if (prefix == nullptr || prefix->name().isEmpty()) {
-        prefix = PREFIX_MODEL->defaultPrefix();
-        runConfig->setPrefix(prefix);
+    if (!setupPrefix()) {
+        return false;
     }
 
-    if (!prefix->exists()) {
-        if (!prefix->makePath()) {
-            showError("Failed to write prefix", PrefixWriteError);
-            return false;
-        }
+    if (!setupCt()) {
+        return false;
     }
 
-    Ct* ct = runConfig->ct();
-    if (ct == nullptr || ct->path().isEmpty()) {
-        Ct* defaultCt = CT_MODEL->defaultCt();
-        if (defaultCt == nullptr || defaultCt->path().isEmpty()) {
-            showError("Cannot run with empty compatibility tool", InvalidCt);
-            return false;
-        }
-        runConfig->setCt(defaultCt);
-    }
-
-    PrefixSettings* prefixSettings = prefix->settings();
     QProcessEnvironment& env = runConfig->setNewEnv();
+    const PrefixSettings* prefixSettings = runConfig->prefix()->settings();
 
-    prefixSettings->setCtPath(ct->path()); // Save run settings
-
-    PREFIX_MODEL->refreshList();
-
-    env.insert("WINEPREFIX"_L1, prefix->path());
+    env.insert("WINEPREFIX"_L1, runConfig->prefix()->path());
     env.insert("MANGOHUD"_L1, prefixSettings->mangoHudEnabled() ? Y : N);
     env.insert("OBS_VKCAPTURE"_L1, prefixSettings->obsVkCaptureEnabled() ? Y : N);
     env.insert("PROTON_USE_XALIA"_L1, prefixSettings->xaliaEnabled() ? Y : N);
@@ -115,6 +91,51 @@ bool RunManager::setupConfig(RunConfig* runConfig)
     env.insert("PROTON_ENABLE_NVAPI"_L1, prefixSettings->nvapiEnabled() ? Y : N);
     env.insert("PROTON_USE_SDL"_L1, prefixSettings->sdlInputEnabled() ? Y : N);
 
+    return true;
+}
+
+bool RunManager::setupPrefix() {
+    Prefix* prefix = m_runConfig->prefix();
+
+    if (prefix == nullptr || prefix->name().isEmpty()) {
+        prefix = PREFIX_MODEL->defaultPrefix();
+        m_runConfig->setPrefix(prefix);
+    }
+
+    if (!prefix->exists()) {
+        if (!prefix->makePath()) {
+            showError("Failed to write prefix", PrefixWriteError);
+            return false;
+        }
+    }
+
+    PREFIX_MODEL->refreshList();
+    return true;
+}
+
+bool RunManager::setupCt() {
+    Ct* ct = m_runConfig->ct();
+    PrefixSettings* prefixSettings = m_runConfig->prefix()->settings();
+    const QString prefixCtPath = prefixSettings->ctPath();
+
+    if (ct == nullptr || ct->path().isEmpty()) {
+        Ct* prefixCt = CT_MODEL->forPath(prefixCtPath);
+        if (prefixCt != nullptr) {
+            m_runConfig->setCt(prefixCt);
+        } else {
+            Ct* defaultCt = CT_MODEL->defaultCt();
+            if (defaultCt == nullptr || defaultCt->path().isEmpty()) {
+                showError("Cannot run with empty compatibility tool", InvalidCt);
+                return false;
+            }
+            m_runConfig->setCt(defaultCt);
+        }
+    }
+
+    QString runConfigCtPath = m_runConfig->ct()->path();
+    if (prefixCtPath != runConfigCtPath) {
+        prefixSettings->setCtPath(runConfigCtPath); // Save run settings
+    }
     return true;
 }
 

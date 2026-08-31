@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.19)
-project(Kisel VERSION 1.3.4 LANGUAGES CXX)
+project(Kisel VERSION 1.3.5 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -167,7 +167,7 @@ set(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
 add_custom_target(flatpak-package
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
     COMMAND flatpak-builder --repo=repo --force-clean
-        flatpak-build "${CMAKE_SOURCE_DIR}/misc/flatpak/io.github.seinedkoda.kisel.yml"
+        flatpak-build "${CMAKE_SOURCE_DIR}/misc/flatpak/local/io.github.seinedkoda.kisel.yml"
     COMMAND flatpak build-bundle repo 
         "${CMAKE_BINARY_DIR}/packages/kisel-${PROJECT_VERSION}-x86_64.flatpak"
         io.github.seinedkoda.kisel
