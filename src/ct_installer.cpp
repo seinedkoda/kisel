@@ -105,7 +105,10 @@ CtInstaller* CtInstaller::instance()
 
 QString CtInstaller::defaultCtSource()
 {
-    return "Proton-GE (Github)"_L1;
+    if (APP_SETTINGS->deviceSupportsModernVulkan()) {
+        return "Proton-GE (Github)"_L1;
+    }
+    return "Proton-CachyOS (Github)"_L1;
 }
 
 const QMap<QString, QUrl>& CtInstaller::ctSourceMap()

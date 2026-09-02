@@ -141,6 +141,22 @@ AddNewCtDialog::AddNewCtDialog(QWidget* parent)
     connect(m_ctSourceComboBox, &QComboBox::currentTextChanged, this, &AddNewCtDialog::fetchAvailableReleases);
     layout->addWidget(m_ctSourceComboBox);
 
+    if (!APP_SETTINGS->deviceSupportsModernVulkan()) {
+        auto* infoWidget = new QWidget(this);
+        layout->addWidget(infoWidget);
+
+        auto* infoWidgetLayout = new QHBoxLayout(infoWidget);
+        infoWidgetLayout->setAlignment(Qt::AlignLeft);
+
+        auto* infoIcon = new QLabel(this);
+        infoIcon->setPixmap(QIcon::fromTheme("help-about").pixmap(16, 16));
+        infoWidgetLayout->addWidget(infoIcon);
+
+        auto* infoLabel = new QLabel(tr("Your device does not support Vulkan 1.4 or higher, Proton-CachyOS is set by default for compatibility"), this);
+        infoLabel->setWordWrap(true);
+        infoWidgetLayout->addWidget(infoLabel);
+    }
+
     auto* versionLabel = new QLabel(tr("Version:"), this);
     layout->addWidget(versionLabel);
 
@@ -173,6 +189,8 @@ AddNewCtDialog::AddNewCtDialog(QWidget* parent)
     layout->addWidget(m_addToInstallationButton);
 
     fetchAvailableReleases();
+    adjustSize();
+    setFixedSize(size());
 }
 
 void AddNewCtDialog::fetchAvailableReleases()

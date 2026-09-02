@@ -2,6 +2,7 @@
 
 #include <QDir>
 #include <QSettings>
+#include <QVersionNumber>
 
 namespace kisel {
 #define APP_SETTINGS AppSettings::instance()
@@ -24,6 +25,10 @@ public:
     [[nodiscard]] QString locale() const;
 
     static bool isFlatpak();
+
+    static bool deviceSupportsVulkan();
+    static QVersionNumber vulkanApiVersion();
+    static bool deviceSupportsModernVulkan();
 
     void setStyleName(const QString& styleName);
     QString styleName();

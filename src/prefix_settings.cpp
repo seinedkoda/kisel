@@ -1,5 +1,7 @@
 #include "prefix_settings.hpp"
 
+#include "app_settings.hpp"
+
 using namespace Qt::StringLiterals;
 using namespace kisel;
 
@@ -105,7 +107,7 @@ void PrefixSettings::setOpenglEnabled(bool enabled)
 
 bool PrefixSettings::openglEnabled() const
 {
-    return value("opengl"_L1, false).toBool();
+    return value("opengl"_L1, !APP_SETTINGS->deviceSupportsVulkan()).toBool();
 }
 
 void PrefixSettings::setSteamEnabled(bool enabled)

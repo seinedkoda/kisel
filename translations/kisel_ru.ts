@@ -38,12 +38,17 @@
     </message>
     <message>
         <location filename="../src/about_dialog.cpp" line="58"/>
-        <source>&lt;b&gt;Components:&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Компоненты:&lt;/b&gt;</translation>
+        <source>No</source>
+        <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../src/about_dialog.cpp" line="73"/>
-        <location filename="../src/about_dialog.cpp" line="74"/>
+        <location filename="../src/about_dialog.cpp" line="60"/>
+        <source>&lt;dl&gt;&lt;dt&gt;&lt;b&gt;System Information:&lt;/b&gt;&lt;/dt&gt;&lt;dd&gt;OS: &lt;i&gt;%1&lt;/i&gt;&lt;/dd&gt;&lt;dd&gt;Supported Vulkan API: &lt;i&gt;%2&lt;/i&gt;&lt;/dd&gt;&lt;dt&gt;&lt;b&gt;Components:&lt;/b&gt;&lt;/dt&gt;&lt;dd&gt;umu-run (&lt;i&gt;%3&lt;/i&gt;)&lt;/dd&gt;&lt;dd&gt;winetricks (&lt;i&gt;%4&lt;/i&gt;)&lt;/dd&gt;&lt;dd&gt;mangohud (&lt;i&gt;%5&lt;/i&gt;)&lt;/dd&gt;&lt;dd&gt;obs-vkcapture (&lt;i&gt;%6&lt;/i&gt;)&lt;/dd&gt;&lt;/dl&gt;</source>
+        <translation>&lt;dl&gt;&lt;dt&gt;&lt;b&gt;Системная информация:&lt;/b&gt;&lt;/dt&gt;&lt;dd&gt;ОС: &lt;i&gt;%1&lt;/i&gt;&lt;/dd&gt;&lt;dd&gt;Поддерживаемый Vulkan API: &lt;i&gt;%2&lt;/i&gt;&lt;/dd&gt;&lt;dt&gt;&lt;b&gt;Компоненты:&lt;/b&gt;&lt;/dt&gt;&lt;dd&gt;umu-run (&lt;i&gt;%3&lt;/i&gt;)&lt;/dd&gt;&lt;dd&gt;winetricks (&lt;i&gt;%4&lt;/i&gt;)&lt;/dd&gt;&lt;dd&gt;mangohud (&lt;i&gt;%5&lt;/i&gt;)&lt;/dd&gt;&lt;dd&gt;obs-vkcapture (&lt;i&gt;%6&lt;/i&gt;)&lt;/dd&gt;&lt;/dl&gt;</translation>
+    </message>
+    <message>
+        <location filename="../src/about_dialog.cpp" line="81"/>
+        <location filename="../src/about_dialog.cpp" line="82"/>
         <source>About Qt</source>
         <translation>О Qt</translation>
     </message>
@@ -71,22 +76,27 @@
         <translation>&lt;Нет данных&gt;</translation>
     </message>
     <message>
-        <location filename="../src/ct_window.cpp" line="144"/>
+        <location filename="../src/ct_window.cpp" line="155"/>
+        <source>Your device does not support Vulkan 1.4 or higher, Proton-CachyOS is set by default for compatibility</source>
+        <translation>Ваше устройство не поддерживает Vulkan 1.4 или выше, Proton-CachyOS выставлен по умолчанию для совместимости</translation>
+    </message>
+    <message>
+        <location filename="../src/ct_window.cpp" line="160"/>
         <source>Version:</source>
         <translation>Версия:</translation>
     </message>
     <message>
-        <location filename="../src/ct_window.cpp" line="160"/>
+        <location filename="../src/ct_window.cpp" line="176"/>
         <source>Installation location:</source>
         <translation>Место установки:</translation>
     </message>
     <message>
-        <location filename="../src/ct_window.cpp" line="208"/>
+        <location filename="../src/ct_window.cpp" line="226"/>
         <source>Update error</source>
         <translation>Ошибка обновления</translation>
     </message>
     <message>
-        <location filename="../src/ct_window.cpp" line="208"/>
+        <location filename="../src/ct_window.cpp" line="226"/>
         <source>Error loading releases: %1</source>
         <translation>Ошибка загрузки выпусков: %1</translation>
     </message>
@@ -241,17 +251,17 @@
 <context>
     <name>kisel::CtInstaller</name>
     <message>
-        <location filename="../src/ct_installer.cpp" line="141"/>
+        <location filename="../src/ct_installer.cpp" line="144"/>
         <source>Invalid response format from Server API</source>
         <translation>Неверный формат ответа от API сервера</translation>
     </message>
     <message>
-        <location filename="../src/ct_installer.cpp" line="157"/>
+        <location filename="../src/ct_installer.cpp" line="160"/>
         <source>No suitable installation path specified: %1</source>
         <translation>Не указан подходящий путь установки: %1</translation>
     </message>
     <message>
-        <location filename="../src/ct_installer.cpp" line="164"/>
+        <location filename="../src/ct_installer.cpp" line="167"/>
         <source>Cannot create directory: %1</source>
         <translation>Невозможно создать директорию: %1</translation>
     </message>
