@@ -2,144 +2,197 @@
 
 #include <QComboBox>
 #include <QDialogButtonBox>
-#include <QDir>
-#include <QFileInfo>
-#include <QGridLayout>
 #include <QGroupBox>
 #include <QLabel>
-#include <QPushButton>
+#include <QMenu>
 #include <QVBoxLayout>
+#include <utility>
 
 #include "prefix_model.hpp"
+#include "shortcut_utils.hpp"
 
 using namespace Qt::StringLiterals;
 using namespace kisel;
 
 ShortcutDialog::ShortcutDialog(RunConfig* runConfig, QWidget* parent)
     : QDialog(parent)
+    , m_exeFile(runConfig->exeFile())
     , m_currentPrefix(runConfig->prefix())
+    , m_iconToolButton(new QToolButton(this))
     , m_prefixComboBox(new QComboBox(this))
     , m_categoryComboBox(new QComboBox(this))
 {
-    setWindowTitle(tr("Create shortcut"));
+    setWindowTitle(tr("Shortcuts"));
     setAttribute(Qt::WA_DeleteOnClose);
     setWindowModality(Qt::ApplicationModal);
     setMinimumWidth(300);
 
-    auto* exeFile = runConfig->exeFile();
-    const QString individualPrefixName = Prefix::generatePrefixNameFromFile(exeFile->path());
-    bool isIndividualPrefix = m_currentPrefix->name() == individualPrefixName;
-    if (isIndividualPrefix) {
-        m_individualPrefix = m_currentPrefix;
-    } else {
+    const QString individualPrefixName = m_exeFile->id();
+    m_individualPrefix = PREFIX_MODEL->forName(individualPrefixName);
+    if (m_individualPrefix == nullptr) {
         m_individualPrefix = new Prefix(individualPrefixName, this);
     }
-
     auto* layout = new QVBoxLayout(this);
+    layout->setAlignment(Qt::AlignTop);
 
-    auto* contentWidget = new QWidget(this);
-    auto* contentLayout = new QVBoxLayout(contentWidget);
-    contentLayout->setContentsMargins(0, 0, 0, 0);
-    contentLayout->setAlignment(Qt::AlignTop);
-    layout->addWidget(contentWidget);
-
-    auto* appearanceGroupBox = new QGroupBox(tr("Appearance"), this);
-    contentLayout->addWidget(appearanceGroupBox);
-
-    auto* appearanceLayout = new QGridLayout(appearanceGroupBox);
-
-    auto* iconLabel = new QLabel(this);
-    iconLabel->setFixedSize(64, 64);
-    iconLabel->setScaledContents(true);
-    iconLabel->setPixmap(exeFile->icon().pixmap(64, 64));
-    appearanceLayout->addWidget(iconLabel, 0, 0, 2, 1, Qt::AlignHCenter);
-
-    auto* rightExeIconLine = new QFrame(this);
-    rightExeIconLine->setFrameShape(QFrame::VLine);
-    appearanceLayout->addWidget(rightExeIconLine, 0, 1, 2, 1);
-
-    auto* nameLabel = new QLabel(tr("Shortcut name"), this);
-    appearanceLayout->addWidget(nameLabel, 0, 2);
-
-    m_nameEdit = new QLineEdit(exeFile->baseName(), this);
-    m_nameEdit->setPlaceholderText(tr("Shortcut name"));
-    m_nameEdit->setCursorPosition(0);
-    appearanceLayout->addWidget(m_nameEdit, 1, 2);
-
-    auto* prefixGroupBox = new QGroupBox(tr("Prefix"), this);
-    contentLayout->addWidget(prefixGroupBox);
-
-    auto* prefixLayout = new QVBoxLayout(prefixGroupBox);
-
-    auto* individualPrefixCheckBox = new QCheckBox(tr("Individual"), this);
-    individualPrefixCheckBox->setChecked(isIndividualPrefix);
-    prefixLayout->addWidget(individualPrefixCheckBox);
-
-    m_prefixComboBox->setPlaceholderText(individualPrefixName);
-    m_prefixComboBox->setModel(PREFIX_MODEL);
-    m_prefixComboBox->setDisabled(isIndividualPrefix);
-    if (PREFIX_MODEL->containsName(m_currentPrefix->name())) {
-        m_prefixComboBox->setCurrentText(m_currentPrefix->name());
-    } else {
-        m_prefixComboBox->setCurrentIndex(-1);
-    }
-    prefixLayout->addWidget(m_prefixComboBox);
-
-    connect(individualPrefixCheckBox, &QCheckBox::clicked, this, [this](bool checked) {
-        m_prefixComboBox->setDisabled(checked);
-        if (checked) {
-            m_currentPrefix = m_individualPrefix;
-            m_prefixComboBox->setCurrentIndex(-1);
-        } else {
-            m_currentPrefix = PREFIX_MODEL->defaultPrefix();
-            m_prefixComboBox->setCurrentText(m_currentPrefix->name());
-        }
-    });
-
-    auto* locationGroupBox = new QGroupBox(tr("Location"), this);
-    contentLayout->addWidget(locationGroupBox);
-
-    auto* locationLayout = new QGridLayout(locationGroupBox);
+    auto* titleLabel = new QLabel(tr("<h3>Shortcuts</h3>"));
+    layout->addWidget(titleLabel);
 
     m_menuCheckBox = new QCheckBox(tr("Menu"), this);
+    m_menuCheckBox->setIcon(QIcon::fromTheme("start-here-symbolic"));
     m_menuCheckBox->setChecked(true);
-    locationLayout->addWidget(m_menuCheckBox, 0, 0);
+    layout->addWidget(m_menuCheckBox);
+
+    m_desktopCheckbox = new QCheckBox(tr("Desktop"), this);
+    m_desktopCheckbox->setIcon(QIcon::fromTheme("user-desktop-symbolic"));
+    layout->addWidget(m_desktopCheckbox);
+
+    auto* parametersGroupBox = new QGroupBox(tr("Parameters"), this);
+    layout->addWidget(parametersGroupBox);
+
+    auto* parametersLayout = new QVBoxLayout(parametersGroupBox);
+
+    auto* appearanceWidget = new QWidget(this);
+    parametersLayout->addWidget(appearanceWidget);
+
+    auto* appearanceLayout = new QHBoxLayout(appearanceWidget);
+    appearanceLayout->setContentsMargins(0, 0, 0, 0);
+    appearanceLayout->setSpacing(6);
+
+    auto* nameWidget = new QWidget(this);
+    appearanceLayout->addWidget(nameWidget);
+
+    auto* nameLayout = new QVBoxLayout(nameWidget);
+    nameLayout->setContentsMargins(0, 0, 0, 0);
+    nameLayout->setAlignment(Qt::AlignVCenter);
+
+    auto* nameLabel = new QLabel(tr("Shortcut name"), this);
+    nameLayout->addWidget(nameLabel);
+
+    m_nameEdit = new QLineEdit(m_exeFile->baseName(), this);
+    m_nameEdit->setPlaceholderText(m_exeFile->baseName());
+    m_nameEdit->setCursorPosition(0);
+    nameLayout->addWidget(m_nameEdit);
+
+    const QIcon& icon = m_exeFile->icon();
+    setIconSizes(icon);
+
+    auto* iconMenu = new QMenu(this);
+    for (const QSize& size : std::as_const(m_iconSizes)) {
+        auto* action = iconMenu->addAction(icon.pixmap(size), QStringLiteral("%1x%2").arg(size.width()).arg(size.height()));
+        action->setData(size);
+    }
+
+    if (!icon.isNull()) {
+        m_iconToolButton->setIcon(m_exeFile->icon().pixmap(m_currentSize).scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    }
+    m_iconToolButton->setIconSize(QSize(64, 64));
+    m_iconToolButton->setPopupMode(QToolButton::MenuButtonPopup);
+    m_iconToolButton->setMenu(iconMenu);
+    appearanceLayout->addWidget(m_iconToolButton);
+
+    connect(m_iconToolButton, &QToolButton::triggered, this, [this](QAction* action) {
+        m_currentSize = action->data().toSize();
+        m_iconToolButton->setIcon(action->icon().pixmap(m_currentSize).scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    });
+
+    auto* bottomAppearanceLine = new QFrame(this);
+    bottomAppearanceLine->setFrameShape(QFrame::HLine);
+    parametersLayout->addWidget(bottomAppearanceLine);
+
+    auto* categoryLabel = new QLabel(tr("Category"), this);
+    parametersLayout->addWidget(categoryLabel);
 
     for (auto i = categoryMap().cbegin(), end = categoryMap().cend(); i != end; ++i) {
         m_categoryComboBox->addItem(i.key(), i.value());
     }
-    m_categoryComboBox->setCurrentText(tr("Other"));
-    locationLayout->addWidget(m_categoryComboBox, 0, 1);
+    m_categoryComboBox->setCurrentText(tr("Game"));
+    parametersLayout->addWidget(m_categoryComboBox);
 
-    m_desktopCheckbox = new QCheckBox(tr("Desktop"), this);
-    locationLayout->addWidget(m_desktopCheckbox, 1, 0);
+    auto* bottomCategoryLine = new QFrame(this);
+    bottomCategoryLine->setFrameShape(QFrame::HLine);
+    parametersLayout->addWidget(bottomCategoryLine);
 
-    connect(m_menuCheckBox, &QCheckBox::clicked, this, [this](bool checked) {
-        m_categoryComboBox->setEnabled(checked);
+    auto* prefixLabel = new QLabel(tr("Prefix"), this);
+    parametersLayout->addWidget(prefixLabel);
+
+    bool prefixIsIndividual = m_currentPrefix->name() == individualPrefixName;
+
+    auto* individualPrefixCheckBox = new QCheckBox(tr("Individual"), this);
+    individualPrefixCheckBox->setChecked(prefixIsIndividual);
+    parametersLayout->addWidget(individualPrefixCheckBox);
+
+    m_prefixComboBox->setPlaceholderText(individualPrefixName);
+    m_prefixComboBox->setModel(PREFIX_MODEL);
+    m_prefixComboBox->setDisabled(prefixIsIndividual);
+    if (prefixIsIndividual) {
+        m_prefixComboBox->setCurrentIndex(-1);
+    } else {
+        m_prefixComboBox->setCurrentText(m_currentPrefix->name());
+    }
+    parametersLayout->addWidget(m_prefixComboBox);
+
+    connect(individualPrefixCheckBox, &QCheckBox::clicked, this, [this](bool checked) {
+        m_prefixComboBox->setDisabled(checked);
+        if (checked) {
+            m_prefixComboBox->setCurrentIndex(-1);
+        } else {
+            m_prefixComboBox->setCurrentText(PREFIX_MODEL->defaultPrefix()->name());
+        }
     });
 
-    auto* addButton = new QPushButton(QIcon::fromTheme("list-add"), tr("Add"), this);
-    auto* cancelButton = new QPushButton(QIcon::fromTheme("window-close"), tr("Cancel"), this);
+    connect(m_prefixComboBox, &QComboBox::currentIndexChanged, this, [this](int index) {
+        if (index == -1) {
+            m_currentPrefix = m_individualPrefix;
+        } else {
+            m_currentPrefix = PREFIX_MODEL->forIndex(index);
+        }
+    });
 
-    auto* buttonBox = new QDialogButtonBox(Qt::Horizontal);
-    buttonBox->addButton(addButton, QDialogButtonBox::AcceptRole);
-    buttonBox->addButton(cancelButton, QDialogButtonBox::RejectRole);
+    auto* buttonBox = new QDialogButtonBox(this);
+    buttonBox->setStandardButtons(QDialogButtonBox::Save | QDialogButtonBox::Cancel);
     layout->addWidget(buttonBox);
 
-    connect(m_nameEdit, &QLineEdit::textChanged, this, [addButton](QStringView text) {
-        addButton->setDisabled(text.isEmpty());
-    });
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::close);
-    connect(buttonBox, &QDialogButtonBox::accepted, this, [this, exeFile]() {
-        QString category = m_categoryComboBox->currentData().toString();
-        if (m_menuCheckBox->isChecked()) {
-            exeFile->createShortcut(*m_currentPrefix, m_nameEdit->text(), ExecutableFile::ShortcutDestination::Menu, category);
-        }
-        if (m_desktopCheckbox->isChecked()) {
-            exeFile->createShortcut(*m_currentPrefix, m_nameEdit->text(), ExecutableFile::ShortcutDestination::Desktop, category);
-        }
-        close();
-    });
+    connect(buttonBox, &QDialogButtonBox::accepted, this, &ShortcutDialog::onAccepted);
+
+    adjustSize();
+    setFixedSize(size());
+}
+
+void ShortcutDialog::onAccepted()
+{
+    QString name = m_nameEdit->text();
+    if (name.isEmpty()) {
+        name = m_exeFile->baseName();
+    }
+
+    QString category = m_categoryComboBox->currentData().toString();
+
+    ShortcutLocations locations;
+    if (m_menuCheckBox->isChecked()) {
+        locations |= ShortcutLocation::Menu;
+    }
+    if (m_desktopCheckbox->isChecked()) {
+        locations |= ShortcutLocation::Desktop;
+    }
+
+    createShortcut(m_exeFile, m_currentPrefix, locations, m_nameEdit->text(), m_currentSize, category);
+
+    close();
+}
+
+void ShortcutDialog::setIconSizes(const QIcon& icon)
+{
+    m_iconSizes = icon.availableSizes();
+    std::ranges::sort(m_iconSizes,
+        [](const QSize& a, const QSize& b) {
+            return (a.width() * a.height()) > (b.width() * b.height());
+        });
+
+    if (!m_iconSizes.isEmpty()) {
+        m_currentSize = m_iconSizes.first();
+    }
 }
 
 const QMap<QString, QString>& ShortcutDialog::categoryMap()

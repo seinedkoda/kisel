@@ -383,6 +383,11 @@
         <translation>Запустить</translation>
     </message>
     <message>
+        <location filename="../src/main_window.cpp" line="80"/>
+        <source>Shortcuts</source>
+        <translation>Ярлыки</translation>
+    </message>
+    <message>
         <location filename="../src/main_window.cpp" line="121"/>
         <source>Tools</source>
         <translation>Инструменты</translation>
@@ -472,11 +477,6 @@
         <location filename="../src/main_window.cpp" line="37"/>
         <source>Individual</source>
         <translation>Индивидуальный</translation>
-    </message>
-    <message>
-        <location filename="../src/main_window.cpp" line="80"/>
-        <source>Create shortcut</source>
-        <translation>Создать ярлык</translation>
     </message>
     <message>
         <location filename="../src/main_window.cpp" line="83"/>
@@ -829,82 +829,82 @@
 <context>
     <name>kisel::PrefixWindow</name>
     <message>
-        <location filename="../src/prefix_window.cpp" line="61"/>
+        <location filename="../src/prefix_window.cpp" line="64"/>
         <source>Kisel — Prefixes</source>
         <translation>Кисель — Префиксы</translation>
     </message>
     <message>
-        <location filename="../src/prefix_window.cpp" line="128"/>
+        <location filename="../src/prefix_window.cpp" line="131"/>
         <source>Open in files</source>
         <translation>Открыть в файлах</translation>
     </message>
     <message>
-        <location filename="../src/prefix_window.cpp" line="97"/>
+        <location filename="../src/prefix_window.cpp" line="100"/>
         <source>Configure</source>
         <translation>Настроить</translation>
     </message>
     <message>
-        <location filename="../src/prefix_window.cpp" line="69"/>
+        <location filename="../src/prefix_window.cpp" line="72"/>
         <source>&lt;h3&gt;Prefixes&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;Префиксы&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../src/prefix_window.cpp" line="103"/>
+        <location filename="../src/prefix_window.cpp" line="106"/>
         <source>Tools</source>
         <translation>Инструменты</translation>
     </message>
     <message>
-        <location filename="../src/prefix_window.cpp" line="105"/>
+        <location filename="../src/prefix_window.cpp" line="108"/>
         <source>Install components</source>
         <translation>Установить компоненты</translation>
     </message>
     <message>
-        <location filename="../src/prefix_window.cpp" line="108"/>
+        <location filename="../src/prefix_window.cpp" line="111"/>
         <source>Opening error</source>
         <translation>Ошибка открытия</translation>
     </message>
     <message>
-        <location filename="../src/prefix_window.cpp" line="108"/>
+        <location filename="../src/prefix_window.cpp" line="111"/>
         <source>&quot;winetricks&quot; not found! Please install this package to open this window</source>
         <translation>&quot;winetricks&quot; не найден! Пожалуйста установите этот пакет для открытия этого окна</translation>
     </message>
     <message>
-        <location filename="../src/prefix_window.cpp" line="116"/>
+        <location filename="../src/prefix_window.cpp" line="119"/>
         <source>Wine settings</source>
         <translation>Настройки Wine</translation>
     </message>
     <message>
-        <location filename="../src/prefix_window.cpp" line="119"/>
+        <location filename="../src/prefix_window.cpp" line="122"/>
         <source>Explorer</source>
         <translation>Проводник</translation>
     </message>
     <message>
-        <location filename="../src/prefix_window.cpp" line="122"/>
+        <location filename="../src/prefix_window.cpp" line="125"/>
         <source>Registry</source>
         <translation>Реестр</translation>
     </message>
     <message>
-        <location filename="../src/prefix_window.cpp" line="125"/>
+        <location filename="../src/prefix_window.cpp" line="128"/>
         <source>Remove programs</source>
         <translation>Удаление программ</translation>
     </message>
     <message>
-        <location filename="../src/prefix_window.cpp" line="133"/>
+        <location filename="../src/prefix_window.cpp" line="136"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../src/prefix_window.cpp" line="77"/>
+        <location filename="../src/prefix_window.cpp" line="80"/>
         <source>Add new</source>
         <translation>Добавить новый</translation>
     </message>
     <message>
-        <location filename="../src/prefix_window.cpp" line="135"/>
+        <location filename="../src/prefix_window.cpp" line="138"/>
         <source>Confirm</source>
         <translation>Подтвердить</translation>
     </message>
     <message>
-        <location filename="../src/prefix_window.cpp" line="135"/>
+        <location filename="../src/prefix_window.cpp" line="138"/>
         <source>Remove the &quot;%1&quot; prefix?</source>
         <translation>Удалить префикс &quot;%1&quot;?</translation>
     </message>
@@ -912,131 +912,125 @@
 <context>
     <name>kisel::ShortcutDialog</name>
     <message>
-        <location filename="../src/shortcut_dialog.cpp" line="24"/>
-        <source>Create shortcut</source>
-        <translation>Создать ярлык</translation>
+        <location filename="../src/shortcut_dialog.cpp" line="38"/>
+        <source>&lt;h3&gt;Shortcuts&lt;/h3&gt;</source>
+        <translation>&lt;h3&gt;Ярлыки&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../src/shortcut_dialog.cpp" line="46"/>
-        <source>Appearance</source>
-        <translation>Внешний вид</translation>
-    </message>
-    <message>
-        <location filename="../src/shortcut_dialog.cpp" line="61"/>
-        <location filename="../src/shortcut_dialog.cpp" line="65"/>
+        <location filename="../src/shortcut_dialog.cpp" line="69"/>
         <source>Shortcut name</source>
         <translation>Имя ярлыка</translation>
     </message>
     <message>
-        <location filename="../src/shortcut_dialog.cpp" line="69"/>
+        <location filename="../src/shortcut_dialog.cpp" line="116"/>
         <source>Prefix</source>
         <translation>Префикс</translation>
     </message>
     <message>
-        <location filename="../src/shortcut_dialog.cpp" line="104"/>
+        <location filename="../src/shortcut_dialog.cpp" line="41"/>
         <source>Menu</source>
         <translation>Меню</translation>
     </message>
     <message>
-        <location filename="../src/shortcut_dialog.cpp" line="111"/>
-        <location filename="../src/shortcut_dialog.cpp" line="148"/>
-        <source>Other</source>
-        <translation>Прочее</translation>
+        <location filename="../src/shortcut_dialog.cpp" line="25"/>
+        <source>Shortcuts</source>
+        <translation type="unfinished">Ярлыки</translation>
     </message>
     <message>
-        <location filename="../src/shortcut_dialog.cpp" line="149"/>
-        <source>AudioVideo</source>
-        <translation>Мультимедиа</translation>
-    </message>
-    <message>
-        <location filename="../src/shortcut_dialog.cpp" line="150"/>
-        <source>Audio</source>
-        <translation>Аудио</translation>
-    </message>
-    <message>
-        <location filename="../src/shortcut_dialog.cpp" line="151"/>
-        <source>Video</source>
-        <translation>Видео</translation>
-    </message>
-    <message>
-        <location filename="../src/shortcut_dialog.cpp" line="152"/>
-        <source>Development</source>
-        <translation>Разработка</translation>
-    </message>
-    <message>
-        <location filename="../src/shortcut_dialog.cpp" line="153"/>
-        <source>Education</source>
-        <translation>Образование</translation>
-    </message>
-    <message>
-        <location filename="../src/shortcut_dialog.cpp" line="154"/>
-        <source>HealthFitness</source>
-        <translation>Здоровье</translation>
-    </message>
-    <message>
-        <location filename="../src/shortcut_dialog.cpp" line="155"/>
-        <source>Game</source>
-        <translation>Игры</translation>
-    </message>
-    <message>
-        <location filename="../src/shortcut_dialog.cpp" line="156"/>
-        <source>Graphics</source>
-        <translation>Графика</translation>
-    </message>
-    <message>
-        <location filename="../src/shortcut_dialog.cpp" line="157"/>
-        <source>Network</source>
-        <translation>Интернет</translation>
-    </message>
-    <message>
-        <location filename="../src/shortcut_dialog.cpp" line="158"/>
-        <source>Office</source>
-        <translation>Офис</translation>
-    </message>
-    <message>
-        <location filename="../src/shortcut_dialog.cpp" line="159"/>
-        <source>Science</source>
-        <translation>Наука</translation>
-    </message>
-    <message>
-        <location filename="../src/shortcut_dialog.cpp" line="160"/>
-        <source>Settings</source>
-        <translation>Настройки</translation>
-    </message>
-    <message>
-        <location filename="../src/shortcut_dialog.cpp" line="161"/>
-        <source>System</source>
-        <translation>Система</translation>
-    </message>
-    <message>
-        <location filename="../src/shortcut_dialog.cpp" line="162"/>
-        <source>Utility</source>
-        <translation>Служебные</translation>
-    </message>
-    <message>
-        <location filename="../src/shortcut_dialog.cpp" line="114"/>
+        <location filename="../src/shortcut_dialog.cpp" line="46"/>
         <source>Desktop</source>
         <translation>Рабочий стол</translation>
     </message>
     <message>
-        <location filename="../src/shortcut_dialog.cpp" line="74"/>
-        <source>Individual</source>
-        <translation>Индивидуальный</translation>
+        <location filename="../src/shortcut_dialog.cpp" line="50"/>
+        <source>Parameters</source>
+        <translation>Параметры</translation>
     </message>
     <message>
-        <location filename="../src/shortcut_dialog.cpp" line="99"/>
-        <source>Location</source>
-        <translation>Расположение</translation>
+        <location filename="../src/shortcut_dialog.cpp" line="103"/>
+        <source>Category</source>
+        <translation>Категория</translation>
+    </message>
+    <message>
+        <location filename="../src/shortcut_dialog.cpp" line="201"/>
+        <source>Other</source>
+        <translation>Прочее</translation>
+    </message>
+    <message>
+        <location filename="../src/shortcut_dialog.cpp" line="202"/>
+        <source>AudioVideo</source>
+        <translation>Мультимедиа</translation>
+    </message>
+    <message>
+        <location filename="../src/shortcut_dialog.cpp" line="203"/>
+        <source>Audio</source>
+        <translation>Аудио</translation>
+    </message>
+    <message>
+        <location filename="../src/shortcut_dialog.cpp" line="204"/>
+        <source>Video</source>
+        <translation>Видео</translation>
+    </message>
+    <message>
+        <location filename="../src/shortcut_dialog.cpp" line="205"/>
+        <source>Development</source>
+        <translation>Разработка</translation>
+    </message>
+    <message>
+        <location filename="../src/shortcut_dialog.cpp" line="206"/>
+        <source>Education</source>
+        <translation>Образование</translation>
+    </message>
+    <message>
+        <location filename="../src/shortcut_dialog.cpp" line="207"/>
+        <source>HealthFitness</source>
+        <translation>Здоровье</translation>
+    </message>
+    <message>
+        <location filename="../src/shortcut_dialog.cpp" line="109"/>
+        <location filename="../src/shortcut_dialog.cpp" line="208"/>
+        <source>Game</source>
+        <translation>Игры</translation>
+    </message>
+    <message>
+        <location filename="../src/shortcut_dialog.cpp" line="209"/>
+        <source>Graphics</source>
+        <translation>Графика</translation>
+    </message>
+    <message>
+        <location filename="../src/shortcut_dialog.cpp" line="210"/>
+        <source>Network</source>
+        <translation>Интернет</translation>
+    </message>
+    <message>
+        <location filename="../src/shortcut_dialog.cpp" line="211"/>
+        <source>Office</source>
+        <translation>Офис</translation>
+    </message>
+    <message>
+        <location filename="../src/shortcut_dialog.cpp" line="212"/>
+        <source>Science</source>
+        <translation>Наука</translation>
+    </message>
+    <message>
+        <location filename="../src/shortcut_dialog.cpp" line="213"/>
+        <source>Settings</source>
+        <translation>Настройки</translation>
+    </message>
+    <message>
+        <location filename="../src/shortcut_dialog.cpp" line="214"/>
+        <source>System</source>
+        <translation>Система</translation>
+    </message>
+    <message>
+        <location filename="../src/shortcut_dialog.cpp" line="215"/>
+        <source>Utility</source>
+        <translation>Служебные</translation>
     </message>
     <message>
         <location filename="../src/shortcut_dialog.cpp" line="121"/>
-        <source>Add</source>
-        <translation>Добавить</translation>
-    </message>
-    <message>
-        <location filename="../src/shortcut_dialog.cpp" line="122"/>
-        <source>Cancel</source>
-        <translation>Отменить</translation>
+        <source>Individual</source>
+        <translation>Индивидуальный</translation>
     </message>
 </context>
 <context>

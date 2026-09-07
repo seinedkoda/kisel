@@ -52,6 +52,9 @@ AddNewPrefixDialog::AddNewPrefixDialog(QWidget* parent)
         prefix->makePath();
         close();
     });
+
+    adjustSize();
+    setFixedSize(size());
 }
 
 PrefixWindow::PrefixWindow(QWidget* parent)

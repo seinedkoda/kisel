@@ -16,6 +16,19 @@ AppSettings::AppSettings(QObject* parent)
 {
     QIcon::setThemeSearchPaths(QIcon::themeSearchPaths() << ":/icons/thirdparty");
     QIcon::setFallbackThemeName("Papirus");
+
+    createAppDirectories();
+}
+
+void AppSettings::createAppDirectories()
+{
+    static QList<QDir> dirs { prefixesDir(), ctsDirList().first() };
+
+    for (const auto& dir : dirs) {
+        if (!dir.exists() && !dir.mkpath(".")) {
+            qCritical() << "Failed to create important directory:" << dir.absolutePath();
+        }
+    }
 }
 
 AppSettings* AppSettings::instance()

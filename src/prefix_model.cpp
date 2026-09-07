@@ -10,11 +10,6 @@ using namespace kisel;
 PrefixModel::PrefixModel(QObject* parent)
     : QAbstractListModel(parent)
 {
-    if (!PREFIXES_DIR.exists() && !PREFIXES_DIR.mkpath(".")) {
-        qCritical() << "Unable to create root directory for prefixes";
-        return;
-    }
-
     refreshList();
 }
 

@@ -77,7 +77,7 @@ MainWindow::MainWindow(const QString& exePath)
 
     auto* exeMenu = new QMenu(this);
 
-    auto* createShortcutAction = exeMenu->addAction(QIcon::fromTheme("link"), tr("Create shortcut"));
+    auto* createShortcutAction = exeMenu->addAction(QIcon::fromTheme("link"), tr("Shortcuts"));
     connect(createShortcutAction, &QAction::triggered, this, &MainWindow::onCreateShortcutTriggered);
 
     auto* clearExeAction = exeMenu->addAction(QIcon::fromTheme("edit-clear"), tr("Clear"));
@@ -246,7 +246,7 @@ void MainWindow::setExecutablePath(const QString& exePath)
     }
 
     if (exeIsValid) {
-        m_individualPrefixName = Prefix::generatePrefixNameFromFile(m_runConfig->exePath());
+        m_individualPrefixName = m_runConfig->exeFile()->id();
         m_individualPrefix = new Prefix(m_individualPrefixName, this);
         m_prefixComboBox->setPlaceholderText(m_individualPrefixName);
     } else {

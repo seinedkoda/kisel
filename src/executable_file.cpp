@@ -1,6 +1,5 @@
 #include "executable_file.hpp"
 
-#include <QBuffer>
 #include <QCryptographicHash>
 #include <QDir>
 #include <QProcess>
@@ -8,22 +7,25 @@
 #include <QStandardPaths>
 #include <QTemporaryFile>
 
-#include "app_settings.hpp"
-
 using namespace Qt::StringLiterals;
 using namespace kisel;
 
 ExecutableFile::ExecutableFile(const QString& path, QObject* parent)
     : QObject(parent)
-    , m_fileInfo(path)
-    , m_needUpdateIcon(!path.isEmpty())
 {
+    setPath(path);
 }
 
 void ExecutableFile::setPath(const QString& newPath)
 {
     m_fileInfo.setFile(newPath);
-    m_needUpdateIcon = true;
+    setIdFromPath();
+    loadIcon();
+}
+
+QString ExecutableFile::id() const
+{
+    return m_id;
 }
 
 QString ExecutableFile::path() const
@@ -64,18 +66,42 @@ bool ExecutableFile::isCmd() const
     return suffix == "bat"_L1 || suffix == "cmd"_L1;
 }
 
-const QIcon& ExecutableFile::icon()
+void ExecutableFile::setIdFromPath()
 {
-    if (m_needUpdateIcon) {
-        loadIcon();
-        m_needUpdateIcon = false;
+    if (!m_fileInfo.exists()) {
+        m_id.clear();
+        return;
     }
+
+    QString cleanName = m_fileInfo.baseName().toLower();
+
+    // Replace any special characters and spaces with a hyphen
+    static const QRegularExpression nonAlphaNum("[^a-z0-9-]+"_L1);
+    cleanName.replace(nonAlphaNum, "-"_L1);
+
+    // Removing duplicate and hanging hyphens
+    static const QRegularExpression multiHyphen("-+"_L1);
+    cleanName.replace(multiHyphen, "-"_L1);
+    cleanName = cleanName.trimmed();
+    static QRegularExpression hangHyphen("^-+|-+$"_L1);
+    cleanName.remove(hangHyphen);
+
+    // Generate an 8-character MD5 hash of the canonical path to the .exe (for uniqueness)
+    QByteArray hashBytes = QCryptographicHash::hash(m_fileInfo.canonicalFilePath().toUtf8(), QCryptographicHash::Md5).toHex();
+    QString pathHash = QString::fromUtf8(hashBytes.left(8));
+
+    m_id = QStringLiteral("%1-%2").arg(cleanName, pathHash);
+}
+
+const QIcon& ExecutableFile::icon() const
+{
     return m_icon;
 }
 
 void ExecutableFile::loadIcon()
 {
     if (!isValid()) {
+        m_icon = QIcon();
         return;
     }
 
@@ -137,125 +163,4 @@ bool ExecutableFile::extractIconGroup(const QString& groupName, const QString& o
     }
 
     return true;
-}
-
-void ExecutableFile::createShortcut(
-    const Prefix& prefix,
-    QString shortcutName,
-    ShortcutDestination shortcutDest,
-    const QString& category) const
-{
-    if (!isValid()) {
-        return;
-    }
-
-    const QDir iconsDir(prefix.dir().filePath(".kisel/icons/"_L1));
-    QString iconPath = saveIconWithHashName(iconsDir);
-    if (iconPath.isEmpty()) {
-        qWarning() << "Failed to save icon for shortcut";
-    }
-
-    QString destDirPath;
-    if (shortcutDest == Menu) {
-        if (APP_SETTINGS->isFlatpak()) {
-            destDirPath = QDir::homePath() + "/.local/share/applications";
-            // or "--filesystem=xdg-data/applications"
-        } else {
-            destDirPath = QStandardPaths::writableLocation(QStandardPaths::ApplicationsLocation);
-        }
-    } else if (shortcutDest == Desktop) {
-        destDirPath = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
-    } else {
-        qCritical() << "Invalid shortcut destination";
-        return;
-    }
-
-    if (destDirPath.isEmpty()) {
-        qCritical() << "Could not determine writable location for shortcut";
-        return;
-    }
-
-    if (!QDir().mkpath(destDirPath)) {
-        qCritical() << "Failed to create destination directory:" << destDirPath;
-        return;
-    }
-
-    const QDir shortcutDestDir(destDirPath);
-    const QString desktopFilePath = shortcutDestDir.filePath(baseName() % ".desktop"_L1);
-    QFile desktopFile(desktopFilePath);
-    if (!desktopFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        qCritical() << "Failed to open shortcut file for writing:" << desktopFilePath;
-        return;
-    }
-
-    if (shortcutName.isEmpty()) {
-        shortcutName = baseName();
-    }
-
-    // Escape characters
-    auto escapeExecArg = [](QString str) {
-        str.replace(u'\\', R"(\\)"_L1);
-        str.replace(u'"', R"(\")"_L1);
-        str.replace(u'%', R"(%%)"_L1);
-        return str;
-    };
-
-    const QString escapedPrefixName = escapeExecArg(prefix.name());
-    const QString escapedExePath = escapeExecArg(path());
-
-    QTextStream stream(&desktopFile);
-    stream << "[Desktop Entry]\n"_L1;
-    stream << "Type=Application\n"_L1;
-    stream << "Name="_L1 << shortcutName << u'\n';
-    if (APP_SETTINGS->isFlatpak()) {
-        stream << "Exec=flatpak run --file-forwarding io.github.seinedkoda.kisel -p \""_L1 << escapedPrefixName << "\" @@ \""_L1 << escapedExePath << "\" @@\n"_L1;
-    } else {
-        stream << "Exec=kisel -p \""_L1 << escapedPrefixName << "\" \""_L1 << escapedExePath << "\"\n"_L1;
-    }
-    stream << "Icon="_L1 << iconPath << u'\n';
-    stream << "Categories="_L1 << category << ";\n"_L1;
-    stream << "StartupNotify=true\n"_L1;
-    stream << "Terminal=false\n"_L1;
-
-    desktopFile.close();
-
-    const QFileDevice::Permissions permissions = QFile::permissions(desktopFilePath) | QFileDevice::ExeUser;
-    if (!QFile::setPermissions(desktopFilePath, permissions)) {
-        qWarning() << "Failed to make .desktop file executable:" << desktopFilePath;
-    }
-}
-
-QString ExecutableFile::saveIconWithHashName(const QDir& outputDir) const
-{
-    if (m_icon.isNull()) {
-        return { };
-    }
-
-    QByteArray bytes;
-    QBuffer buffer(&bytes);
-    buffer.open(QIODevice::WriteOnly);
-
-    const QSize size = m_icon.actualSize(QSize(256, 256));
-    const QPixmap& pixmap = m_icon.pixmap(size);
-
-    if (!pixmap.save(&buffer, "PNG")) {
-        return { };
-    }
-
-    const QByteArray hashBytes = QCryptographicHash::hash(bytes, QCryptographicHash::Md5);
-    QString hashString = QString::fromLatin1(hashBytes.toHex());
-
-    if (!outputDir.exists()) {
-        if (!outputDir.mkpath(".")) {
-            qCritical() << "Unable to create prefix icons directory:" << outputDir.path();
-            return { };
-        }
-    }
-
-    QString filePath = outputDir.filePath(name() % "_"_L1 % hashString % ".png"_L1);
-    if (pixmap.save(filePath, "PNG")) {
-        return filePath;
-    }
-
-    return { };
 }

@@ -1,25 +1,17 @@
 #pragma once
 
-#include <QObject>
 #include <QFileInfo>
 #include <QIcon>
-
-#include "prefix.hpp"
 
 namespace kisel {
 class ExecutableFile : public QObject {
     Q_OBJECT
 
 public:
-    enum ShortcutDestination {
-        Menu,
-        Desktop
-    };
-    Q_ENUM(ShortcutDestination)
-
     explicit ExecutableFile(const QString& path = "", QObject* parent = nullptr);
 
     void setPath(const QString& newPath);
+    [[nodiscard]] QString id() const;
     [[nodiscard]] QString path() const;
     [[nodiscard]] QString dirPath() const;
     [[nodiscard]] QString name() const;
@@ -27,21 +19,16 @@ public:
     [[nodiscard]] bool isValid() const;
     [[nodiscard]] bool isMsi() const;
     [[nodiscard]] bool isCmd() const;
-    const QIcon& icon();
-    void createShortcut(
-        const Prefix& prefix,
-        QString shortcutName = "",
-        ShortcutDestination shortcutDest = Menu,
-        const QString& category = "") const;
+    [[nodiscard]] const QIcon& icon() const;
 
 private:
+    void setIdFromPath();
     void loadIcon();
     [[nodiscard]] QString findBestIconGroupName() const;
     [[nodiscard]] bool extractIconGroup(const QString& groupName, const QString& outputPath) const;
-    [[nodiscard]] QString saveIconWithHashName(const QDir& outputDir) const;
 
+    QString m_id;
     QFileInfo m_fileInfo;
     QIcon m_icon;
-    bool m_needUpdateIcon;
 };
 }

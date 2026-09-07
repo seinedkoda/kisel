@@ -1,7 +1,6 @@
 #pragma once
 
 #include <QAbstractListModel>
-#include <qabstractitemmodel.h>
 
 #include "prefix.hpp"
 

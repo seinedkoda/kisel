@@ -65,5 +65,7 @@ public:
 
 private:
     explicit AppSettings(QObject* parent = nullptr);
+
+    static void createAppDirectories();
 };
 }

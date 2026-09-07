@@ -12,7 +12,6 @@ class Prefix : public QObject {
 public:
     explicit Prefix(const QString& name, QObject* parent = nullptr);
 
-    static QString generatePrefixNameFromFile(const QString& filePath);
     [[nodiscard]] QString path() const;
     [[nodiscard]] QDir dir() const;
     [[nodiscard]] QString name() const;

@@ -17,29 +17,6 @@ Prefix::Prefix(const QString& name, QObject* parent)
     m_settings = new PrefixSettings(m_dir.filePath(".kisel/prefix.conf"_L1), this);
 }
 
-QString Prefix::generatePrefixNameFromFile(const QString& filePath)
-{
-    QFileInfo fileInfo(filePath);
-    QString cleanName = fileInfo.baseName().toLower();
-
-    // Replace any special characters and spaces with a hyphen
-    static const QRegularExpression nonAlphaNum("[^a-z0-9-]+"_L1);
-    cleanName.replace(nonAlphaNum, "-"_L1);
-
-    // Removing duplicate and hanging hyphens
-    static const QRegularExpression multiHyphen("-+"_L1);
-    cleanName.replace(multiHyphen, "-"_L1);
-    cleanName = cleanName.trimmed();
-    static QRegularExpression hangHyphen("^-+|-+$"_L1);
-    cleanName.remove(hangHyphen);
-
-    // Generate an 8-character MD5 hash of the canonical path to the .exe (for uniqueness)
-    QByteArray hashBytes = QCryptographicHash::hash(fileInfo.canonicalFilePath().toUtf8(), QCryptographicHash::Md5).toHex();
-    QString pathHash = QString::fromUtf8(hashBytes.left(8));
-
-    return QStringLiteral("%1-%2").arg(cleanName, pathHash);
-}
-
 QString Prefix::path() const
 {
     return m_dir.absolutePath();

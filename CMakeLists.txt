@@ -36,6 +36,7 @@ qt_add_executable(kisel
     src/run_config.hpp src/run_config.cpp
     src/about_dialog.hpp src/about_dialog.cpp
     src/ct_installer.hpp src/ct_installer.cpp
+    src/shortcut_utils.hpp src/shortcut_utils.cpp
 )
 
 qt_add_resources(kisel "resources"
@@ -70,6 +71,8 @@ qt_add_resources(kisel "resources"
         "resources/icons/thirdparty/Papirus/16x16/mimetypes/text-x-log.svg"
         "resources/icons/thirdparty/Papirus/16x16/apps/steam.svg"
         "resources/icons/thirdparty/Papirus/16x16/symbolic/apps/wine-symbolic.svg"
+        "resources/icons/thirdparty/Papirus/16x16/symbolic/places/user-desktop-symbolic.svg"
+        "resources/icons/thirdparty/Papirus/16x16/symbolic/places/start-here-symbolic.svg"
 )
 
 add_dependencies(kisel update_translations)
