@@ -1,11 +1,10 @@
 #include <QApplication>
 #include <QCommandLineParser>
 
-#include "app_settings.hpp"
-#include "main_window.hpp"
-#include "run_manager.hpp"
-#include "translator.hpp"
-#include "tray_icon.hpp"
+#include "core/appsettings/app_settings.hpp"
+#include "core/run/run_manager.hpp"
+#include "ui/mainwindow/main_window.hpp"
+#include "ui/trayicon/tray_icon.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -13,8 +12,9 @@ int main(int argc, char* argv[])
     QApplication::setApplicationName("kisel");
     QApplication::setApplicationVersion(APP_VERSION);
 
+    kisel::APP_SETTINGS->createAppDirectories();
+    kisel::APP_SETTINGS->installLocale();
     kisel::APP_SETTINGS->applyCurrentStyle();
-    kisel::TRANSLATOR->setLocaleFromSettings();
 
     QCommandLineParser parser;
     parser.setApplicationDescription(QCoreApplication::translate("cli", "Efficient launch of Windows programs"));
