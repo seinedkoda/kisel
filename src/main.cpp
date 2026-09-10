@@ -1,8 +1,8 @@
 #include <QApplication>
 #include <QCommandLineParser>
 
+#include "core/app/app.hpp"
 #include "core/appsettings/app_settings.hpp"
-#include "core/run/run_manager.hpp"
 #include "ui/mainwindow/main_window.hpp"
 #include "ui/trayicon/tray_icon.hpp"
 

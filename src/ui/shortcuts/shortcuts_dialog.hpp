@@ -7,6 +7,7 @@
 #include <QToolButton>
 
 #include "core/run/run_config.hpp"
+#include "core/shortcuts/shortcut.hpp"
 
 namespace kisel {
 class ShortcutDialog : public QDialog {
@@ -25,6 +26,8 @@ private:
     const ExecutableFile* m_exeFile;
     const Prefix* m_currentPrefix;
     const Prefix* m_individualPrefix = nullptr;
+    Shortcut* m_menuShortcut;
+    Shortcut* m_desktopShortcut;
     QList<QSize> m_iconSizes;
     QSize m_currentSize;
     QComboBox* m_prefixComboBox;

@@ -5,8 +5,6 @@
 #include "run_config.hpp"
 
 namespace kisel {
-#define RUN_MANAGER RunManager::instance()
-
 class RunManager : public QObject {
     Q_OBJECT
 
@@ -27,7 +25,7 @@ public:
     };
     Q_ENUM(RunningError)
 
-    static RunManager* instance();
+    explicit RunManager(QObject* parent = nullptr);
 
     void run(RunConfig* runConfig);
     void runWineCfg(const Prefix* prefix);
@@ -48,8 +46,6 @@ private slots:
     void onProcessError(QProcess::ProcessError error);
 
 private:
-    explicit RunManager(QObject* parent = nullptr);
-
     bool setupConfig(RunConfig* runConfig);
     bool setupPrefix();
     bool setupCt();

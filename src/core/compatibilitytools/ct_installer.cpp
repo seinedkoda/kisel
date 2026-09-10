@@ -6,8 +6,8 @@
 #include <QNetworkReply>
 #include <QTemporaryFile>
 
+#include "core/app/app.hpp"
 #include "core/appsettings/app_settings.hpp"
-#include "ct_model.hpp"
 
 using namespace Qt::StringLiterals;
 using namespace kisel;

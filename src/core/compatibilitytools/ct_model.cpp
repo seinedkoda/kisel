@@ -13,12 +13,6 @@ CtModel::CtModel(QObject* parent)
     refreshList();
 }
 
-CtModel* CtModel::instance()
-{
-    static CtModel instance;
-    return &instance;
-}
-
 int CtModel::rowCount(const QModelIndex& parent) const
 {
     Q_UNUSED(parent)
@@ -47,9 +41,9 @@ QVariant CtModel::data(const QModelIndex& index, int role) const
         return { };
     }
 
+    int column = index.column();
     const Ct* ct = m_cts.at(row);
 
-    int column = index.column();
     if (column == 0) {
         switch (role) {
         case Qt::DisplayRole:

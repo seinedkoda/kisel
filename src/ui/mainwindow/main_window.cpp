@@ -11,10 +11,10 @@
 #include <QSizePolicy>
 #include <QVBoxLayout>
 
+#include "core/app/app.hpp"
 #include "core/appsettings/app_settings.hpp"
 #include "core/compatibilitytools/ct_installer.hpp"
 #include "core/compatibilitytools/ct_model.hpp"
-#include "core/prefix/prefix_model.hpp"
 #include "core/prefix/prefix_settings.hpp"
 #include "ui/aboutapp/about_app_dialog.hpp"
 #include "ui/appsettings/app_settings_window.hpp"

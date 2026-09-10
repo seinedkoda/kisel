@@ -3,7 +3,7 @@
 #include <QAction>
 #include <QCoreApplication>
 
-#include "core/run/run_manager.hpp"
+#include "core/app/app.hpp"
 
 using namespace kisel;
 

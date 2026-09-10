@@ -13,12 +13,6 @@ PrefixModel::PrefixModel(QObject* parent)
     refreshList();
 }
 
-PrefixModel* PrefixModel::instance()
-{
-    static PrefixModel instance;
-    return &instance;
-}
-
 int PrefixModel::rowCount(const QModelIndex& parent) const
 {
     Q_UNUSED(parent)

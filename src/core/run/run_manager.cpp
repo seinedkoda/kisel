@@ -3,7 +3,7 @@
 #include "core/appsettings/app_settings.hpp"
 #include "core/compatibilitytools/ct_model.hpp"
 #include "core/executablefile/executable_file.hpp"
-#include "core/prefix/prefix_model.hpp"
+#include "core/app/app.hpp"
 #include "run_config.hpp"
 
 using namespace Qt::StringLiterals;
@@ -19,12 +19,6 @@ RunManager::RunManager(QObject* parent)
     connect(&m_process, &QProcess::started, this, &RunManager::onProcessStarted);
     connect(&m_process, &QProcess::finished, this, &RunManager::onProcessFinished);
     connect(&m_process, &QProcess::errorOccurred, this, &RunManager::onProcessError);
-}
-
-RunManager* RunManager::instance()
-{
-    static RunManager instance;
-    return &instance;
 }
 
 void RunManager::run(RunConfig* runConfig)

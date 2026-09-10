@@ -1,4 +1,5 @@
 target_sources(kisel PRIVATE
+    app/app.hpp app/app.cpp
     appsettings/app_settings.hpp appsettings/app_settings.cpp
     executablefile/executable_file.hpp executablefile/executable_file.cpp
     prefix/prefix.hpp prefix/prefix.cpp
@@ -9,5 +10,6 @@ target_sources(kisel PRIVATE
     compatibilitytools/ct_installer.hpp compatibilitytools/ct_installer.cpp
     run/run_config.hpp run/run_config.cpp
     run/run_manager.hpp run/run_manager.cpp
-    shortcuts/shortcuts_utils.hpp shortcuts/shortcuts_utils.cpp
+    shortcuts/shortcut.hpp shortcuts/shortcut.cpp
+    shortcuts/shortcut_model.hpp shortcuts/shortcut_model.cpp
 )

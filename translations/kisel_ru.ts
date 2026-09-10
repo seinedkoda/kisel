@@ -132,77 +132,82 @@
 <context>
     <name>kisel::AppSettingsWindow</name>
     <message>
-        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="19"/>
+        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="20"/>
         <source>Kisel — Settings</source>
         <translation>Кисель — Настройки</translation>
     </message>
     <message>
-        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="29"/>
+        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="30"/>
         <source>&lt;h3&gt;Global settings&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;Глобальные настройки&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="32"/>
+        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="33"/>
         <source>&lt;i&gt;For detailed settings, go to the prefix context menu in the main window&lt;/i&gt;</source>
         <translation>&lt;i&gt;Для детальной настройки перейдите в контекстное меню префикса на главном окне&lt;/i&gt;</translation>
     </message>
     <message>
-        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="40"/>
+        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="42"/>
         <source>General</source>
         <translation>Основное</translation>
     </message>
     <message>
-        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="45"/>
+        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="47"/>
         <source>Language</source>
         <translation>Язык</translation>
     </message>
     <message>
-        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="56"/>
+        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="58"/>
         <source>Style</source>
         <translation>Стиль</translation>
     </message>
     <message>
-        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="82"/>
+        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="101"/>
+        <source>Runtime auto-update</source>
+        <translation>Авто-обновления среды выполнения</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="112"/>
         <source>Default prefix</source>
         <translation>Префикс по умолчанию</translation>
     </message>
     <message>
-        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="85"/>
+        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="115"/>
         <source>Individual</source>
         <translation>Индивидуальный</translation>
     </message>
     <message>
-        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="107"/>
+        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="137"/>
         <source>Default compatibility tool</source>
         <translation>Средство совместимости по умолчанию</translation>
     </message>
     <message>
-        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="111"/>
+        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="141"/>
         <source>&lt;No installed&gt;</source>
         <translation>&lt;Нет установленных&gt;</translation>
     </message>
     <message>
-        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="131"/>
+        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="89"/>
         <source>Built-in (Flatpak)</source>
         <translation>Встроенный (Flatpak)</translation>
     </message>
     <message>
-        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="134"/>
+        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="92"/>
         <source>Built-in</source>
         <translation>Встроенный</translation>
     </message>
     <message>
-        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="135"/>
+        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="93"/>
         <source>System</source>
         <translation>Системный</translation>
     </message>
     <message>
-        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="143"/>
-        <source>Runtime auto-update</source>
-        <translation>Автоматическое обновление среды выполнения</translation>
+        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="154"/>
+        <source>Shortcuts</source>
+        <translation>Ярлыки</translation>
     </message>
     <message>
-        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="71"/>
+        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="73"/>
         <source>Logging</source>
         <translation>Сохранение журнала запуска</translation>
     </message>
@@ -269,12 +274,12 @@
 <context>
     <name>kisel::CtModel</name>
     <message>
-        <location filename="../src/core/compatibilitytools/ct_model.cpp" line="97"/>
+        <location filename="../src/core/compatibilitytools/ct_model.cpp" line="91"/>
         <source>Name</source>
         <translation>Название</translation>
     </message>
     <message>
-        <location filename="../src/core/compatibilitytools/ct_model.cpp" line="99"/>
+        <location filename="../src/core/compatibilitytools/ct_model.cpp" line="93"/>
         <source>Status</source>
         <translation>Статус</translation>
     </message>
@@ -922,115 +927,161 @@
         <translation>&lt;h3&gt;Ярлыки&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../src/ui/shortcuts/shortcuts_dialog.cpp" line="41"/>
+        <location filename="../src/ui/shortcuts/shortcuts_dialog.cpp" line="43"/>
         <source>Menu</source>
         <translation>Меню</translation>
     </message>
     <message>
-        <location filename="../src/ui/shortcuts/shortcuts_dialog.cpp" line="46"/>
+        <location filename="../src/ui/shortcuts/shortcuts_dialog.cpp" line="50"/>
         <source>Desktop</source>
         <translation>Рабочий стол</translation>
     </message>
     <message>
-        <location filename="../src/ui/shortcuts/shortcuts_dialog.cpp" line="50"/>
+        <location filename="../src/ui/shortcuts/shortcuts_dialog.cpp" line="55"/>
         <source>Parameters</source>
         <translation>Параметры</translation>
     </message>
     <message>
-        <location filename="../src/ui/shortcuts/shortcuts_dialog.cpp" line="69"/>
+        <location filename="../src/ui/shortcuts/shortcuts_dialog.cpp" line="74"/>
         <source>Shortcut name</source>
         <translation>Имя ярлыка</translation>
     </message>
     <message>
-        <location filename="../src/ui/shortcuts/shortcuts_dialog.cpp" line="103"/>
+        <location filename="../src/ui/shortcuts/shortcuts_dialog.cpp" line="115"/>
         <source>Category</source>
         <translation>Категория</translation>
     </message>
     <message>
-        <location filename="../src/ui/shortcuts/shortcuts_dialog.cpp" line="109"/>
-        <location filename="../src/ui/shortcuts/shortcuts_dialog.cpp" line="208"/>
+        <location filename="../src/ui/shortcuts/shortcuts_dialog.cpp" line="121"/>
+        <location filename="../src/ui/shortcuts/shortcuts_dialog.cpp" line="227"/>
         <source>Game</source>
         <translation>Игры</translation>
     </message>
     <message>
-        <location filename="../src/ui/shortcuts/shortcuts_dialog.cpp" line="116"/>
+        <location filename="../src/ui/shortcuts/shortcuts_dialog.cpp" line="128"/>
         <source>Prefix</source>
         <translation>Префикс</translation>
     </message>
     <message>
-        <location filename="../src/ui/shortcuts/shortcuts_dialog.cpp" line="121"/>
+        <location filename="../src/ui/shortcuts/shortcuts_dialog.cpp" line="133"/>
         <source>Individual</source>
         <translation>Индивидуальный</translation>
     </message>
     <message>
-        <location filename="../src/ui/shortcuts/shortcuts_dialog.cpp" line="201"/>
+        <location filename="../src/ui/shortcuts/shortcuts_dialog.cpp" line="220"/>
         <source>Other</source>
         <translation>Прочее</translation>
     </message>
     <message>
-        <location filename="../src/ui/shortcuts/shortcuts_dialog.cpp" line="202"/>
+        <location filename="../src/ui/shortcuts/shortcuts_dialog.cpp" line="221"/>
         <source>AudioVideo</source>
         <translation>Мультимедиа</translation>
     </message>
     <message>
-        <location filename="../src/ui/shortcuts/shortcuts_dialog.cpp" line="203"/>
+        <location filename="../src/ui/shortcuts/shortcuts_dialog.cpp" line="222"/>
         <source>Audio</source>
         <translation>Аудио</translation>
     </message>
     <message>
-        <location filename="../src/ui/shortcuts/shortcuts_dialog.cpp" line="204"/>
+        <location filename="../src/ui/shortcuts/shortcuts_dialog.cpp" line="223"/>
         <source>Video</source>
         <translation>Видео</translation>
     </message>
     <message>
-        <location filename="../src/ui/shortcuts/shortcuts_dialog.cpp" line="205"/>
+        <location filename="../src/ui/shortcuts/shortcuts_dialog.cpp" line="224"/>
         <source>Development</source>
         <translation>Разработка</translation>
     </message>
     <message>
-        <location filename="../src/ui/shortcuts/shortcuts_dialog.cpp" line="206"/>
+        <location filename="../src/ui/shortcuts/shortcuts_dialog.cpp" line="225"/>
         <source>Education</source>
         <translation>Образование</translation>
     </message>
     <message>
-        <location filename="../src/ui/shortcuts/shortcuts_dialog.cpp" line="207"/>
+        <location filename="../src/ui/shortcuts/shortcuts_dialog.cpp" line="226"/>
         <source>HealthFitness</source>
         <translation>Здоровье</translation>
     </message>
     <message>
-        <location filename="../src/ui/shortcuts/shortcuts_dialog.cpp" line="209"/>
+        <location filename="../src/ui/shortcuts/shortcuts_dialog.cpp" line="228"/>
         <source>Graphics</source>
         <translation>Графика</translation>
     </message>
     <message>
-        <location filename="../src/ui/shortcuts/shortcuts_dialog.cpp" line="210"/>
+        <location filename="../src/ui/shortcuts/shortcuts_dialog.cpp" line="229"/>
         <source>Network</source>
         <translation>Интернет</translation>
     </message>
     <message>
-        <location filename="../src/ui/shortcuts/shortcuts_dialog.cpp" line="211"/>
+        <location filename="../src/ui/shortcuts/shortcuts_dialog.cpp" line="230"/>
         <source>Office</source>
         <translation>Офис</translation>
     </message>
     <message>
-        <location filename="../src/ui/shortcuts/shortcuts_dialog.cpp" line="212"/>
+        <location filename="../src/ui/shortcuts/shortcuts_dialog.cpp" line="231"/>
         <source>Science</source>
         <translation>Наука</translation>
     </message>
     <message>
-        <location filename="../src/ui/shortcuts/shortcuts_dialog.cpp" line="213"/>
+        <location filename="../src/ui/shortcuts/shortcuts_dialog.cpp" line="232"/>
         <source>Settings</source>
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="../src/ui/shortcuts/shortcuts_dialog.cpp" line="214"/>
+        <location filename="../src/ui/shortcuts/shortcuts_dialog.cpp" line="233"/>
         <source>System</source>
         <translation>Системный</translation>
     </message>
     <message>
-        <location filename="../src/ui/shortcuts/shortcuts_dialog.cpp" line="215"/>
+        <location filename="../src/ui/shortcuts/shortcuts_dialog.cpp" line="234"/>
         <source>Utility</source>
         <translation>Служебные</translation>
+    </message>
+</context>
+<context>
+    <name>kisel::ShortcutModel</name>
+    <message>
+        <location filename="../src/core/shortcuts/shortcut_model.cpp" line="95"/>
+        <source>Menu</source>
+        <translation>Меню</translation>
+    </message>
+    <message>
+        <location filename="../src/core/shortcuts/shortcut_model.cpp" line="95"/>
+        <source>Desktop</source>
+        <translation>Рабочий стол</translation>
+    </message>
+    <message>
+        <location filename="../src/core/shortcuts/shortcut_model.cpp" line="108"/>
+        <source>Name</source>
+        <translation>Название</translation>
+    </message>
+    <message>
+        <location filename="../src/core/shortcuts/shortcut_model.cpp" line="110"/>
+        <source>Location</source>
+        <translation>Расположение</translation>
+    </message>
+</context>
+<context>
+    <name>kisel::ShortcutsListWidget</name>
+    <message>
+        <location filename="../src/ui/shortcuts/shortcuts_list_widget.cpp" line="31"/>
+        <source>Open location</source>
+        <translation>Открыть расположение</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/shortcuts/shortcuts_list_widget.cpp" line="37"/>
+        <source>Delete</source>
+        <translation>Удалить</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/shortcuts/shortcuts_list_widget.cpp" line="39"/>
+        <source>Confirm</source>
+        <translation>Подтвердить</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/shortcuts/shortcuts_list_widget.cpp" line="39"/>
+        <source>Remove the selected shortcuts?</source>
+        <translation>Удалить выбранные ярлыки?</translation>
     </message>
 </context>
 <context>

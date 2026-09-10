@@ -7,7 +7,7 @@
 #include <QVBoxLayout>
 
 #include "core/appsettings/app_settings.hpp"
-#include "core/compatibilitytools/ct_model.hpp"
+#include "core/app/app.hpp"
 
 using namespace Qt::StringLiterals;
 using namespace kisel;

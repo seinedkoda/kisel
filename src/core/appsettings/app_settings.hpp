@@ -15,6 +15,7 @@ class AppSettings : public QSettings {
     Q_OBJECT
 
 public:
+    explicit AppSettings(QObject* parent = nullptr);
     static AppSettings* instance();
 
     static const QDir& appDataDir();
@@ -69,8 +70,6 @@ public:
     static const QString& obsVkCapturePath();
 
 private:
-    explicit AppSettings(QObject* parent = nullptr);
-
     void loadLanguageMap();
 
     QList<QDir> m_appDirs;

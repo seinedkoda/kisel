@@ -1,8 +1,8 @@
 #include "run_config.hpp"
 
+#include "core/app/app.hpp"
 #include "core/appsettings/app_settings.hpp"
 #include "core/executablefile/executable_file.hpp"
-#include "core/prefix/prefix_model.hpp"
 
 using namespace Qt::StringLiterals;
 using namespace kisel;

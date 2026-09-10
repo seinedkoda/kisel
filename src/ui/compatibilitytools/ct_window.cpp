@@ -10,7 +10,7 @@
 
 #include "core/appsettings/app_settings.hpp"
 #include "core/compatibilitytools/ct_installer.hpp"
-#include "core/compatibilitytools/ct_model.hpp"
+#include "core/app/app.hpp"
 
 using namespace kisel;
 
@@ -69,21 +69,21 @@ void CtWindow::onContextMenuRequested(const QPoint& pos)
 
     Ct* ct = CT_MODEL->forIndex(index.row());
 
-    auto* menu = new QMenu(this);
+    QMenu menu(this);
 
     const Ct::Status status = ct->status();
     if (status == Ct::Installed) {
-        QAction* openAction = menu->addAction(QIcon::fromTheme("document-open-folder"), tr("Open in files"));
+        QAction* openAction = menu.addAction(QIcon::fromTheme("document-open-folder"), tr("Open in files"));
         connect(openAction, &QAction::triggered, this, [ct]() { QDesktopServices::openUrl(QUrl::fromLocalFile(ct->path())); });
 
-        QAction* deleteAction = menu->addAction(QIcon::fromTheme("entry-delete"), tr("Delete"));
+        QAction* deleteAction = menu.addAction(QIcon::fromTheme("entry-delete"), tr("Delete"));
         connect(deleteAction, &QAction::triggered, this, [this, ct, index]() {
             if (QMessageBox::question(this, tr("Confirmation required"), tr("Delete \"%1\"?").arg(ct->name())) == QMessageBox::Yes) {
                 CT_MODEL->removeRow(index.row());
             }
         });
     } else if (status == Ct::Downloading || status == Ct::Unpacking) {
-        QAction* stopAction = menu->addAction(QIcon::fromTheme("media-playback-stop"), tr("Cancel"));
+        QAction* stopAction = menu.addAction(QIcon::fromTheme("media-playback-stop"), tr("Cancel"));
         connect(stopAction, &QAction::triggered, this, [this, ct]() {
             auto answer = QMessageBox::question(this, tr("Confirmation required"), tr("Cancel the installation process of \"%1\"?").arg(ct->name()));
             if (answer == QMessageBox::Yes) {
@@ -92,7 +92,7 @@ void CtWindow::onContextMenuRequested(const QPoint& pos)
         });
     }
 
-    menu->exec(QCursor::pos());
+    menu.exec(QCursor::pos());
 }
 
 void ProgressBarDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const

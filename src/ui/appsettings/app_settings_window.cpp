@@ -7,9 +7,10 @@
 #include <QLabel>
 #include <QStyleFactory>
 
+#include "core/app/app.hpp"
 #include "core/appsettings/app_settings.hpp"
 #include "core/compatibilitytools/ct_model.hpp"
-#include "core/prefix/prefix_model.hpp"
+#include "ui/shortcuts/shortcuts_list_widget.hpp"
 
 using namespace kisel;
 
@@ -19,7 +20,7 @@ AppSettingsWindow::AppSettingsWindow(QWidget* parent)
     setWindowTitle(tr("Kisel — Settings"));
     setWindowIcon(QIcon(":/icons/kisel-256x256.png"));
     setAttribute(Qt::WA_DeleteOnClose);
-    setMinimumWidth(400);
+    setMinimumWidth(300);
 
     auto* centralWidget = new QWidget(this);
     setCentralWidget(centralWidget);
@@ -37,7 +38,8 @@ AppSettingsWindow::AppSettingsWindow(QWidget* parent)
     layout->addWidget(tabWidget);
 
     auto* generalTab = new QWidget(this);
-    tabWidget->addTab(generalTab, tr("General"));
+
+    tabWidget->addTab(generalTab, QIcon::fromTheme("user-home-symbolic"), tr("General"));
 
     auto* generalTabLayout = new QVBoxLayout(generalTab);
     generalTabLayout->setAlignment(Qt::AlignTop);
@@ -78,6 +80,34 @@ AppSettingsWindow::AppSettingsWindow(QWidget* parent)
     auto* bottomLanguageLine = new QFrame(this);
     bottomLanguageLine->setFrameShape(QFrame::HLine);
     generalTabLayout->addWidget(bottomLanguageLine);
+
+    auto* umuLabel = new QLabel("UMU", this);
+    generalTabLayout->addWidget(umuLabel);
+
+    auto* umuPathComboBox = new QComboBox(this);
+    if (APP_SETTINGS->isFlatpak()) {
+        umuPathComboBox->addItem(tr("Built-in (Flatpak)"), false);
+        umuPathComboBox->setDisabled(true);
+    } else {
+        umuPathComboBox->addItem(tr("Built-in"), false);
+        umuPathComboBox->addItem(tr("System"), true);
+        umuPathComboBox->setCurrentIndex(APP_SETTINGS->useSystemUMU() ? 1 : 0);
+        connect(umuPathComboBox, &QComboBox::activated, this, [umuPathComboBox]() {
+            APP_SETTINGS->setUseSystemUMU(umuPathComboBox->currentData().toBool());
+        });
+    }
+    generalTabLayout->addWidget(umuPathComboBox);
+
+    auto* runtimeAutoUpdateCheckBox = new QCheckBox(tr("Runtime auto-update"), this);
+    runtimeAutoUpdateCheckBox->setChecked(APP_SETTINGS->runtimeAutoUpdate());
+    connect(runtimeAutoUpdateCheckBox, &QCheckBox::clicked, this, [](bool checked) {
+        APP_SETTINGS->setRuntimeAutoUpdate(checked);
+    });
+    generalTabLayout->addWidget(runtimeAutoUpdateCheckBox);
+
+    auto* bottomUmuLine = new QFrame(this);
+    bottomUmuLine->setFrameShape(QFrame::HLine);
+    generalTabLayout->addWidget(bottomUmuLine);
 
     auto* defaultPrefixLabel = new QLabel(tr("Default prefix"), this);
     generalTabLayout->addWidget(defaultPrefixLabel);
@@ -120,30 +150,6 @@ AppSettingsWindow::AppSettingsWindow(QWidget* parent)
     });
     generalTabLayout->addWidget(ctComboBox);
 
-    auto* umuTab = new QWidget(this);
-    tabWidget->addTab(umuTab, "UMU");
-
-    auto* umuTabLayout = new QVBoxLayout(umuTab);
-    umuTabLayout->setAlignment(Qt::AlignTop);
-
-    auto* umuPathComboBox = new QComboBox(this);
-    if (APP_SETTINGS->isFlatpak()) {
-        umuPathComboBox->addItem(tr("Built-in (Flatpak)"), false);
-        umuPathComboBox->setDisabled(true);
-    } else {
-        umuPathComboBox->addItem(tr("Built-in"), false);
-        umuPathComboBox->addItem(tr("System"), true);
-        umuPathComboBox->setCurrentIndex(APP_SETTINGS->useSystemUMU() ? 1 : 0);
-        connect(umuPathComboBox, &QComboBox::activated, this, [umuPathComboBox]() {
-            APP_SETTINGS->setUseSystemUMU(umuPathComboBox->currentData().toBool());
-        });
-    }
-    umuTabLayout->addWidget(umuPathComboBox);
-
-    auto* runtimeAutoUpdateCheckBox = new QCheckBox(tr("Runtime auto-update"), this);
-    runtimeAutoUpdateCheckBox->setChecked(APP_SETTINGS->runtimeAutoUpdate());
-    connect(runtimeAutoUpdateCheckBox, &QCheckBox::clicked, this, [](bool checked) {
-        APP_SETTINGS->setRuntimeAutoUpdate(checked);
-    });
-    umuTabLayout->addWidget(runtimeAutoUpdateCheckBox);
+    auto* shortcutsTab = new ShortcutsListWidget(this);
+    tabWidget->addTab(shortcutsTab, QIcon::fromTheme("link"), tr("Shortcuts"));
 }

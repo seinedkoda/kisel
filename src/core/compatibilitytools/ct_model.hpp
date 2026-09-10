@@ -6,8 +6,6 @@
 #include "ct.hpp"
 
 namespace kisel {
-#define CT_MODEL CtModel::instance()
-
 class CtModel : public QAbstractTableModel {
     Q_OBJECT
 
@@ -20,7 +18,7 @@ public:
     };
     Q_ENUM(Roles);
 
-    static CtModel* instance();
+    explicit CtModel(QObject* parent = nullptr);
 
     [[nodiscard]] int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     [[nodiscard]] int columnCount(const QModelIndex& parent = QModelIndex()) const override;
@@ -40,8 +38,6 @@ public:
     void setCtStatus(Ct* ct, Ct::Status status);
 
 private:
-    explicit CtModel(QObject* parent = nullptr);
-
     bool containsPath(QStringView path);
 
     QList<Ct*> m_cts;

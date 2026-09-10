@@ -5,8 +5,6 @@
 #include "prefix.hpp"
 
 namespace kisel {
-#define PREFIX_MODEL PrefixModel::instance()
-
 class PrefixModel : public QAbstractListModel {
     Q_OBJECT
 
@@ -17,7 +15,7 @@ public:
     };
     Q_ENUM(Roles)
 
-    static PrefixModel* instance();
+    explicit PrefixModel(QObject* parent = nullptr);
 
     [[nodiscard]] int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     [[nodiscard]] QHash<int, QByteArray> roleNames() const override;
@@ -36,8 +34,6 @@ public:
     bool containsName(QStringView name);
 
 private:
-    explicit PrefixModel(QObject* parent = nullptr);
-
     QList<Prefix*> m_prefixes;
 };
 }

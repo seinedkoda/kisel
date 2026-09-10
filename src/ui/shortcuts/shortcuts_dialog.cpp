@@ -8,8 +8,8 @@
 #include <QVBoxLayout>
 #include <utility>
 
+#include "core/app/app.hpp"
 #include "core/prefix/prefix_model.hpp"
-#include "core/shortcuts/shortcuts_utils.hpp"
 
 using namespace Qt::StringLiterals;
 using namespace kisel;
@@ -38,13 +38,18 @@ ShortcutDialog::ShortcutDialog(RunConfig* runConfig, QWidget* parent)
     auto* titleLabel = new QLabel(tr("<h3>Shortcuts</h3>"));
     layout->addWidget(titleLabel);
 
+    m_menuShortcut = SHORTCUT_MODEL->shortcut(m_exeFile->id(), ShortcutLocation::Menu);
+
     m_menuCheckBox = new QCheckBox(tr("Menu"), this);
     m_menuCheckBox->setIcon(QIcon::fromTheme("start-here-symbolic"));
-    m_menuCheckBox->setChecked(true);
+    m_menuCheckBox->setChecked(m_menuShortcut != nullptr);
     layout->addWidget(m_menuCheckBox);
+
+    m_desktopShortcut = SHORTCUT_MODEL->shortcut(m_exeFile->id(), ShortcutLocation::Desktop);
 
     m_desktopCheckbox = new QCheckBox(tr("Desktop"), this);
     m_desktopCheckbox->setIcon(QIcon::fromTheme("user-desktop-symbolic"));
+    m_desktopCheckbox->setChecked(m_desktopShortcut != nullptr);
     layout->addWidget(m_desktopCheckbox);
 
     auto* parametersGroupBox = new QGroupBox(tr("Parameters"), this);
@@ -71,6 +76,13 @@ ShortcutDialog::ShortcutDialog(RunConfig* runConfig, QWidget* parent)
 
     m_nameEdit = new QLineEdit(m_exeFile->baseName(), this);
     m_nameEdit->setPlaceholderText(m_exeFile->baseName());
+    if (m_menuShortcut != nullptr) {
+        m_nameEdit->setText(m_menuShortcut->name());
+    } else if (m_desktopShortcut != nullptr) {
+        m_nameEdit->setText(m_desktopShortcut->name());
+    } else {
+        m_nameEdit->setText(m_exeFile->baseName());
+    }
     m_nameEdit->setCursorPosition(0);
     nameLayout->addWidget(m_nameEdit);
 
@@ -172,12 +184,19 @@ void ShortcutDialog::onAccepted()
     ShortcutLocations locations;
     if (m_menuCheckBox->isChecked()) {
         locations |= ShortcutLocation::Menu;
-    }
-    if (m_desktopCheckbox->isChecked()) {
-        locations |= ShortcutLocation::Desktop;
+    } else {
+        SHORTCUT_MODEL->removeShortcut(m_menuShortcut);
     }
 
-    createShortcut(m_exeFile, m_currentPrefix, locations, m_nameEdit->text(), m_currentSize, category);
+    if (m_desktopCheckbox->isChecked()) {
+        locations |= ShortcutLocation::Desktop;
+    } else {
+        SHORTCUT_MODEL->removeShortcut(m_desktopShortcut);
+    }
+
+    if (locations != 0U) {
+        SHORTCUT_MODEL->createShortcut(m_exeFile, m_currentPrefix, locations, m_nameEdit->text(), m_currentSize, category);
+    }
 
     close();
 }

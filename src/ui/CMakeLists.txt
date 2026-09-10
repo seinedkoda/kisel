@@ -7,5 +7,6 @@ target_sources(kisel PRIVATE
     prefix/prefix_components_dialog.hpp prefix/prefix_components_dialog.cpp
     compatibilitytools/ct_window.hpp compatibilitytools/ct_window.cpp
     shortcuts/shortcuts_dialog.hpp shortcuts/shortcuts_dialog.cpp
+    shortcuts/shortcuts_list_widget.hpp shortcuts/shortcuts_list_widget.cpp
     trayicon/tray_icon.hpp trayicon/tray_icon.cpp
 )

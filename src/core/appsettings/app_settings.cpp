@@ -1,6 +1,7 @@
 #include "app_settings.hpp"
 
 #include <QApplication>
+#include <QApplicationStatic>
 #include <QFileInfo>
 #include <QProcessEnvironment>
 #include <QStandardPaths>
@@ -12,6 +13,9 @@
 using namespace Qt::StringLiterals;
 using namespace kisel;
 
+// NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
+Q_APPLICATION_STATIC(AppSettings, g_appSettings)
+
 AppSettings::AppSettings(QObject* parent)
     : QSettings(QDir::homePath() % "/.config/kisel/kisel.conf"_L1, QSettings::IniFormat, parent)
 {
@@ -21,6 +25,11 @@ AppSettings::AppSettings(QObject* parent)
     m_appDirs = { prefixesDir(), ctsDirList().first() };
 
     loadLanguageMap();
+}
+
+AppSettings* AppSettings::instance()
+{
+    return g_appSettings;
 }
 
 void AppSettings::createAppDirectories()
@@ -40,12 +49,6 @@ void AppSettings::loadLanguageMap()
         const QString name = QLocale(code).nativeLanguageName();
         m_languageMap.insert(name, code);
     }
-}
-
-AppSettings* AppSettings::instance()
-{
-    static AppSettings instance;
-    return &instance;
 }
 
 const QDir& AppSettings::appDataDir()

@@ -7,8 +7,8 @@
 #include <QMessageBox>
 #include <QVBoxLayout>
 
+#include "core/app/app.hpp"
 #include "core/appsettings/app_settings.hpp"
-#include "core/prefix/prefix_model.hpp"
 #include "core/run/run_manager.hpp"
 #include "prefix_components_dialog.hpp"
 #include "prefix_settings_dialog.hpp"
@@ -95,15 +95,15 @@ void PrefixWindow::onContextMenuRequested(const QPoint& pos)
 
     Prefix* prefix = PREFIX_MODEL->forIndex(index.row());
 
-    auto* menu = new QMenu(this);
+    QMenu menu(this);
 
-    QAction* settingsAction = menu->addAction(QIcon::fromTheme("configure"), tr("Configure"));
+    QAction* settingsAction = menu.addAction(QIcon::fromTheme("configure"), tr("Configure"));
     connect(settingsAction, &QAction::triggered, this, [this, prefix]() {
         auto* prefixSettingsDialog = new PrefixSettingsDialog(prefix, this);
         prefixSettingsDialog->exec();
     });
 
-    QMenu* toolsMenu = menu->addMenu(QIcon::fromTheme("tools"), tr("Tools"));
+    QMenu* toolsMenu = menu.addMenu(QIcon::fromTheme("tools"), tr("Tools"));
 
     QAction* componentsAction = toolsMenu->addAction(QIcon::fromTheme("plugins"), tr("Install components"));
     connect(componentsAction, &QAction::triggered, this, [this, prefix]() {
@@ -128,17 +128,17 @@ void PrefixWindow::onContextMenuRequested(const QPoint& pos)
     QAction* uninstallerAction = toolsMenu->addAction(QIcon::fromTheme("entry-delete"), tr("Remove programs"));
     connect(uninstallerAction, &QAction::triggered, this, [prefix]() { RUN_MANAGER->runUninstaller(prefix); });
 
-    QAction* openAction = menu->addAction(QIcon::fromTheme("document-open-folder"), tr("Open in files"));
+    QAction* openAction = menu.addAction(QIcon::fromTheme("document-open-folder"), tr("Open in files"));
     connect(openAction, &QAction::triggered, this, [prefix]() { QDesktopServices::openUrl(QUrl::fromLocalFile(prefix->path())); });
 
-    menu->addSeparator();
+    menu.addSeparator();
 
-    QAction* removeAction = menu->addAction(QIcon::fromTheme("entry-delete"), tr("Delete"));
+    QAction* removeAction = menu.addAction(QIcon::fromTheme("entry-delete"), tr("Delete"));
     connect(removeAction, &QAction::triggered, this, [this, prefix, index]() {
         if (QMessageBox::question(this, tr("Confirm"), tr("Remove the \"%1\" prefix?").arg(prefix->name())) == QMessageBox::Yes) {
             PREFIX_MODEL->removeRow(index.row());
         }
     });
 
-    menu->exec(QCursor::pos());
+    menu.exec(QCursor::pos());
 }
