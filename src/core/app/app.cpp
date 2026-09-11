@@ -12,6 +12,7 @@ App::App(QObject* parent)
     , m_runManager(new RunManager(this))
     , m_prefixModel(new PrefixModel(this))
     , m_ctModel(new CtModel(this))
+    , m_ctInstaller(new CtInstaller(this))
     , m_shortcutModel(new ShortcutModel(this))
 {
 }
@@ -34,6 +35,11 @@ PrefixModel* App::prefixModel()
 CtModel* App::ctModel()
 {
     return m_ctModel;
+}
+
+CtInstaller* App::ctInstaller()
+{
+    return m_ctInstaller;
 }
 
 ShortcutModel* App::shortcutModel()

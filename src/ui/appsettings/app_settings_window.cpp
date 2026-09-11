@@ -2,14 +2,15 @@
 
 #include <QCheckBox>
 #include <QComboBox>
-#include <QGroupBox>
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QListWidget>
+#include <QStackedWidget>
 #include <QStyleFactory>
 
-#include "core/app/app.hpp"
 #include "core/appsettings/app_settings.hpp"
-#include "core/compatibilitytools/ct_model.hpp"
+#include "ui/compatibilitytools/ct_page.hpp"
+#include "ui/prefix/prefix_page.hpp"
 #include "ui/shortcuts/shortcuts_list_widget.hpp"
 
 using namespace kisel;
@@ -20,7 +21,7 @@ AppSettingsWindow::AppSettingsWindow(QWidget* parent)
     setWindowTitle(tr("Kisel — Settings"));
     setWindowIcon(QIcon(":/icons/kisel-256x256.png"));
     setAttribute(Qt::WA_DeleteOnClose);
-    setMinimumWidth(300);
+    setMinimumWidth(400);
 
     auto* centralWidget = new QWidget(this);
     setCentralWidget(centralWidget);
@@ -30,22 +31,35 @@ AppSettingsWindow::AppSettingsWindow(QWidget* parent)
     auto* titleLabel = new QLabel(tr("<h3>Global settings</h3>"));
     layout->addWidget(titleLabel);
 
-    auto* helpLabel = new QLabel(tr("<i>For detailed settings, go to the prefix context menu in the main window</i>"), this);
+    auto* helpLabel = new QLabel(tr("<i>To configure the executable launch settings in detail, "
+                                    "go to the context menu of the selected prefix</i>"), this);
     helpLabel->setWordWrap(true);
     layout->addWidget(helpLabel);
 
-    auto* tabWidget = new QTabWidget(this);
-    layout->addWidget(tabWidget);
+    auto* contentWidget = new QWidget(this);
+    layout->addWidget(contentWidget);
 
-    auto* generalTab = new QWidget(this);
+    auto* contentLayout = new QHBoxLayout(contentWidget);
+    contentLayout->setContentsMargins(0, 0, 0, 0);
 
-    tabWidget->addTab(generalTab, QIcon::fromTheme("user-home-symbolic"), tr("General"));
+    auto* pageListView = new QListWidget(this);
+    contentLayout->addWidget(pageListView, Qt::AlignLeft);
 
-    auto* generalTabLayout = new QVBoxLayout(generalTab);
-    generalTabLayout->setAlignment(Qt::AlignTop);
+    auto* stackedPages = new QStackedWidget(this);
+    connect(pageListView, &QListWidget::currentRowChanged, this, [stackedPages](int index) {
+        stackedPages->setCurrentIndex(index);
+    });
+    contentLayout->addWidget(stackedPages);
+
+    auto* generalPage = new QWidget(this);
+    new QListWidgetItem(QIcon::fromTheme("user-home-symbolic"), tr("General"), pageListView);
+    stackedPages->addWidget(generalPage);
+
+    auto* generalPageLayout = new QVBoxLayout(generalPage);
+    generalPageLayout->setAlignment(Qt::AlignTop);
 
     auto* languageLabel = new QLabel(tr("Language"), this);
-    generalTabLayout->addWidget(languageLabel);
+    generalPageLayout->addWidget(languageLabel);
 
     auto* languageComboBox = new QComboBox(this);
     languageComboBox->addItems(APP_SETTINGS->languagesList());
@@ -53,10 +67,10 @@ AppSettingsWindow::AppSettingsWindow(QWidget* parent)
     connect(languageComboBox, &QComboBox::currentTextChanged, this, [](const QString& languageName) {
         APP_SETTINGS->setLanguage(languageName);
     });
-    generalTabLayout->addWidget(languageComboBox);
+    generalPageLayout->addWidget(languageComboBox);
 
     auto* styleLabel = new QLabel(tr("Style"), this);
-    generalTabLayout->addWidget(styleLabel);
+    generalPageLayout->addWidget(styleLabel);
 
     auto* styleComboBox = new QComboBox(this);
     static QStringList styles = QStyleFactory::keys();
@@ -68,88 +82,27 @@ AppSettingsWindow::AppSettingsWindow(QWidget* parent)
         styleComboBox->setCurrentText(QStringLiteral("Fusion"));
     }
     connect(styleComboBox, &QComboBox::currentTextChanged, this, [](const QString& styleName) { APP_SETTINGS->setStyleName(styleName); });
-    generalTabLayout->addWidget(styleComboBox);
+    generalPageLayout->addWidget(styleComboBox);
 
     auto* loggingCheckBox = new QCheckBox(tr("Logging"), this);
     loggingCheckBox->setChecked(APP_SETTINGS->loggingEnabled());
     connect(loggingCheckBox, &QCheckBox::clicked, this, [](bool checked) {
         APP_SETTINGS->setLoggingEnabled(checked);
     });
-    generalTabLayout->addWidget(loggingCheckBox);
+    generalPageLayout->addWidget(loggingCheckBox);
 
-    auto* bottomLanguageLine = new QFrame(this);
-    bottomLanguageLine->setFrameShape(QFrame::HLine);
-    generalTabLayout->addWidget(bottomLanguageLine);
+    auto* prefixPage = new PrefixPage(this);
+    new QListWidgetItem(QIcon::fromTheme("drive-symbolic"), tr("Prefixes"), pageListView);
+    stackedPages->addWidget(prefixPage);
 
-    auto* umuLabel = new QLabel("UMU", this);
-    generalTabLayout->addWidget(umuLabel);
+    auto* ctPage = new CtPage(this);
+    new QListWidgetItem(QIcon::fromTheme("tools-wizard"), tr("Compatibility"), pageListView);
+    stackedPages->addWidget(ctPage);
 
-    auto* umuPathComboBox = new QComboBox(this);
-    if (APP_SETTINGS->isFlatpak()) {
-        umuPathComboBox->addItem(tr("Built-in (Flatpak)"), false);
-        umuPathComboBox->setDisabled(true);
-    } else {
-        umuPathComboBox->addItem(tr("Built-in"), false);
-        umuPathComboBox->addItem(tr("System"), true);
-        umuPathComboBox->setCurrentIndex(APP_SETTINGS->useSystemUMU() ? 1 : 0);
-        connect(umuPathComboBox, &QComboBox::activated, this, [umuPathComboBox]() {
-            APP_SETTINGS->setUseSystemUMU(umuPathComboBox->currentData().toBool());
-        });
-    }
-    generalTabLayout->addWidget(umuPathComboBox);
+    auto* shortcutPage = new ShortcutsListWidget(this);
+    new QListWidgetItem(QIcon::fromTheme("link"), tr("Shortcuts"), pageListView);
+    stackedPages->addWidget(shortcutPage);
 
-    auto* runtimeAutoUpdateCheckBox = new QCheckBox(tr("Runtime auto-update"), this);
-    runtimeAutoUpdateCheckBox->setChecked(APP_SETTINGS->runtimeAutoUpdate());
-    connect(runtimeAutoUpdateCheckBox, &QCheckBox::clicked, this, [](bool checked) {
-        APP_SETTINGS->setRuntimeAutoUpdate(checked);
-    });
-    generalTabLayout->addWidget(runtimeAutoUpdateCheckBox);
-
-    auto* bottomUmuLine = new QFrame(this);
-    bottomUmuLine->setFrameShape(QFrame::HLine);
-    generalTabLayout->addWidget(bottomUmuLine);
-
-    auto* defaultPrefixLabel = new QLabel(tr("Default prefix"), this);
-    generalTabLayout->addWidget(defaultPrefixLabel);
-
-    auto* individualPrefixCheckBox = new QCheckBox(tr("Individual"), this);
-    individualPrefixCheckBox->setChecked(APP_SETTINGS->useIndividualPrefix());
-    generalTabLayout->addWidget(individualPrefixCheckBox);
-
-    auto* prefixComboBox = new QComboBox(this);
-    prefixComboBox->setModel(PREFIX_MODEL);
-    prefixComboBox->setCurrentText(PREFIX_MODEL->defaultPrefix()->name());
-    prefixComboBox->setDisabled(APP_SETTINGS->useIndividualPrefix());
-    connect(prefixComboBox, &QComboBox::currentIndexChanged, this, [](int index) {
-        APP_SETTINGS->setDefaultPrefixPath(PREFIX_MODEL->forIndex(index)->path());
-    });
-    generalTabLayout->addWidget(prefixComboBox);
-
-    connect(individualPrefixCheckBox, &QCheckBox::clicked, this, [prefixComboBox](bool checked) {
-        APP_SETTINGS->setUseIndividualPrefix(checked);
-        prefixComboBox->setDisabled(checked);
-    });
-
-    auto* bottomPrefixLine = new QFrame(this);
-    bottomPrefixLine->setFrameShape(QFrame::HLine);
-    generalTabLayout->addWidget(bottomPrefixLine);
-
-    auto* defaultCtLabel = new QLabel(tr("Default compatibility tool"), this);
-    generalTabLayout->addWidget(defaultCtLabel);
-
-    auto* ctComboBox = new QComboBox(this);
-    ctComboBox->setPlaceholderText(tr("<No installed>"));
-    auto* ctInstalledProxyModel = new CtInstalledProxyModel(this);
-    ctInstalledProxyModel->setSourceModel(CT_MODEL);
-    ctComboBox->setModel(ctInstalledProxyModel);
-    if (CT_MODEL->defaultCt() != nullptr) {
-        ctComboBox->setCurrentIndex(CT_MODEL->ctIndex(CT_MODEL->defaultCt()));
-    }
-    connect(ctComboBox, &QComboBox::currentIndexChanged, this, [](int index) {
-        APP_SETTINGS->setDefaultCtPath(CT_MODEL->forIndex(index)->path());
-    });
-    generalTabLayout->addWidget(ctComboBox);
-
-    auto* shortcutsTab = new ShortcutsListWidget(this);
-    tabWidget->addTab(shortcutsTab, QIcon::fromTheme("link"), tr("Shortcuts"));
+    pageListView->setFixedWidth(pageListView->sizeHintForColumn(0) + 6);
+    resize(550, height());
 }

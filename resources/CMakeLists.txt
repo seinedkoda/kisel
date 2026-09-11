@@ -31,4 +31,5 @@ qt_add_resources(kisel "resources"
     "icons/thirdparty/Papirus/16x16/symbolic/apps/wine-symbolic.svg"
     "icons/thirdparty/Papirus/16x16/symbolic/places/user-desktop-symbolic.svg"
     "icons/thirdparty/Papirus/16x16/symbolic/places/start-here-symbolic.svg"
+    "icons/thirdparty/Papirus/16x16/symbolic/devices/drive-symbolic.svg"
 )

@@ -17,6 +17,8 @@ public:
     explicit MainWindow(const QString& exePath = "");
 
 private slots:
+    static void onOpenPrefixListWidget();
+    static void onOpenCtListWidget();
     void onExeSelectionClicked();
     void onRunStopTriggered();
     void onCreateShortcutTriggered();
@@ -28,8 +30,7 @@ private slots:
     void openLogFile();
 
 private:
-    static void openPrefixWindow();
-    static void openCtWindow();
+
     static void openAppSettingsWindow();
     void setExecutablePath(const QString& exePath);
     void setPreferredPrefix();

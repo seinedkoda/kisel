@@ -18,10 +18,10 @@
 #include "core/prefix/prefix_settings.hpp"
 #include "ui/aboutapp/about_app_dialog.hpp"
 #include "ui/appsettings/app_settings_window.hpp"
-#include "ui/compatibilitytools/ct_window.hpp"
+#include "ui/compatibilitytools/ct_list_widget.hpp"
 #include "ui/prefix/prefix_components_dialog.hpp"
+#include "ui/prefix/prefix_list_widget.hpp"
 #include "ui/prefix/prefix_settings_dialog.hpp"
-#include "ui/prefix/prefix_window.hpp"
 #include "ui/shortcuts/shortcuts_dialog.hpp"
 
 using namespace kisel;
@@ -149,7 +149,7 @@ MainWindow::MainWindow(const QString& exePath)
     prefixMenu->addSeparator();
 
     auto* prefixManageAction = prefixMenu->addAction(QIcon::fromTheme("view-list-text"), tr("Manage"));
-    connect(prefixManageAction, &QAction::triggered, this, []() { openPrefixWindow(); });
+    connect(prefixManageAction, &QAction::triggered, this, &MainWindow::onOpenPrefixListWidget);
 
     m_prefixMenuButton->setToolTip(tr("Open prefix menu"));
     m_prefixMenuButton->setIcon(QIcon::fromTheme("open-menu"));
@@ -173,7 +173,7 @@ MainWindow::MainWindow(const QString& exePath)
 
     m_ctWindowButton->setToolTip(tr("Open the Compatibility Tools window"));
     m_ctWindowButton->setIcon(QIcon::fromTheme("view-list"));
-    connect(m_ctWindowButton, &QToolButton::clicked, this, [this]() { openCtWindow(); });
+    connect(m_ctWindowButton, &QToolButton::clicked, this, &MainWindow::onOpenCtListWidget);
     environmentBoxLayout->addWidget(m_ctWindowButton, 4, 1);
 
     auto* bottomWidget = new QWidget(this);
@@ -341,16 +341,17 @@ void MainWindow::onCurrentCtIndexChanged(int index)
     m_runConfig->setCt(CT_MODEL->forIndex(index));
 }
 
-void MainWindow::openPrefixWindow()
+void MainWindow::onOpenPrefixListWidget()
 {
-    auto* prefixWindow = new PrefixWindow();
-    prefixWindow->show();
+    auto* prefixListWidget = new PrefixListWidget();
+    prefixListWidget->show();
 }
 
-void MainWindow::openCtWindow()
+void MainWindow::onOpenCtListWidget()
 {
-    auto* ctWindow = new CtWindow();
-    ctWindow->show();
+    auto* ctListWidget = new CtListWidget();
+    ctListWidget->resize(400, ctListWidget->height());
+    ctListWidget->show();
 }
 
 void MainWindow::openAppSettingsWindow()
@@ -408,7 +409,7 @@ void MainWindow::onRunningError(RunManager::RunningError error, const QString& e
             errorTitle,
             tr("The required compatibility tool is missing, open window to manage?"));
         if (answer == QMessageBox::Yes) {
-            openCtWindow();
+            onOpenCtListWidget();
         }
     } break;
     case RunManager::RunningError::NoUmu:

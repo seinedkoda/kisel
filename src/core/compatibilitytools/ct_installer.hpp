@@ -8,8 +8,6 @@
 #include "ct.hpp"
 
 namespace kisel {
-#define CT_INSTALLER CtInstaller::instance()
-
 class CtInstallProcess : public QObject { // NOLINT(cppcoreguidelines-virtual-class-destructor)
     Q_OBJECT
     Q_DISABLE_COPY_MOVE(CtInstallProcess)
@@ -36,7 +34,7 @@ class CtInstaller : public QObject {
     Q_OBJECT
 
 public:
-    static CtInstaller* instance();
+    explicit CtInstaller(QObject* parent = nullptr);
 
     static QString defaultCtSource();
     static const QMap<QString, QUrl>& ctSourceMap();
@@ -50,8 +48,6 @@ signals:
     void newInstalled();
 
 private:
-    explicit CtInstaller(QObject* parent = nullptr);
-
     static QString deviceArchitecture();
     static bool deviceHasV3Exstensions();
     static QString getBaseArchitectureNameFromAsset(const QString& assetName);

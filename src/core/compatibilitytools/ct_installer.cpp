@@ -97,12 +97,6 @@ CtInstaller::CtInstaller(QObject* parent)
 {
 }
 
-CtInstaller* CtInstaller::instance()
-{
-    static CtInstaller instance;
-    return &instance;
-}
-
 QString CtInstaller::defaultCtSource()
 {
     if (APP_SETTINGS->deviceSupportsModernVulkan()) {

@@ -1,91 +1,47 @@
-#include "prefix_window.hpp"
+#include "prefix_list_widget.hpp"
 
 #include <QDesktopServices>
 #include <QLabel>
-#include <QListView>
 #include <QMenu>
 #include <QMessageBox>
+#include <QPushButton>
 #include <QVBoxLayout>
 
 #include "core/app/app.hpp"
 #include "core/appsettings/app_settings.hpp"
-#include "core/run/run_manager.hpp"
-#include "prefix_components_dialog.hpp"
-#include "prefix_settings_dialog.hpp"
+#include "ui/prefix/new_prefix_dialog.hpp"
+#include "ui/prefix/prefix_components_dialog.hpp"
+#include "ui/prefix/prefix_settings_dialog.hpp"
 
 using namespace kisel;
 
-AddNewPrefixDialog::AddNewPrefixDialog(QWidget* parent)
-    : QDialog(parent)
-    , m_nameInput(new QLineEdit(this))
-    , m_saveButton(new QPushButton(QIcon::fromTheme("document-save"), tr("Save"), this))
-{
-    setWindowTitle(tr("Add new prefix"));
-    setAttribute(Qt::WA_DeleteOnClose);
-    setWindowModality(Qt::ApplicationModal);
-    setMinimumWidth(400);
-
-    auto* layout = new QVBoxLayout(this);
-
-    auto* nameLabel = new QLabel(tr("Enter the prefix name"), this);
-    layout->addWidget(nameLabel);
-
-    m_nameInput->setPlaceholderText(tr("Name"));
-    layout->addWidget(m_nameInput);
-
-    m_saveButton->setEnabled(false);
-
-    auto* closeButton = new QPushButton(QIcon::fromTheme("window-close"), tr("Close"), this);
-    connect(closeButton, &QPushButton::clicked, this, &AddNewPrefixDialog::close);
-
-    auto* buttonBox = new QDialogButtonBox(Qt::Horizontal);
-    buttonBox->addButton(m_saveButton, QDialogButtonBox::AcceptRole);
-    buttonBox->addButton(closeButton, QDialogButtonBox::RejectRole);
-    layout->addWidget(buttonBox);
-
-    connect(m_nameInput, &QLineEdit::textChanged, this, [this](const QString& text) {
-        m_saveButton->setEnabled(PREFIX_MODEL->isValidPrefixName(text));
-    });
-
-    connect(m_saveButton, &QPushButton::clicked, this, [this]() {
-        Prefix* prefix = PREFIX_MODEL->add(m_nameInput->text());
-        prefix->makePath();
-        close();
-    });
-
-    adjustSize();
-    setFixedSize(size());
-}
-
-PrefixWindow::PrefixWindow(QWidget* parent)
-    : QMainWindow(parent)
+PrefixListWidget::PrefixListWidget(QWidget* parent)
+    : QWidget(parent)
     , m_prefixListView(new QListView(this))
 {
     setWindowTitle(tr("Kisel — Prefixes"));
     setWindowIcon(QIcon(":/icons/kisel-256x256.png"));
     setAttribute(Qt::WA_DeleteOnClose);
 
-    auto* centralWidget = new QWidget(this);
-    auto* layout = new QVBoxLayout(centralWidget);
-    setCentralWidget(centralWidget);
+    auto* layout = new QVBoxLayout(this);
 
     auto* listLabel = new QLabel(tr("<h3>Prefixes</h3>"), this);
     layout->addWidget(listLabel);
 
     m_prefixListView->setModel(PREFIX_MODEL);
     m_prefixListView->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(m_prefixListView, &QListView::customContextMenuRequested, this, &PrefixWindow::onContextMenuRequested);
+    connect(m_prefixListView, &QListView::customContextMenuRequested, this, &PrefixListWidget::onContextMenuRequested);
     layout->addWidget(m_prefixListView);
 
     auto* addNewButton = new QPushButton(QIcon::fromTheme("list-add"), tr("Add new"), this);
     connect(addNewButton, &QPushButton::clicked, this, [this]() {
-        auto* dialog = new AddNewPrefixDialog(this);
+        auto* dialog = new NewPrefixDialog(this);
         dialog->show();
     });
     layout->addWidget(addNewButton);
 }
 
-void PrefixWindow::onContextMenuRequested(const QPoint& pos)
+void PrefixListWidget::onContextMenuRequested(const QPoint& pos)
 {
     QModelIndex index = m_prefixListView->indexAt(pos);
 
