@@ -7,13 +7,19 @@
 #include <QMessageBox>
 
 #include "core/app/app.hpp"
+#include "core/shortcuts/shortcut_model.hpp"
 
 using namespace kisel;
 
 ShortcutsListWidget::ShortcutsListWidget(QWidget* parent)
     : QTableView(parent)
+    , m_proxyModel(new ShortcutProxyModel(this))
 {
-    setModel(SHORTCUT_MODEL);
+    m_proxyModel->setSourceModel(SHORTCUT_MODEL);
+    setModel(m_proxyModel);
+    setSortingEnabled(true);
+    m_proxyModel->sort(ShortcutModel::NameColumn, Qt::AscendingOrder);
+
     setSelectionBehavior(QAbstractItemView::SelectRows);
     resizeColumnsToContents();
     horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
@@ -25,8 +31,8 @@ void ShortcutsListWidget::contextMenuEvent(QContextMenuEvent* event)
 {
     QMenu menu(this);
 
-    const QModelIndexList selectedRows = selectionModel()->selectedRows();
-    const QModelIndex currentIndex = selectionModel()->currentIndex();
+    const QModelIndexList selectedIndexes = selectionModel()->selectedRows();
+    const QModelIndex currentIndex = m_proxyModel->mapToSource(selectionModel()->currentIndex());
 
     QAction* openAction = menu.addAction(QIcon::fromTheme("document-open-folder"), tr("Open location"));
     connect(openAction, &QAction::triggered, this, [currentIndex]() {
@@ -35,10 +41,10 @@ void ShortcutsListWidget::contextMenuEvent(QContextMenuEvent* event)
     });
 
     QAction* deleteAction = menu.addAction(QIcon::fromTheme("entry-delete"), tr("Delete"));
-    connect(deleteAction, &QAction::triggered, this, [this, selectedRows]() {
+    connect(deleteAction, &QAction::triggered, this, [this, selectedIndexes]() {
         if (QMessageBox::question(this, tr("Confirm"), tr("Remove the selected shortcuts?")) == QMessageBox::Yes) {
-            for (const auto& index : std::views::reverse(selectedRows)) {
-                SHORTCUT_MODEL->removeRows(index.row(), 1);
+            for (const auto& index : std::views::reverse(selectedIndexes)) {
+                SHORTCUT_MODEL->removeRows(m_proxyModel->mapToSource(index).row(), 1);
             }
         }
     });

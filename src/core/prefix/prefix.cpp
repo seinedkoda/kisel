@@ -2,6 +2,7 @@
 
 #include <QCryptographicHash>
 #include <QRegularExpression>
+#include <QSaveFile>
 
 #include "core/appsettings/app_settings.hpp"
 #include "prefix_settings.hpp"
@@ -48,12 +49,10 @@ bool Prefix::makePath()
         return false;
     }
 
-    QFile file(m_dir.filePath("pfx.lock"_L1));
+    QSaveFile file(m_dir.filePath("pfx.lock"_L1));
     if (file.open(QIODevice::WriteOnly)) {
-        file.close();
-        return true;
+        return file.commit();
     }
 
-    qDebug() << "Failed to create pfx.lock";
     return false;
 }

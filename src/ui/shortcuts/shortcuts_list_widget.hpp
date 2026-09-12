@@ -2,6 +2,8 @@
 
 #include <QTableView>
 
+#include "core/shortcuts/shortcut_model.hpp"
+
 namespace kisel {
 class ShortcutsListWidget : public QTableView {
     Q_OBJECT
@@ -11,5 +13,8 @@ public:
 
 protected:
     void contextMenuEvent(QContextMenuEvent* event) override;
+
+private:
+    ShortcutProxyModel* m_proxyModel;
 };
 }

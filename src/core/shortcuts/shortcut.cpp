@@ -1,6 +1,7 @@
 #include "shortcut.hpp"
 
 #include <QFileInfo>
+#include <QProcess>
 #include <QStandardPaths>
 
 #include "core/appsettings/app_settings.hpp"
@@ -40,12 +41,12 @@ void Shortcut::parseData()
     while (stream.readLineInto(&line)) {
         line = line.trimmed();
 
-        if (line.isEmpty() || line.startsWith('#')) {
+        if (line.isEmpty() || line.startsWith(u'#')) {
             continue;
         }
 
-        if (line.startsWith('[') && line.endsWith(']')) {
-            inDesktopEntry = (line == "[Desktop Entry]");
+        if (line.startsWith(u'[') && line.endsWith(u']')) {
+            inDesktopEntry = (line == "[Desktop Entry]"_L1);
             continue;
         }
 
@@ -53,7 +54,7 @@ void Shortcut::parseData()
             continue;
         }
 
-        qsizetype equalPos = line.indexOf('=');
+        qsizetype equalPos = line.indexOf(u'=');
         if (equalPos == -1) {
             continue;
         }
@@ -63,8 +64,40 @@ void Shortcut::parseData()
 
         if (key == "Name"_L1) {
             m_name = value;
+        } else if (key == "Exec"_L1) {
+            parseExecValue(value);
+        } else if (key == "Categories"_L1) {
+            m_category = value.section(';', 0, 0);
         } else if (key == "Icon"_L1) {
             m_icon = QIcon(value);
+        }
+    }
+}
+
+void Shortcut::parseExecValue(QStringView value)
+{
+    QStringList tokens = QProcess::splitCommand(value);
+    if (tokens.isEmpty()) {
+        return;
+    }
+
+    for (int i = 0; i < tokens.size(); ++i) {
+        const QString& token = tokens.at(i);
+        bool isFile = token.startsWith(u'/');
+
+        if (!isFile) {
+            if (token.startsWith("-p"_L1) || token.startsWith("--prefix"_L1)) {
+                qsizetype equalPos = token.indexOf(u'=');
+                if (equalPos == -1 && i + 1 < tokens.size() && !tokens.at(i + 1).startsWith('-')) {
+                    // --param value
+                    m_prefixName = tokens.at(i + 1);
+                } else {
+                    // --param=value
+                    m_prefixName = token.mid(equalPos + 1);
+                }
+            }
+        } else {
+            m_exeFilePath = token;
         }
     }
 }
@@ -82,6 +115,21 @@ QString Shortcut::path() const
 QString Shortcut::name() const
 {
     return m_name;
+}
+
+QString Shortcut::prefixName() const
+{
+    return m_prefixName;
+}
+
+QString Shortcut::exeFilePath() const
+{
+    return m_exeFilePath;
+}
+
+QString Shortcut::category() const
+{
+    return m_category;
 }
 
 ShortcutLocation Shortcut::location() const

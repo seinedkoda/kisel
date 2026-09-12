@@ -2,6 +2,8 @@
 
 #include <QAbstractTableModel>
 #include <QIcon>
+#include <QSortFilterProxyModel>
+#include <QCollator>
 
 #include "core/executablefile/executable_file.hpp"
 #include "core/prefix/prefix.hpp"
@@ -19,8 +21,8 @@ public:
     Q_ENUM(Roles)
 
     enum Columns {
-        Name = 0,
-        Location = 1
+        NameColumn = 0,
+        LocationColumn = 1
     };
     Q_ENUM(Columns)
 
@@ -50,5 +52,18 @@ private:
     static QString escapeExecArg(QString arg);
 
     QList<Shortcut*> m_shortcuts;
+};
+
+class ShortcutProxyModel : public QSortFilterProxyModel {
+    Q_OBJECT
+
+public:
+    explicit ShortcutProxyModel(QObject* parent = nullptr);
+
+protected:
+    [[nodiscard]] bool lessThan(const QModelIndex& sourceLeft, const QModelIndex& sourceRight) const override;
+
+private:
+    QCollator m_collator;
 };
 }

@@ -1,6 +1,7 @@
 #include "shortcut_model.hpp"
 
 #include <QBuffer>
+#include <QCollator>
 #include <QCryptographicHash>
 #include <QDir>
 #include <QSaveFile>
@@ -79,7 +80,7 @@ QVariant ShortcutModel::data(const QModelIndex& index, int role) const
         return shortcut->path();
     }
 
-    if (column == Columns::Name) {
+    if (column == Columns::NameColumn) {
         switch (role) {
         case Qt::DisplayRole:
         case NameRole:
@@ -91,7 +92,7 @@ QVariant ShortcutModel::data(const QModelIndex& index, int role) const
         }
     }
 
-    if (column == Columns::Location && role == Qt::DisplayRole) {
+    if (column == Columns::LocationColumn && role == Qt::DisplayRole) {
         return shortcut->location() == ShortcutLocation::Menu ? tr("Menu") : tr("Desktop");
     }
     return { };
@@ -289,4 +290,23 @@ void ShortcutModel::removeShortcut(Shortcut* removableShortcut)
             removeRows(row, 1);
         }
     }
+}
+
+ShortcutProxyModel::ShortcutProxyModel(QObject* parent)
+    : QSortFilterProxyModel(parent)
+{
+    setSortLocaleAware(true);
+    setSortCaseSensitivity(Qt::CaseInsensitive);
+    setDynamicSortFilter(true);
+
+    m_collator.setCaseSensitivity(Qt::CaseInsensitive);
+    m_collator.setNumericMode(true);
+}
+
+bool ShortcutProxyModel::lessThan(const QModelIndex& sourceLeft, const QModelIndex& sourceRight) const
+{
+    QVariant leftData = sourceModel()->data(sourceLeft);
+    QVariant rightData = sourceModel()->data(sourceRight);
+
+    return m_collator.compare(leftData.toString(), rightData.toString()) < 0;
 }
