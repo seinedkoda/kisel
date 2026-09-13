@@ -5,6 +5,9 @@ target_sources(kisel PRIVATE
     prefix/new_prefix_dialog.hpp prefix/new_prefix_dialog.cpp
     prefix/prefix_list_widget.hpp prefix/prefix_list_widget.cpp
     prefix/prefix_page.hpp prefix/prefix_page.cpp
+    prefix/prefix_platfrom_page.hpp prefix/prefix_platfrom_page.cpp
+    prefix/prefix_compatibility_page.hpp prefix/prefix_compatibility_page.cpp
+    prefix/prefix_services_page.hpp prefix/prefix_services_page.cpp
     prefix/prefix_settings_dialog.hpp prefix/prefix_settings_dialog.cpp
     prefix/prefix_components_dialog.hpp prefix/prefix_components_dialog.cpp
     compatibilitytools/old_device_info_widget.hpp compatibilitytools/old_device_info_widget.cpp

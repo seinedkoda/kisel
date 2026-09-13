@@ -41,6 +41,7 @@ sh -c "cp /src/build/kisel-*.rpm /output/"
 
 
 echo "Building Flatpak package..."
+cmake -S $PROJECT_DIR -B $BUILD_DIR -G Ninja -DCMAKE_BUILD_TYPE=Release && \
 cmake --build $BUILD_DIR --target flatpak-package
 
 

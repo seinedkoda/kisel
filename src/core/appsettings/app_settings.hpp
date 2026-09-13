@@ -27,6 +27,7 @@ public:
     void setLanguage(const QString& languageName);
     [[nodiscard]] QString language() const;
     void installLocale(QString localeName = "");
+    void saveLocale(const QString& localeName);
     [[nodiscard]] QString locale() const;
     [[nodiscard]] QStringList languagesList() const;
 

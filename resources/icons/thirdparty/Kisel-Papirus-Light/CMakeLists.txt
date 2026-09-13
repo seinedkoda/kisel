@@ -34,4 +34,5 @@ qt_add_resources(kisel "kisel-papirus-light"
     "16x16/start-here-symbolic.svg"
     "16x16/drive-harddisk.svg"
     "16x16/dialog-cancel.svg"
+    "16x16/computer.svg"
 )

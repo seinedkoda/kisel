@@ -183,6 +183,8 @@ void RunManager::setupUmuProcess()
     m_process.setArguments(args);
 
     env.insert("PROTONPATH"_L1, m_runConfig->ct()->path());
+    env.insert("GAMEID"_L1, prefixSettings->gameId());
+    env.insert("STORE"_L1, prefixSettings->store());
     env.insert("UMU_RUNTIME_UPDATE"_L1, APP_SETTINGS->runtimeAutoUpdate() ? Y : N);
     env.insert("UMU_USE_STEAM"_L1, prefixSettings->steamEnvEnabled() ? Y : N);
     env.insert("UMU_LOG"_L1, APP_SETTINGS->loggingEnabled() ? Y : N);

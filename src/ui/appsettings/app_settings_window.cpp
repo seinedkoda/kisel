@@ -117,6 +117,7 @@ AppSettingsWindow::AppSettingsWindow(QWidget* parent)
     new QListWidgetItem(QIcon::fromTheme("link"), tr("Shortcuts"), pageListView);
     stackedPages->addWidget(shortcutPage);
 
+    pageListView->setCurrentRow(0);
     pageListView->setFixedWidth(pageListView->sizeHintForColumn(0) + 6);
     resize(550, height());
 }

@@ -99,6 +99,7 @@ void AppSettings::setLanguage(const QString& languageName)
 
     const QString localeName = m_languageMap.value(languageName);
     installLocale(localeName);
+    saveLocale(localeName);
 }
 
 QString AppSettings::language() const
@@ -116,9 +117,12 @@ void AppSettings::installLocale(QString localeName)
     if (m_qTranslator.load(locale, "kisel"_L1, "_"_L1, ":/i18n"_L1)) {
         if (qApp->installTranslator(&m_qTranslator)) {
             m_currentLanguageName = locale.nativeLanguageName();
-            setValue("locale"_L1, localeName);
         }
     }
+}
+
+void AppSettings::saveLocale(const QString& localeName) {
+    setValue("locale"_L1, localeName);
 }
 
 QString AppSettings::locale() const

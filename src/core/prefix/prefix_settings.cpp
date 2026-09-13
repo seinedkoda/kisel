@@ -50,6 +50,26 @@ bool PrefixSettings::xaliaEnabled() const
     return value("xalia"_L1, true).toBool();
 }
 
+void PrefixSettings::setGameId(const QString& gameId)
+{
+    setValue("gameId"_L1, gameId);
+}
+
+QString PrefixSettings::gameId() const
+{
+    return value("gameId"_L1, QString()).toString();
+}
+
+void PrefixSettings::setStore(const QString& store)
+{
+    setValue("store"_L1, store);
+}
+
+QString PrefixSettings::store() const
+{
+    return value("store"_L1, QString()).toString();
+}
+
 void PrefixSettings::setNvapiEnabled(bool enabled)
 {
     setValue("nvapi"_L1, enabled);

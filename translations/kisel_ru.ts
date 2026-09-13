@@ -720,6 +720,54 @@
     </message>
 </context>
 <context>
+    <name>kisel::PrefixCompatibilityPage</name>
+    <message>
+        <location filename="../src/ui/prefix/prefix_compatibility_page.cpp" line="22"/>
+        <source>Compatibility tool</source>
+        <translation>Средство совместимости</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/prefix/prefix_compatibility_page.cpp" line="26"/>
+        <source>&lt;No installed&gt;</source>
+        <translation>&lt;Нет установленных&gt;</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/prefix/prefix_compatibility_page.cpp" line="44"/>
+        <source>Enable NVIDIA&apos;s NVAPI GPU support library</source>
+        <translation>Включить поддержку библиотеки NVAPI для NVIDIA GPU</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/prefix/prefix_compatibility_page.cpp" line="51"/>
+        <source>Enable Wayland driver</source>
+        <translation>Включить драйвер Wayland</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/prefix/prefix_compatibility_page.cpp" line="59"/>
+        <source>Enabling HDR auto-enables the wine-wayland driver as it is a requirement</source>
+        <translation>Автоматически включает wine-wayland драйвер, поскольку это является обязательным требованием</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/prefix/prefix_compatibility_page.cpp" line="66"/>
+        <source>Enable WOW64</source>
+        <translation>Включить WOW64</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/prefix/prefix_compatibility_page.cpp" line="67"/>
+        <source>Compatibility with 32-bit applications</source>
+        <translation>Совместимость с 32-битными приложениями</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/prefix/prefix_compatibility_page.cpp" line="74"/>
+        <source>SDL input instead of HIDRAW/Steam Input</source>
+        <translation>SDL ввод вместо HIDRAW/Steam Input</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/prefix/prefix_compatibility_page.cpp" line="81"/>
+        <source>OpenGL instead of Vulkan</source>
+        <translation>OpenGL вместо Vulkan</translation>
+    </message>
+</context>
+<context>
     <name>kisel::PrefixComponentsDialog</name>
     <message>
         <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="24"/>
@@ -945,124 +993,127 @@
     </message>
 </context>
 <context>
-    <name>kisel::PrefixSettingsDialog</name>
+    <name>kisel::PrefixPlatformPage</name>
     <message>
-        <location filename="../src/ui/prefix/prefix_settings_dialog.cpp" line="131"/>
-        <source>Enable accessibility controls, such as controlling the application interface with a gamepad</source>
-        <translation>Включить специальные возможности управления, такие как управление интерфейсом с помощью геймпада</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/prefix/prefix_settings_dialog.cpp" line="39"/>
-        <source>Compatibility</source>
-        <translation>Совместимость</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/prefix/prefix_settings_dialog.cpp" line="70"/>
-        <source>Enable Wayland driver</source>
-        <translation>Включить драйвер Wayland</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/prefix/prefix_settings_dialog.cpp" line="93"/>
-        <source>SDL input instead of HIDRAW/Steam Input</source>
-        <translation>SDL ввод вместо HIDRAW/Steam Input</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/prefix/prefix_settings_dialog.cpp" line="157"/>
-        <source>Use Steam</source>
-        <translation>Использовать Steam</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/prefix/prefix_settings_dialog.cpp" line="149"/>
-        <source>Steam Environment</source>
-        <translation>Окружение Steam</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/prefix/prefix_settings_dialog.cpp" line="150"/>
-        <source>Using the Steam environment for better compatibility with some games</source>
-        <translation>Использование окружения Steam для лучшей совместимости с некоторыми играми</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/prefix/prefix_settings_dialog.cpp" line="85"/>
-        <source>Enable WOW64</source>
-        <translation>Включить WOW64</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/prefix/prefix_settings_dialog.cpp" line="27"/>
-        <source>&lt;h3&gt;Settings for the &quot;%1&quot; prefix&lt;/h3&gt;</source>
-        <translation>&lt;h3&gt;Настройки для префикса &quot;%1&quot;&lt;/h3&gt;</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/prefix/prefix_settings_dialog.cpp" line="30"/>
-        <source>&lt;i&gt;Hover over the option to learn more&lt;/i&gt;</source>
-        <translation>&lt;i&gt;Наведите на опцию чтобы узнать больше&lt;/i&gt;</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/prefix/prefix_settings_dialog.cpp" line="110"/>
-        <source>Services</source>
-        <translation>Сервисы</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/prefix/prefix_settings_dialog.cpp" line="114"/>
-        <source>Enable Performance Monitor (requires mangohud to be installed)</source>
-        <translation>Включить монитор производительности (требуется установленный mangohud)</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/prefix/prefix_settings_dialog.cpp" line="123"/>
-        <source>Enable Vulkan app screen capture for OBS (requires obs-vkcapture to be installed)</source>
-        <translation>Включить захват экрана приложений на Vulkan для OBS (требуется установленный obs-vkcapture)</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/prefix/prefix_settings_dialog.cpp" line="41"/>
-        <source>Compatibility tool</source>
-        <translation>Средство совместимости</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/prefix/prefix_settings_dialog.cpp" line="45"/>
-        <source>&lt;No installed&gt;</source>
-        <translation>&lt;Нет установленных&gt;</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/prefix/prefix_settings_dialog.cpp" line="63"/>
-        <source>Enable NVIDIA&apos;s NVAPI GPU support library</source>
-        <translation>Включить поддержку библиотеки NVAPI для NVIDIA GPU</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/prefix/prefix_settings_dialog.cpp" line="78"/>
-        <source>Enabling HDR auto-enables the wine-wayland driver as it is a requirement</source>
-        <translation>Автоматически включает wine-wayland драйвер, поскольку это является обязательным требованием</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/prefix/prefix_settings_dialog.cpp" line="86"/>
-        <source>Compatibility with 32-bit applications</source>
-        <translation>Совместимость с 32-битными приложениями</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/prefix/prefix_settings_dialog.cpp" line="100"/>
-        <source>OpenGL instead of Vulkan</source>
-        <translation>OpenGL вместо Vulkan</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/prefix/prefix_settings_dialog.cpp" line="140"/>
-        <source>Using Steam</source>
-        <translation>Использование Steam</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/prefix/prefix_settings_dialog.cpp" line="142"/>
+        <location filename="../src/ui/prefix/prefix_platfrom_page.cpp" line="21"/>
         <source>Don&apos;t use Steam</source>
         <translation>Не использовать Steam</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_settings_dialog.cpp" line="165"/>
+        <location filename="../src/ui/prefix/prefix_platfrom_page.cpp" line="70"/>
+        <source>None (Steam)</source>
+        <translation>Нет (Steam)</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/prefix/prefix_platfrom_page.cpp" line="30"/>
+        <source>Steam Environment</source>
+        <translation>Окружение Steam</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/prefix/prefix_platfrom_page.cpp" line="31"/>
+        <source>Using the Steam environment for better compatibility with some games</source>
+        <translation>Использование окружения Steam для лучшей совместимости с некоторыми играми</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/prefix/prefix_platfrom_page.cpp" line="42"/>
+        <source>&lt;a href=https://umu.openwinecomponents.org&gt;Online database&lt;/a&gt;</source>
+        <translation>&lt;a href=https://umu.openwinecomponents.org&gt;База данных онлайн&lt;/a&gt;</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/prefix/prefix_platfrom_page.cpp" line="60"/>
+        <source>Store</source>
+        <translation>Магазин</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/prefix/prefix_platfrom_page.cpp" line="22"/>
+        <source>Use umu-launcher to launch</source>
+        <translation>Использовать umu-launcher для запуска</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/prefix/prefix_platfrom_page.cpp" line="43"/>
+        <source>Database for finding game fixes
+(https://umu.openwinecomponents.org)</source>
+        <translation>База данных для поиска исправлений для игр
+(https://umu.openwinecomponents.org)</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/prefix/prefix_platfrom_page.cpp" line="47"/>
+        <source>Game ID</source>
+        <translation>Идентификатор игры</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/prefix/prefix_platfrom_page.cpp" line="52"/>
+        <source>Determines the umu-id from the umu databases for games requiring fixes</source>
+        <translation>Определяет umu-id в базе данных umu для игр, требующих исправлений</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/prefix/prefix_platfrom_page.cpp" line="71"/>
+        <source>Determines which store to use to search for UMU fixes</source>
+        <translation>Определяет, какой магазин следует использовать для поиска исправлений UMU</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/prefix/prefix_platfrom_page.cpp" line="87"/>
+        <source>Use Steam</source>
+        <translation>Использовать Steam</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/prefix/prefix_platfrom_page.cpp" line="95"/>
         <source>Steam Overlay</source>
         <translation>Оверлей Steam</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_settings_dialog.cpp" line="172"/>
+        <location filename="../src/ui/prefix/prefix_platfrom_page.cpp" line="102"/>
         <source>Enable OnlineFix</source>
         <translation>Включить OnlineFix</translation>
     </message>
+</context>
+<context>
+    <name>kisel::PrefixServicesPage</name>
     <message>
-        <location filename="../src/ui/prefix/prefix_settings_dialog.cpp" line="20"/>
+        <location filename="../src/ui/prefix/prefix_services_page.cpp" line="20"/>
+        <source>Enable Performance Monitor (requires mangohud to be installed)</source>
+        <translation type="unfinished">Включить монитор производительности (требуется установленный mangohud)</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/prefix/prefix_services_page.cpp" line="29"/>
+        <source>Enable Vulkan app screen capture for OBS (requires obs-vkcapture to be installed)</source>
+        <translation type="unfinished">Включить захват экрана приложений на Vulkan для OBS (требуется установленный obs-vkcapture)</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/prefix/prefix_services_page.cpp" line="37"/>
+        <source>Enable accessibility controls, such as controlling the application interface with a gamepad</source>
+        <translation type="unfinished">Включить специальные возможности управления, такие как управление интерфейсом с помощью геймпада</translation>
+    </message>
+</context>
+<context>
+    <name>kisel::PrefixSettingsDialog</name>
+    <message>
+        <location filename="../src/ui/prefix/prefix_settings_dialog.cpp" line="53"/>
+        <source>Compatibility</source>
+        <translation>Совместимость</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/prefix/prefix_settings_dialog.cpp" line="26"/>
+        <source>&lt;h3&gt;Settings for the &quot;%1&quot; prefix&lt;/h3&gt;</source>
+        <translation>&lt;h3&gt;Настройки для префикса &quot;%1&quot;&lt;/h3&gt;</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/prefix/prefix_settings_dialog.cpp" line="29"/>
+        <source>&lt;i&gt;Hover over the option to learn more&lt;/i&gt;</source>
+        <translation>&lt;i&gt;Наведите на опцию чтобы узнать больше&lt;/i&gt;</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/prefix/prefix_settings_dialog.cpp" line="57"/>
+        <source>Services</source>
+        <translation>Сервисы</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/prefix/prefix_settings_dialog.cpp" line="49"/>
+        <source>Platform</source>
+        <translation>Платформа</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/prefix/prefix_settings_dialog.cpp" line="19"/>
         <source>Kisel — Prefix Settings</source>
         <translation>Кисель — Настройки префикса</translation>
     </message>

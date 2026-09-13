@@ -33,6 +33,10 @@ public:
     [[nodiscard]] bool openglEnabled() const;
 
     // Using Steam
+    void setGameId(const QString& gameId);
+    [[nodiscard]] QString gameId() const;
+    void setStore(const QString& store);
+    [[nodiscard]] QString store() const;
     void setSteamEnabled(bool enabled);
     [[nodiscard]] bool steamEnabled() const;
     void setSteamEnvEnabled(bool enabled);
