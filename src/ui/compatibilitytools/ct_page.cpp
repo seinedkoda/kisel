@@ -12,6 +12,7 @@ using namespace kisel;
 
 CtPage::CtPage(QWidget* parent)
     : QWidget(parent)
+    , m_oldDeviceInfoWidget(new OldDeviceInfoWidget(this))
 {
     auto* layout = new QVBoxLayout(this);
     layout->setAlignment(Qt::AlignTop);
@@ -52,13 +53,15 @@ CtPage::CtPage(QWidget* parent)
     auto* ctInstalledProxyModel = new CtInstalledProxyModel(this);
     ctInstalledProxyModel->setSourceModel(CT_MODEL);
     defaultCtComboBox->setModel(ctInstalledProxyModel);
-    if (CT_MODEL->defaultCt() != nullptr) {
-        defaultCtComboBox->setCurrentIndex(CT_MODEL->ctIndex(CT_MODEL->defaultCt()));
-    }
-    connect(defaultCtComboBox, &QComboBox::currentIndexChanged, this, [](int index) {
+    defaultCtComboBox->setCurrentIndex(CT_MODEL->ctIndex(CT_MODEL->defaultCt()));
+    connect(defaultCtComboBox, &QComboBox::currentIndexChanged, this, [this, defaultCtComboBox](int index) {
         APP_SETTINGS->setDefaultCtPath(CT_MODEL->forIndex(index)->path());
+        m_oldDeviceInfoWidget->setHidden(OldDeviceInfoWidget::isCompatibleCt(defaultCtComboBox->currentText()));
     });
     layout->addWidget(defaultCtComboBox);
+
+    layout->addWidget(m_oldDeviceInfoWidget);
+    m_oldDeviceInfoWidget->setHidden(OldDeviceInfoWidget::isCompatibleCt(defaultCtComboBox->currentText()));
 
     auto* bottomDefaultCtLine = new QFrame(this);
     bottomDefaultCtLine->setFrameShape(QFrame::HLine);

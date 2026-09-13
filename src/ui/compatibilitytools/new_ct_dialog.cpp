@@ -17,12 +17,14 @@ NewCtDialog::NewCtDialog(QWidget* parent)
     , m_refreshReleasesButton(new QToolButton(this))
     , m_installationLocationsComboBox(new QComboBox(this))
     , m_addToInstallationButton(new QPushButton(QIcon::fromTheme("browser-download"), tr("Add to installation"), this))
+    , m_oldDeviceInfoWidget(new OldDeviceInfoWidget(this))
 {
     setWindowTitle(tr("Install a new tool"));
     setAttribute(Qt::WA_DeleteOnClose);
     setWindowModality(Qt::ApplicationModal);
 
     auto* layout = new QVBoxLayout(this);
+    layout->setAlignment(Qt::AlignTop);
 
     auto* ctSourceLabel = new QLabel(tr("Source:"), this);
     layout->addWidget(ctSourceLabel);
@@ -33,21 +35,12 @@ NewCtDialog::NewCtDialog(QWidget* parent)
     connect(m_ctSourceComboBox, &QComboBox::currentTextChanged, this, &NewCtDialog::fetchAvailableReleases);
     layout->addWidget(m_ctSourceComboBox);
 
-    if (!APP_SETTINGS->deviceSupportsModernVulkan()) {
-        auto* infoWidget = new QWidget(this);
-        layout->addWidget(infoWidget);
+    connect(m_ctSourceComboBox, &QComboBox::currentIndexChanged, this, [this](int index) {
+        m_oldDeviceInfoWidget->setHidden(OldDeviceInfoWidget::isCompatibleCt(m_ctSourceComboBox->currentText()));
+    });
 
-        auto* infoWidgetLayout = new QHBoxLayout(infoWidget);
-        infoWidgetLayout->setAlignment(Qt::AlignLeft);
-
-        auto* infoIcon = new QLabel(this);
-        infoIcon->setPixmap(QIcon::fromTheme("help-about").pixmap(16, 16));
-        infoWidgetLayout->addWidget(infoIcon);
-
-        auto* infoLabel = new QLabel(tr("Your device does not support Vulkan 1.4 or higher, Proton-CachyOS is set by default for compatibility"), this);
-        infoLabel->setWordWrap(true);
-        infoWidgetLayout->addWidget(infoLabel);
-    }
+    layout->addWidget(m_oldDeviceInfoWidget);
+    m_oldDeviceInfoWidget->setHidden(OldDeviceInfoWidget::isCompatibleCt(m_ctSourceComboBox->currentText()));
 
     auto* versionLabel = new QLabel(tr("Version:"), this);
     layout->addWidget(versionLabel);
@@ -76,9 +69,16 @@ NewCtDialog::NewCtDialog(QWidget* parent)
     }
     layout->addWidget(m_installationLocationsComboBox);
 
+    layout->addStretch();
+
+    auto* buttonBox = new QDialogButtonBox(QDialogButtonBox::Cancel, this);
+    buttonBox->addButton(m_addToInstallationButton, QDialogButtonBox::AcceptRole);
     m_addToInstallationButton->setEnabled(false);
-    connect(m_addToInstallationButton, &QPushButton::clicked, this, &NewCtDialog::onInstallClicked);
-    layout->addWidget(m_addToInstallationButton);
+
+    connect(buttonBox, &QDialogButtonBox::accepted, this, &NewCtDialog::onInstallClicked);
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+
+    layout->addWidget(buttonBox);
 
     fetchAvailableReleases();
     adjustSize();
@@ -122,5 +122,5 @@ void NewCtDialog::onReleasesLoaded(QObject* requester, const QMap<QString, QUrl>
 void NewCtDialog::onInstallClicked()
 {
     CT_INSTALLER->addToInstallation(m_releasesComboBox->currentText(), m_releasesComboBox->currentData().toUrl(), m_installationLocationsComboBox->currentText());
-    close();
+    accept();
 }

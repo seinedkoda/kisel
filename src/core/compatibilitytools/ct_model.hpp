@@ -18,6 +18,12 @@ public:
     };
     Q_ENUM(Roles);
 
+    enum Columns {
+        NameColumn = 0,
+        StatusColumn = 1
+    };
+    Q_ENUM(Columns)
+
     explicit CtModel(QObject* parent = nullptr);
 
     [[nodiscard]] int rowCount(const QModelIndex& parent = QModelIndex()) const override;

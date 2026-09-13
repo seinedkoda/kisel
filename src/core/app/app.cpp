@@ -9,12 +9,10 @@ Q_APPLICATION_STATIC(App, g_app)
 
 App::App(QObject* parent)
     : QObject(parent)
-    , m_runManager(new RunManager(this))
     , m_prefixModel(new PrefixModel(this))
     , m_ctModel(new CtModel(this))
-    , m_ctInstaller(new CtInstaller(this))
-    , m_shortcutModel(new ShortcutModel(this))
 {
+    m_runManager = new RunManager(m_prefixModel, m_ctModel, this);
 }
 
 App* App::instance()
@@ -39,10 +37,16 @@ CtModel* App::ctModel()
 
 CtInstaller* App::ctInstaller()
 {
+    if (m_ctInstaller == nullptr) {
+        m_ctInstaller = new CtInstaller(this);
+    }
     return m_ctInstaller;
 }
 
 ShortcutModel* App::shortcutModel()
 {
+    if (m_shortcutModel == nullptr) {
+        m_shortcutModel = new ShortcutModel(this);
+    }
     return m_shortcutModel;
 }

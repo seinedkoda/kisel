@@ -58,7 +58,8 @@ QVariant PrefixModel::data(const QModelIndex& index, int role) const
     }
 }
 
-bool PrefixModel::removeRows(int row, int count, const QModelIndex& parent) // NOLINT(bugprone-easily-swappable-parameters)
+// NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
+bool PrefixModel::removeRows(int row, int count, const QModelIndex& parent)
 {
     if (row < 0 || row >= m_prefixes.count()) {
         return false;

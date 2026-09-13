@@ -4,6 +4,8 @@
 #include <QDialog>
 #include <QToolButton>
 
+#include "ui/compatibilitytools/old_device_info_widget.hpp"
+
 namespace kisel {
 class NewCtDialog : public QDialog {
     Q_OBJECT
@@ -22,5 +24,6 @@ private:
     QToolButton* m_refreshReleasesButton;
     QComboBox* m_installationLocationsComboBox;
     QPushButton* m_addToInstallationButton;
+    OldDeviceInfoWidget* m_oldDeviceInfoWidget;
 };
 }

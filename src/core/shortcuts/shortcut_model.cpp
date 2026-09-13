@@ -51,7 +51,10 @@ QHash<int, QByteArray> ShortcutModel::roleNames() const
 {
     static const QHash<int, QByteArray> roles {
         { NameRole, "name" },
-        { PathRole, "path" }
+        { PathRole, "path" },
+        { ExeFileRole, "exeFile" },
+        { PrefixRole, "prefix" },
+        { LocationRole, "location" }
     };
 
     return roles;
@@ -75,27 +78,34 @@ QVariant ShortcutModel::data(const QModelIndex& index, int role) const
 
     int column = index.column();
     const Shortcut* shortcut = m_shortcuts.at(row);
+    bool isDesktopShortcut = shortcut->location() == ShortcutLocation::Desktop;
 
-    if (role == PathRole) {
-        return shortcut->path();
-    }
-
-    if (column == Columns::NameColumn) {
-        switch (role) {
-        case Qt::DisplayRole:
-        case NameRole:
-            return shortcut->name();
-        case Qt::DecorationRole:
-            return shortcut->icon();
-        default:
-            return { };
+    switch (role) {
+    case Qt::DisplayRole:
+        if (column == LocationColumn) {
+            return isDesktopShortcut ? tr("Desktop") : tr("Menu");
         }
+        return shortcut->name();
+    case Qt::DecorationRole:
+        if (column == NameColumn) {
+            return shortcut->icon();
+        } else if (column == LocationColumn) {
+            return isDesktopShortcut ? QIcon::fromTheme("user-desktop-symbolic") : QIcon::fromTheme("start-here-symbolic");
+        }
+        return { };
+    case NameRole:
+        return shortcut->name();
+    case PathRole:
+        return shortcut->path();
+    case ExeFileRole:
+        return shortcut->exeFilePath();
+    case PrefixRole:
+        return shortcut->prefixName();
+    case LocationRole:
+        return shortcut->location();
+    default:
+        return { };
     }
-
-    if (column == Columns::LocationColumn && role == Qt::DisplayRole) {
-        return shortcut->location() == ShortcutLocation::Menu ? tr("Menu") : tr("Desktop");
-    }
-    return { };
 }
 
 QVariant ShortcutModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -105,16 +115,17 @@ QVariant ShortcutModel::headerData(int section, Qt::Orientation orientation, int
     }
 
     switch (section) {
-    case 0:
+    case NameColumn:
         return tr("Name");
-    case 1:
+    case LocationColumn:
         return tr("Location");
     default:
         return { };
     }
 }
 
-bool ShortcutModel::removeRows(int row, int count, const QModelIndex& parent) // NOLINT(bugprone-easily-swappable-parameters)
+// NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
+bool ShortcutModel::removeRows(int row, int count, const QModelIndex& parent)
 {
     if (row < 0 || row >= m_shortcuts.count()) {
         return false;

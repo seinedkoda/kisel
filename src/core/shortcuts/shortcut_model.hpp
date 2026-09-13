@@ -16,7 +16,10 @@ class ShortcutModel : public QAbstractTableModel {
 public:
     enum Roles {
         NameRole = Qt::UserRole + 1,
-        PathRole
+        PathRole,
+        ExeFileRole,
+        PrefixRole,
+        LocationRole
     };
     Q_ENUM(Roles)
 

@@ -44,28 +44,26 @@ QVariant CtModel::data(const QModelIndex& index, int role) const
     int column = index.column();
     const Ct* ct = m_cts.at(row);
 
-    if (column == 0) {
-        switch (role) {
-        case Qt::DisplayRole:
-            return ct->name();
-        case Qt::DecorationRole:
-            return ct->icon();
-        default:
-            return { };
-        }
-    } else if (column == 1) {
-        switch (role) {
-        case Qt::DisplayRole:
+    switch (role) {
+    case Qt::DisplayRole:
+        if (column == StatusColumn) {
             return Ct::statusToString(ct->status());
-        case StatusRole:
-            return ct->status();
-        case ProgressRole:
-            return ct->progress();
-        default:
-            return { };
         }
+        return ct->name();
+    case Qt::DecorationRole:
+        if (column == NameColumn) {
+            return ct->icon();
+        }
+        return { };
+    case PathRole:
+        return ct->path();
+    case StatusRole:
+        return ct->status();
+    case ProgressRole:
+        return ct->progress();
+    default:
+        return { };
     }
-    return { };
 }
 
 QHash<int, QByteArray> CtModel::roleNames() const
@@ -87,16 +85,17 @@ QVariant CtModel::headerData(int section, Qt::Orientation orientation, int role)
     }
 
     switch (section) {
-    case 0:
+    case NameColumn:
         return tr("Name");
-    case 1:
+    case StatusColumn:
         return tr("Status");
     default:
         return { };
     }
 }
 
-bool CtModel::removeRows(int row, int count, const QModelIndex& parent) // NOLINT(bugprone-easily-swappable-parameters)
+// NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
+bool CtModel::removeRows(int row, int count, const QModelIndex& parent)
 {
     if (row < 0 || row >= m_cts.count()) {
         return false;

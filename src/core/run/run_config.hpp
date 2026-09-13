@@ -21,7 +21,6 @@ public:
     [[nodiscard]] QString exeName() const;
     [[nodiscard]] const QIcon& exeIcon() const;
     void setPrefix(Prefix* prefix);
-    void setPrefixName(const QString& prefixName);
     [[nodiscard]] Prefix* prefix() const;
     void setCt(Ct* ct);
     [[nodiscard]] Ct* ct() const;

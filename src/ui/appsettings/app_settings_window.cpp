@@ -100,6 +100,7 @@ AppSettingsWindow::AppSettingsWindow(QWidget* parent)
     stackedPages->addWidget(ctPage);
 
     auto* shortcutPage = new ShortcutsListWidget(this);
+    shortcutPage->layout()->setContentsMargins(0, 0, 0, 0);
     new QListWidgetItem(QIcon::fromTheme("link"), tr("Shortcuts"), pageListView);
     stackedPages->addWidget(shortcutPage);
 

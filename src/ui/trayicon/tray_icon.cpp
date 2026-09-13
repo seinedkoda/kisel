@@ -3,39 +3,38 @@
 #include <QAction>
 #include <QCoreApplication>
 
-#include "core/app/app.hpp"
-
 using namespace kisel;
 
 TrayIcon::TrayIcon(RunManager* runManager)
-    : QObject(runManager)
-    , m_trayIcon(new QSystemTrayIcon(QIcon(":/icons/kisel.svg"), this))
+    : QSystemTrayIcon(QIcon(":/icons/kisel.svg"), runManager)
+    , m_runManager(runManager)
 {
-    auto* terminateAction = new QAction(tr("Terminate the process"), &m_trayMenu);
-    connect(terminateAction, &QAction::triggered, this, [runManager]() { runManager->stop(); });
-    m_trayMenu.addAction(terminateAction);
-
-    m_trayMenu.addSeparator();
-
-    auto* quitAction = new QAction(tr("Exit"), this);
-    connect(quitAction, &QAction::triggered, this, [runManager]() {
-        runManager->stop();
-        qApp->quit();
-    });
-    m_trayMenu.addAction(quitAction);
-
-    m_trayIcon->setContextMenu(&m_trayMenu);
-
     connect(runManager, &RunManager::runningChanged, this, &TrayIcon::onRunningChanged);
+
+    QAction* terminateAction = m_menu.addAction(tr("Terminate the process"));
+    connect(terminateAction, &QAction::triggered, runManager, &RunManager::stop);
+
+    m_menu.addSeparator();
+
+    auto* quitAction = m_menu.addAction(tr("Exit"));
+    connect(quitAction, &QAction::triggered, this, &TrayIcon::onQuitTriggered);
+
+    setContextMenu(&m_menu);
 }
 
 void TrayIcon::onRunningChanged(bool isRunning)
 {
     if (isRunning) {
-        m_trayIcon->show();
-        m_trayIcon->setToolTip(tr("Kisel: %1").arg(RUN_MANAGER->taskName()));
+        show();
+        setToolTip(tr("Kisel: %1").arg(m_runManager->taskName()));
     } else {
-        m_trayIcon->setToolTip(tr("Kisel"));
-        m_trayIcon->hide();
+        setToolTip(tr("Kisel"));
+        hide();
     }
+}
+
+void TrayIcon::onQuitTriggered()
+{
+    m_runManager->stop();
+    qApp->quit();
 }

@@ -5,7 +5,7 @@
 #include "core/shortcuts/shortcut_model.hpp"
 
 namespace kisel {
-class ShortcutsListWidget : public QTableView {
+class ShortcutsListWidget : public QWidget {
     Q_OBJECT
 
 public:
@@ -14,7 +14,11 @@ public:
 protected:
     void contextMenuEvent(QContextMenuEvent* event) override;
 
+private slots:
+    void onCreateShortcutClicked();
+
 private:
     ShortcutProxyModel* m_proxyModel;
+    QTableView* m_tableView;
 };
 }

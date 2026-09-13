@@ -1,6 +1,5 @@
 #include "run_config.hpp"
 
-#include "core/app/app.hpp"
 #include "core/appsettings/app_settings.hpp"
 #include "core/executablefile/executable_file.hpp"
 
@@ -41,17 +40,6 @@ const QIcon& RunConfig::exeIcon() const
 void RunConfig::setPrefix(Prefix* prefix)
 {
     m_prefix = prefix;
-}
-
-void RunConfig::setPrefixName(const QString& prefixName)
-{
-    Prefix* prefix = PREFIX_MODEL->forName(prefixName);
-    if (prefix == nullptr) {
-        qWarning() << "Prefix" << prefixName << "not found, default prefix used";
-        m_prefix = PREFIX_MODEL->defaultPrefix();
-    } else {
-        m_prefix = prefix;
-    }
 }
 
 Prefix* RunConfig::prefix() const

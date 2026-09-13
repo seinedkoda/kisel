@@ -2,6 +2,8 @@
 
 #include <QProcess>
 
+#include "core/compatibilitytools/ct_model.hpp"
+#include "core/prefix/prefix_model.hpp"
 #include "run_config.hpp"
 
 namespace kisel {
@@ -25,7 +27,7 @@ public:
     };
     Q_ENUM(RunningError)
 
-    explicit RunManager(QObject* parent = nullptr);
+    explicit RunManager(PrefixModel* prefixModel, CtModel* ctModel, QObject* parent = nullptr);
 
     void run(RunConfig* runConfig);
     void runWineCfg(const Prefix* prefix);
@@ -56,8 +58,10 @@ private:
     void showError(const QString& errorText, RunningError error, bool emitText = false);
 
     QProcess m_process;
-    bool m_isRunning = false;
-    RunConfig* m_runConfig;
     QString m_currentTaskName;
+    bool m_isRunning = false;
+    PrefixModel* m_prefixModel;
+    CtModel* m_ctModel;
+    RunConfig* m_runConfig;
 };
 }

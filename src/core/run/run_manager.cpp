@@ -1,9 +1,7 @@
 #include "run_manager.hpp"
 
 #include "core/appsettings/app_settings.hpp"
-#include "core/compatibilitytools/ct_model.hpp"
 #include "core/executablefile/executable_file.hpp"
-#include "core/app/app.hpp"
 #include "run_config.hpp"
 
 using namespace Qt::StringLiterals;
@@ -12,8 +10,10 @@ using namespace kisel;
 static const auto Y = "1"_L1;
 static const auto N = "0"_L1;
 
-RunManager::RunManager(QObject* parent)
+RunManager::RunManager(PrefixModel* prefixModel, CtModel* ctModel, QObject* parent)
     : QObject(parent)
+    , m_prefixModel(prefixModel)
+    , m_ctModel(ctModel)
     , m_runConfig(nullptr)
 {
     connect(&m_process, &QProcess::started, this, &RunManager::onProcessStarted);
@@ -92,7 +92,8 @@ bool RunManager::setupPrefix()
     Prefix* prefix = m_runConfig->prefix();
 
     if (prefix == nullptr || prefix->name().isEmpty()) {
-        prefix = PREFIX_MODEL->defaultPrefix();
+        qWarning() << "Prefix not found, default prefix used";
+        prefix = m_prefixModel->defaultPrefix();
         m_runConfig->setPrefix(prefix);
     }
 
@@ -103,7 +104,7 @@ bool RunManager::setupPrefix()
         }
     }
 
-    PREFIX_MODEL->refreshList();
+    m_prefixModel->refreshList();
     return true;
 }
 
@@ -114,11 +115,11 @@ bool RunManager::setupCt()
     const QString prefixCtPath = prefixSettings->ctPath();
 
     if (ct == nullptr || ct->path().isEmpty()) {
-        Ct* prefixCt = CT_MODEL->forPath(prefixCtPath);
+        Ct* prefixCt = m_ctModel->forPath(prefixCtPath);
         if (prefixCt != nullptr) {
             m_runConfig->setCt(prefixCt);
         } else {
-            Ct* defaultCt = CT_MODEL->defaultCt();
+            Ct* defaultCt = m_ctModel->defaultCt();
             if (defaultCt == nullptr || defaultCt->path().isEmpty()) {
                 showError("Cannot run with empty compatibility tool", InvalidCt);
                 return false;

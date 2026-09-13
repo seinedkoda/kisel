@@ -3,6 +3,7 @@
   <id>io.github.seinedkoda.kisel</id>
 
   <name>Kisel</name>
+  <name xml:lang="ru">Кисель</name>
   <developer id="io.github.seinedkoda">
     <name translate="no">Seined Koda</name>
   </developer>

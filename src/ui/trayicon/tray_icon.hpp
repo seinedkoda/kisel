@@ -7,7 +7,7 @@
 #include "core/run/run_manager.hpp"
 
 namespace kisel {
-class TrayIcon : public QObject {
+class TrayIcon : public QSystemTrayIcon {
     Q_OBJECT
 
 public:
@@ -15,9 +15,10 @@ public:
 
 private slots:
     void onRunningChanged(bool isRunning);
+    void onQuitTriggered();
 
 private:
-    QMenu m_trayMenu;
-    QSystemTrayIcon* m_trayIcon;
+    QMenu m_menu;
+    RunManager* m_runManager;
 };
 }

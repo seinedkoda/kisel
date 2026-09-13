@@ -13,7 +13,6 @@
 
 #include "core/app/app.hpp"
 #include "core/appsettings/app_settings.hpp"
-#include "core/compatibilitytools/ct_installer.hpp"
 #include "core/compatibilitytools/ct_model.hpp"
 #include "core/prefix/prefix_settings.hpp"
 #include "ui/aboutapp/about_app_dialog.hpp"
@@ -22,7 +21,7 @@
 #include "ui/prefix/prefix_components_dialog.hpp"
 #include "ui/prefix/prefix_list_widget.hpp"
 #include "ui/prefix/prefix_settings_dialog.hpp"
-#include "ui/shortcuts/shortcuts_dialog.hpp"
+#include "ui/shortcuts/edit_shortcuts_dialog.hpp"
 
 using namespace kisel;
 
@@ -77,8 +76,8 @@ MainWindow::MainWindow(const QString& exePath)
 
     auto* exeMenu = new QMenu(this);
 
-    auto* createShortcutAction = exeMenu->addAction(QIcon::fromTheme("link"), tr("Shortcuts"));
-    connect(createShortcutAction, &QAction::triggered, this, &MainWindow::onCreateShortcutTriggered);
+    auto* editShortcutsAction = exeMenu->addAction(QIcon::fromTheme("link"), tr("Shortcuts"));
+    connect(editShortcutsAction, &QAction::triggered, this, &MainWindow::onEditShortcutsTriggered);
 
     auto* clearExeAction = exeMenu->addAction(QIcon::fromTheme("edit-clear"), tr("Clear"));
     connect(clearExeAction, &QAction::triggered, this, [this]() { setExecutablePath(""); });
@@ -164,8 +163,8 @@ MainWindow::MainWindow(const QString& exePath)
     m_ctComboBox->setPlaceholderText(tr("Install a new one →"));
     ctInstalledProxyModel->setSourceModel(CT_MODEL);
     m_ctComboBox->setModel(ctInstalledProxyModel);
-    connect(CT_INSTALLER, &CtInstaller::newInstalled, this, [this]() {
-        if (m_ctComboBox->currentIndex() == -1) {
+    connect(CT_MODEL, &CtModel::rowsInserted, this, [this]() {
+        if (m_ctComboBox->currentIndex() == -1 && CT_MODEL->rowCount() > 0) {
             m_ctComboBox->setCurrentIndex(0);
         }
     });
@@ -384,9 +383,9 @@ void MainWindow::onRunStopTriggered()
     }
 }
 
-void MainWindow::onCreateShortcutTriggered()
+void MainWindow::onEditShortcutsTriggered()
 {
-    auto* shortcutDialog = new ShortcutDialog(m_runConfig, this);
+    auto* shortcutDialog = new EditShortcutsDialog(m_runConfig->exePath(), m_runConfig->prefix(), this);
     shortcutDialog->show();
 }
 

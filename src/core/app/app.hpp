@@ -9,6 +9,7 @@
 #include "core/shortcuts/shortcut_model.hpp"
 
 namespace kisel {
+#define APP App::instance()
 #define RUN_MANAGER App::instance()->runManager()
 #define PREFIX_MODEL App::instance()->prefixModel()
 #define CT_MODEL App::instance()->ctModel()
@@ -30,7 +31,7 @@ private:
     RunManager* m_runManager;
     PrefixModel* m_prefixModel;
     CtModel* m_ctModel;
-    CtInstaller* m_ctInstaller;
-    ShortcutModel* m_shortcutModel;
+    CtInstaller* m_ctInstaller = nullptr;
+    ShortcutModel* m_shortcutModel = nullptr;
 };
 }

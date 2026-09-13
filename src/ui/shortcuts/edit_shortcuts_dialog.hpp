@@ -6,14 +6,16 @@
 #include <QLineEdit>
 #include <QToolButton>
 
-#include "core/run/run_config.hpp"
+#include "core/executablefile/executable_file.hpp"
+#include "core/prefix/prefix.hpp"
 #include "core/shortcuts/shortcut.hpp"
 
 namespace kisel {
-class ShortcutDialog : public QDialog {
+class EditShortcutsDialog : public QDialog {
     Q_OBJECT
+
 public:
-    ShortcutDialog(RunConfig* runConfig, QWidget* parent = nullptr);
+    EditShortcutsDialog(const QString& exeFilePath, Prefix* prefix = nullptr, QWidget* parent = nullptr);
 
 private slots:
     void onAccepted();

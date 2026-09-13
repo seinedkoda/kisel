@@ -21,7 +21,7 @@ private slots:
     static void onOpenCtListWidget();
     void onExeSelectionClicked();
     void onRunStopTriggered();
-    void onCreateShortcutTriggered();
+    void onEditShortcutsTriggered();
     void onRunningError(kisel::RunManager::RunningError error, const QString& errorText);
     void onRunningChanged(bool isRunning);
     void onCurrentPrefixTextChanged(const QString& prefixName);

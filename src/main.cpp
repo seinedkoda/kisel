@@ -34,7 +34,7 @@ int main(int argc, char* argv[])
     } else if (parser.isSet(prefixOption)) {
         kisel::RunConfig runConfig;
         runConfig.setExecutablePath(positionalArgs.first());
-        runConfig.setPrefixName(parser.value(prefixOption));
+        runConfig.setPrefix(kisel::PREFIX_MODEL->forName(parser.value(prefixOption)));
         kisel::RUN_MANAGER->run(&runConfig);
     } else {
         auto* mainWindow = new kisel::MainWindow(positionalArgs.first());

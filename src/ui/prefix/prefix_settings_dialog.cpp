@@ -6,8 +6,8 @@
 #include <QStandardPaths>
 #include <QVBoxLayout>
 
-#include "core/appsettings/app_settings.hpp"
 #include "core/app/app.hpp"
+#include "core/appsettings/app_settings.hpp"
 
 using namespace Qt::StringLiterals;
 using namespace kisel;
@@ -15,6 +15,7 @@ using namespace kisel;
 PrefixSettingsDialog::PrefixSettingsDialog(Prefix* prefix, QWidget* parent)
     : QDialog(parent)
     , m_prefix(prefix)
+    , m_oldDeviceInfoWidget(new OldDeviceInfoWidget(this))
 {
     setWindowTitle(tr("Kisel — Prefix Settings"));
     setAttribute(Qt::WA_DeleteOnClose);
@@ -49,10 +50,14 @@ PrefixSettingsDialog::PrefixSettingsDialog(Prefix* prefix, QWidget* parent)
     if (prefixCt != nullptr) {
         ctComboBox->setCurrentIndex(CT_MODEL->ctIndex(prefixCt));
     }
-    connect(ctComboBox, &QComboBox::currentIndexChanged, this, [this](int index) {
+    connect(ctComboBox, &QComboBox::currentIndexChanged, this, [this, ctComboBox](int index) {
         m_prefix->settings()->setCtPath(CT_MODEL->forIndex(index)->path());
+        m_oldDeviceInfoWidget->setHidden(OldDeviceInfoWidget::isCompatibleCt(ctComboBox->currentText()));
     });
     compatibilityTabLayout->addWidget(ctComboBox);
+
+    compatibilityTabLayout->addWidget(m_oldDeviceInfoWidget);
+    m_oldDeviceInfoWidget->setHidden(OldDeviceInfoWidget::isCompatibleCt(ctComboBox->currentText()));
 
     auto* nvapiCheckBox = new QCheckBox("NVAPI"_L1, this);
     nvapiCheckBox->setToolTip(tr("Enable NVIDIA's NVAPI GPU support library"));

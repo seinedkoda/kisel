@@ -10,6 +10,7 @@
 
 #include "core/app/app.hpp"
 #include "core/compatibilitytools/ct_installer.hpp"
+#include "core/compatibilitytools/ct_model.hpp"
 #include "ui/compatibilitytools/new_ct_dialog.hpp"
 
 using namespace kisel;
@@ -31,8 +32,8 @@ CtListWidget::CtListWidget(QWidget* parent)
     auto* delegate = new ProgressBarDelegate(m_ctTableView);
     m_ctTableView->setItemDelegateForColumn(1, delegate);
     m_ctTableView->resizeColumnsToContents();
-    m_ctTableView->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
-    m_ctTableView->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
+    m_ctTableView->horizontalHeader()->setSectionResizeMode(CtModel::NameColumn, QHeaderView::Stretch);
+    m_ctTableView->horizontalHeader()->setSectionResizeMode(CtModel::StatusColumn, QHeaderView::ResizeToContents);
     m_ctTableView->verticalHeader()->hide();
     m_ctTableView->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(m_ctTableView, &QTableView::customContextMenuRequested, this, &CtListWidget::onContextMenuRequested);

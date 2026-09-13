@@ -1,4 +1,4 @@
-#include "shortcuts_dialog.hpp"
+#include "edit_shortcuts_dialog.hpp"
 
 #include <QDialogButtonBox>
 #include <QGroupBox>
@@ -9,15 +9,16 @@
 
 #include "core/app/app.hpp"
 #include "core/appsettings/app_settings.hpp"
+#include "core/executablefile/executable_file.hpp"
 #include "core/prefix/prefix_model.hpp"
 
 using namespace Qt::StringLiterals;
 using namespace kisel;
 
-ShortcutDialog::ShortcutDialog(RunConfig* runConfig, QWidget* parent)
+EditShortcutsDialog::EditShortcutsDialog(const QString& exeFilePath, Prefix* prefix, QWidget* parent)
     : QDialog(parent)
-    , m_exeFile(runConfig->exeFile())
-    , m_currentPrefix(runConfig->prefix())
+    , m_exeFile(new ExecutableFile(exeFilePath, this))
+    , m_currentPrefix(prefix)
     , m_menuCheckBox(new QCheckBox(tr("Menu"), this))
     , m_desktopCheckbox(new QCheckBox(tr("Desktop"), this))
     , m_iconToolButton(new QToolButton(this))
@@ -26,7 +27,7 @@ ShortcutDialog::ShortcutDialog(RunConfig* runConfig, QWidget* parent)
     , m_categoryComboBox(new QComboBox(this))
     , m_iconMenu(new QMenu(this))
 {
-    setWindowTitle(tr("Shortcuts"));
+    setWindowTitle(tr("Kisel — Edit shortcuts"));
     setAttribute(Qt::WA_DeleteOnClose);
     setWindowModality(Qt::ApplicationModal);
     setMinimumWidth(300);
@@ -34,7 +35,7 @@ ShortcutDialog::ShortcutDialog(RunConfig* runConfig, QWidget* parent)
     auto* layout = new QVBoxLayout(this);
     layout->setAlignment(Qt::AlignTop);
 
-    auto* titleLabel = new QLabel(tr("<h3>Shortcuts</h3>"));
+    auto* titleLabel = new QLabel(tr("<h3>Edit shortcuts</h3>"));
     layout->addWidget(titleLabel);
 
     m_menuShortcut = SHORTCUT_MODEL->shortcut(m_exeFile->id(), ShortcutLocation::Menu);
@@ -135,7 +136,7 @@ ShortcutDialog::ShortcutDialog(RunConfig* runConfig, QWidget* parent)
     layout->addWidget(buttonBox);
 
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::close);
-    connect(buttonBox, &QDialogButtonBox::accepted, this, &ShortcutDialog::onAccepted);
+    connect(buttonBox, &QDialogButtonBox::accepted, this, &EditShortcutsDialog::onAccepted);
 
     setDefaultParameters();
 
@@ -152,7 +153,7 @@ ShortcutDialog::ShortcutDialog(RunConfig* runConfig, QWidget* parent)
     setFixedSize(size());
 }
 
-void ShortcutDialog::setDefaultParameters()
+void EditShortcutsDialog::setDefaultParameters()
 {
     const QString individualPrefixName = m_exeFile->id();
     m_individualPrefix = PREFIX_MODEL->forName(individualPrefixName);
@@ -169,29 +170,10 @@ void ShortcutDialog::setDefaultParameters()
 
     if (shortcut == nullptr) {
         m_nameEdit->setText(m_exeFile->baseName());
-        bool isIndividualPrefix = m_currentPrefix->name() == individualPrefixName;
-        if (isIndividualPrefix) {
-            m_prefixComboBox->setCurrentIndex(-1);
-        } else {
-            m_prefixComboBox->setCurrentText(m_currentPrefix->name());
-        }
-        m_prefixComboBox->setDisabled(isIndividualPrefix);
-        m_individualPrefixCheckBox->setChecked(isIndividualPrefix);
         m_categoryComboBox->setCurrentText(tr("Game"));
     } else {
         m_nameEdit->setText(shortcut->name());
         m_currentPrefix = PREFIX_MODEL->forName(shortcut->prefixName());
-        if (m_currentPrefix == nullptr) {
-            if (APP_SETTINGS->useIndividualPrefix()) {
-                m_prefixComboBox->setCurrentIndex(-1);
-            } else {
-                m_prefixComboBox->setCurrentText(PREFIX_MODEL->defaultPrefix()->name());
-            }
-        }
-        bool isIndividualPrefix = m_currentPrefix->name() == individualPrefixName;
-        m_prefixComboBox->setCurrentText(m_currentPrefix->name());
-        m_prefixComboBox->setDisabled(isIndividualPrefix);
-        m_individualPrefixCheckBox->setChecked(isIndividualPrefix);
         m_categoryComboBox->setCurrentText(categoryMap().value(shortcut->category()));
         QList<QSize> shortcutIconSizes = shortcut->icon().availableSizes();
         if (!shortcutIconSizes.isEmpty()) {
@@ -201,12 +183,30 @@ void ShortcutDialog::setDefaultParameters()
         }
     }
 
+    if (m_currentPrefix == nullptr) {
+        if (APP_SETTINGS->useIndividualPrefix()) {
+            m_prefixComboBox->setCurrentIndex(-1);
+        } else {
+            m_prefixComboBox->setCurrentText(PREFIX_MODEL->defaultPrefix()->name());
+        }
+    }
+
+    bool isIndividualPrefix = m_currentPrefix->name() == individualPrefixName;
+    if (isIndividualPrefix) {
+        m_prefixComboBox->setCurrentIndex(-1);
+    } else {
+        m_prefixComboBox->setCurrentText(m_currentPrefix->name());
+    }
+
+    m_prefixComboBox->setDisabled(isIndividualPrefix);
+    m_individualPrefixCheckBox->setChecked(isIndividualPrefix);
+
     if (!m_exeFile->icon().isNull()) {
         m_iconToolButton->setIcon(m_exeFile->icon().pixmap(m_currentIconSize).scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     }
 }
 
-void ShortcutDialog::setIconSizes(const QIcon& icon)
+void EditShortcutsDialog::setIconSizes(const QIcon& icon)
 {
     m_iconSizes = icon.availableSizes();
     std::ranges::sort(m_iconSizes,
@@ -219,7 +219,7 @@ void ShortcutDialog::setIconSizes(const QIcon& icon)
     }
 }
 
-void ShortcutDialog::onAccepted()
+void EditShortcutsDialog::onAccepted()
 {
     QString name = m_nameEdit->text();
     if (name.isEmpty()) {
@@ -250,7 +250,7 @@ void ShortcutDialog::onAccepted()
     close();
 }
 
-const QMap<QString, QString>& ShortcutDialog::categoryMap()
+const QMap<QString, QString>& EditShortcutsDialog::categoryMap()
 {
     static const QMap<QString, QString> categoryMap {
         { "Other"_L1, tr("Other") },
