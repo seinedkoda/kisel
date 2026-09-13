@@ -56,52 +56,62 @@
 <context>
     <name>kisel::AppSettingsWindow</name>
     <message>
-        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="21"/>
+        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="22"/>
         <source>Kisel — Settings</source>
         <translation>Кисель — Настройки</translation>
     </message>
     <message>
-        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="31"/>
+        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="32"/>
         <source>&lt;h3&gt;Global settings&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;Глобальные настройки&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="34"/>
+        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="35"/>
         <source>&lt;i&gt;To configure the executable launch settings in detail, go to the context menu of the selected prefix&lt;/i&gt;</source>
         <translation>&lt;i&gt;Для детальной настройки запуска исполняемого файла перейдите в контекстное меню выбранного префикса&lt;/i&gt;</translation>
     </message>
     <message>
-        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="55"/>
+        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="57"/>
         <source>General</source>
         <translation>Основное</translation>
     </message>
     <message>
-        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="95"/>
+        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="93"/>
+        <source>System</source>
+        <translation>Системная</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="108"/>
         <source>Prefixes</source>
         <translation>Префиксы</translation>
     </message>
     <message>
-        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="99"/>
+        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="112"/>
         <source>Compatibility</source>
         <translation>Совместимость</translation>
     </message>
     <message>
-        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="61"/>
+        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="63"/>
         <source>Language</source>
         <translation>Язык</translation>
     </message>
     <message>
-        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="72"/>
+        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="89"/>
+        <source>Icon theme type</source>
+        <translation>Тип темы значков</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="74"/>
         <source>Style</source>
         <translation>Стиль</translation>
     </message>
     <message>
-        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="104"/>
+        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="117"/>
         <source>Shortcuts</source>
         <translation>Ярлыки</translation>
     </message>
     <message>
-        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="87"/>
+        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="100"/>
         <source>Logging</source>
         <translation>Сохранение журнала запуска</translation>
     </message>

@@ -151,7 +151,7 @@ MainWindow::MainWindow(const QString& exePath)
     connect(prefixManageAction, &QAction::triggered, this, &MainWindow::onOpenPrefixListWidget);
 
     m_prefixMenuButton->setToolTip(tr("Open prefix menu"));
-    m_prefixMenuButton->setIcon(QIcon::fromTheme("open-menu"));
+    m_prefixMenuButton->setIcon(QIcon::fromTheme("open-menu-symbolic"));
     m_prefixMenuButton->setMenu(prefixMenu);
     m_prefixMenuButton->setPopupMode(QToolButton::InstantPopup);
     environmentBoxLayout->addWidget(m_prefixMenuButton, 2, 1);
@@ -171,7 +171,7 @@ MainWindow::MainWindow(const QString& exePath)
     environmentBoxLayout->addWidget(m_ctComboBox, 4, 0);
 
     m_ctWindowButton->setToolTip(tr("Open the Compatibility Tools window"));
-    m_ctWindowButton->setIcon(QIcon::fromTheme("view-list"));
+    m_ctWindowButton->setIcon(QIcon::fromTheme("view-list-details"));
     connect(m_ctWindowButton, &QToolButton::clicked, this, &MainWindow::onOpenCtListWidget);
     environmentBoxLayout->addWidget(m_ctWindowButton, 4, 1);
 

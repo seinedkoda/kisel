@@ -36,6 +36,9 @@ public:
     static QVersionNumber vulkanApiVersion();
     static bool deviceSupportsModernVulkan();
 
+    void setIconThemeType(int iconThemeType);
+    int iconThemeType();
+
     void setStyleName(const QString& styleName);
     QString styleName();
     void applyCurrentStyle();

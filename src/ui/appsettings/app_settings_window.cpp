@@ -13,6 +13,7 @@
 #include "ui/prefix/prefix_page.hpp"
 #include "ui/shortcuts/shortcuts_list_widget.hpp"
 
+using namespace Qt::StringLiterals;
 using namespace kisel;
 
 AppSettingsWindow::AppSettingsWindow(QWidget* parent)
@@ -32,7 +33,8 @@ AppSettingsWindow::AppSettingsWindow(QWidget* parent)
     layout->addWidget(titleLabel);
 
     auto* helpLabel = new QLabel(tr("<i>To configure the executable launch settings in detail, "
-                                    "go to the context menu of the selected prefix</i>"), this);
+                                    "go to the context menu of the selected prefix</i>"),
+        this);
     helpLabel->setWordWrap(true);
     layout->addWidget(helpLabel);
 
@@ -52,7 +54,7 @@ AppSettingsWindow::AppSettingsWindow(QWidget* parent)
     contentLayout->addWidget(stackedPages);
 
     auto* generalPage = new QWidget(this);
-    new QListWidgetItem(QIcon::fromTheme("user-home-symbolic"), tr("General"), pageListView);
+    new QListWidgetItem(QIcon::fromTheme("user-home"), tr("General"), pageListView);
     stackedPages->addWidget(generalPage);
 
     auto* generalPageLayout = new QVBoxLayout(generalPage);
@@ -84,6 +86,17 @@ AppSettingsWindow::AppSettingsWindow(QWidget* parent)
     connect(styleComboBox, &QComboBox::currentTextChanged, this, [](const QString& styleName) { APP_SETTINGS->setStyleName(styleName); });
     generalPageLayout->addWidget(styleComboBox);
 
+    auto* iconThemeTypeLabel = new QLabel(tr("Icon theme type"), this);
+    generalPageLayout->addWidget(iconThemeTypeLabel);
+
+    auto* iconThemeTypeComboBox = new QComboBox(this);
+    iconThemeTypeComboBox->addItems({ tr("System"), "Kisel-Papirus-Light"_L1, "Kisel-Papirus-Dark"_L1 });
+    iconThemeTypeComboBox->setCurrentIndex(APP_SETTINGS->iconThemeType());
+    connect(iconThemeTypeComboBox, &QComboBox::currentIndexChanged, this, [](int index) {
+        APP_SETTINGS->setIconThemeType(index);
+    });
+    generalPageLayout->addWidget(iconThemeTypeComboBox);
+
     auto* loggingCheckBox = new QCheckBox(tr("Logging"), this);
     loggingCheckBox->setChecked(APP_SETTINGS->loggingEnabled());
     connect(loggingCheckBox, &QCheckBox::clicked, this, [](bool checked) {
@@ -92,7 +105,7 @@ AppSettingsWindow::AppSettingsWindow(QWidget* parent)
     generalPageLayout->addWidget(loggingCheckBox);
 
     auto* prefixPage = new PrefixPage(this);
-    new QListWidgetItem(QIcon::fromTheme("drive-symbolic"), tr("Prefixes"), pageListView);
+    new QListWidgetItem(QIcon::fromTheme("drive-harddisk"), tr("Prefixes"), pageListView);
     stackedPages->addWidget(prefixPage);
 
     auto* ctPage = new CtPage(this);

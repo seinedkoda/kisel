@@ -7,6 +7,7 @@
 #include <QStandardPaths>
 #include <QStyle>
 #include <QStyleFactory>
+#include <QStyleHints>
 #include <QVulkanInstance>
 #include <utility>
 
@@ -19,8 +20,20 @@ Q_APPLICATION_STATIC(AppSettings, g_appSettings)
 AppSettings::AppSettings(QObject* parent)
     : QSettings(QDir::homePath() % "/.config/kisel/kisel.conf"_L1, QSettings::IniFormat, parent)
 {
-    QIcon::setThemeSearchPaths(QIcon::themeSearchPaths() << ":/icons/thirdparty");
-    QIcon::setFallbackThemeName("Papirus");
+    QIcon::setThemeSearchPaths(QIcon::themeSearchPaths() << ":/thirdparty");
+
+    if (QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark) {
+        QIcon::setFallbackThemeName("Kisel-Papirus-Dark");
+    } else {
+        QIcon::setFallbackThemeName("Kisel-Papirus-Light");
+    }
+
+    int iconTheme = iconThemeType();
+    if (iconTheme == 1) {
+        QIcon::setThemeName("Kisel-Papirus-Light");
+    } else if (iconTheme == 2) {
+        QIcon::setThemeName("Kisel-Papirus-Dark");
+    }
 
     m_appDirs = { prefixesDir(), ctsDirList().first() };
 
@@ -141,6 +154,19 @@ bool AppSettings::deviceSupportsModernVulkan()
 {
     static QVersionNumber modernApiVersion(1, 4);
     return vulkanApiVersion() >= modernApiVersion;
+}
+
+void AppSettings::setIconThemeType(int iconThemeType)
+{
+    setValue("iconThemeType"_L1, iconThemeType);
+}
+
+int AppSettings::iconThemeType()
+{
+    // 0 - System theme
+    // 1 - Kisel-Papirus-Light
+    // 2 - Kisel-Papirus-Dark
+    return value("iconThemeType"_L1, 0).toInt();
 }
 
 void AppSettings::setStyleName(const QString& styleName)
