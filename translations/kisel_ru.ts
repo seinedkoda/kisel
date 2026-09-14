@@ -768,7 +768,7 @@
     <name>kisel::PrefixComponentsDialog</name>
     <message>
         <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="24"/>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="160"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="159"/>
         <source>Install selected</source>
         <translation>Установить выбранное</translation>
     </message>
@@ -813,82 +813,82 @@
         <translation>Поиск по имени</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="116"/>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="135"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="115"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="134"/>
         <source>Update error</source>
         <translation>Ошибка обновления</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="117"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="116"/>
         <source>Failed to get list of components available for installation: %1</source>
         <translation>Не удалось получить список компонентов доступных для установки: %1</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="136"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="135"/>
         <source>Failed to get list of installed components: %1</source>
         <translation>Не удалось получить список уже установленных компонентов: %1</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="185"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="184"/>
         <source>&lt;b&gt;Description:&lt;/b&gt; %1</source>
         <translation>&lt;b&gt;Описание:&lt;/b&gt; %1</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="191"/>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="205"/>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="274"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="190"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="204"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="273"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="191"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="190"/>
         <source>Cancel the installation process?</source>
         <translation>Отменить процесс установки?</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="206"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="205"/>
         <source>Install selected components?
 %1</source>
         <translation>Установить выбранные компоненты?
 %1</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="201"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="200"/>
         <source>There is nothing to install</source>
         <translation>Нечего устанавливать</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="201"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="200"/>
         <source>Mark the components to install in the prefix</source>
         <translation>Отметьте компоненты для установки в префикс</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="228"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="227"/>
         <source>Stop</source>
         <translation>Остановить</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="242"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="241"/>
         <source>Installation error</source>
         <translation>Ошибка установки</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="243"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="242"/>
         <source>Failed to install the selected components: %1</source>
         <translation>Не удалось установить выбранные компоненты: %1</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="253"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="252"/>
         <source>Completed</source>
         <translation>Завершено</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="253"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="252"/>
         <source>Successfully installed!</source>
         <translation>Успешно установлено</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="274"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="273"/>
         <source>Cancel the installation process and close the window?</source>
         <translation>Отменить процесс установки и закрыть окно?</translation>
     </message>

@@ -163,7 +163,7 @@ MainWindow::MainWindow(const QString& exePath)
     m_ctComboBox->setPlaceholderText(tr("Install a new one →"));
     ctInstalledProxyModel->setSourceModel(CT_MODEL);
     m_ctComboBox->setModel(ctInstalledProxyModel);
-    connect(CT_MODEL, &CtModel::rowsInserted, this, [this]() {
+    connect(ctInstalledProxyModel, &CtModel::rowsInserted, this, [this]() {
         if (m_ctComboBox->currentIndex() == -1 && CT_MODEL->rowCount() > 0) {
             m_ctComboBox->setCurrentIndex(0);
         }
