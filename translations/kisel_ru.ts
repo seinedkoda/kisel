@@ -160,17 +160,17 @@
 <context>
     <name>kisel::CtInstallProcess</name>
     <message>
-        <location filename="../src/core/compatibilitytools/ct_installer.cpp" line="45"/>
+        <location filename="../src/core/compatibilitytools/ct_installer.cpp" line="50"/>
         <source>Cannot create temporary file</source>
         <translation>Невозможно создать временный файл</translation>
     </message>
     <message>
-        <location filename="../src/core/compatibilitytools/ct_installer.cpp" line="59"/>
+        <location filename="../src/core/compatibilitytools/ct_installer.cpp" line="64"/>
         <source>Cannot create directory: %1</source>
         <translation>Невозможно создать директорию: %1</translation>
     </message>
     <message>
-        <location filename="../src/core/compatibilitytools/ct_installer.cpp" line="74"/>
+        <location filename="../src/core/compatibilitytools/ct_installer.cpp" line="79"/>
         <source>Archive extraction error: %1</source>
         <translation>Ошибка извлечения архива: %1</translation>
     </message>
@@ -178,17 +178,17 @@
 <context>
     <name>kisel::CtInstaller</name>
     <message>
-        <location filename="../src/core/compatibilitytools/ct_installer.cpp" line="138"/>
+        <location filename="../src/core/compatibilitytools/ct_installer.cpp" line="143"/>
         <source>Invalid response format from Server API</source>
         <translation>Неверный формат ответа от API сервера</translation>
     </message>
     <message>
-        <location filename="../src/core/compatibilitytools/ct_installer.cpp" line="154"/>
+        <location filename="../src/core/compatibilitytools/ct_installer.cpp" line="159"/>
         <source>No suitable installation path specified: %1</source>
         <translation>Не указан подходящий путь установки: %1</translation>
     </message>
     <message>
-        <location filename="../src/core/compatibilitytools/ct_installer.cpp" line="161"/>
+        <location filename="../src/core/compatibilitytools/ct_installer.cpp" line="166"/>
         <source>Cannot create directory: %1</source>
         <translation>Невозможно создать директорию: %1</translation>
     </message>
@@ -768,7 +768,7 @@
     <name>kisel::PrefixComponentsDialog</name>
     <message>
         <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="24"/>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="154"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="160"/>
         <source>Install selected</source>
         <translation>Установить выбранное</translation>
     </message>
@@ -813,82 +813,82 @@
         <translation>Поиск по имени</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="110"/>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="129"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="116"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="135"/>
         <source>Update error</source>
         <translation>Ошибка обновления</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="111"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="117"/>
         <source>Failed to get list of components available for installation: %1</source>
         <translation>Не удалось получить список компонентов доступных для установки: %1</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="130"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="136"/>
         <source>Failed to get list of installed components: %1</source>
         <translation>Не удалось получить список уже установленных компонентов: %1</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="179"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="185"/>
         <source>&lt;b&gt;Description:&lt;/b&gt; %1</source>
         <translation>&lt;b&gt;Описание:&lt;/b&gt; %1</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="185"/>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="199"/>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="266"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="191"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="205"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="274"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="185"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="191"/>
         <source>Cancel the installation process?</source>
         <translation>Отменить процесс установки?</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="200"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="206"/>
         <source>Install selected components?
 %1</source>
         <translation>Установить выбранные компоненты?
 %1</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="195"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="201"/>
         <source>There is nothing to install</source>
         <translation>Нечего устанавливать</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="195"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="201"/>
         <source>Mark the components to install in the prefix</source>
         <translation>Отметьте компоненты для установки в префикс</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="222"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="228"/>
         <source>Stop</source>
         <translation>Остановить</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="234"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="242"/>
         <source>Installation error</source>
         <translation>Ошибка установки</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="235"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="243"/>
         <source>Failed to install the selected components: %1</source>
         <translation>Не удалось установить выбранные компоненты: %1</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="245"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="253"/>
         <source>Completed</source>
         <translation>Завершено</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="245"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="253"/>
         <source>Successfully installed!</source>
         <translation>Успешно установлено</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="266"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="274"/>
         <source>Cancel the installation process and close the window?</source>
         <translation>Отменить процесс установки и закрыть окно?</translation>
     </message>

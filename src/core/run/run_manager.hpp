@@ -53,7 +53,7 @@ private:
     bool setupCt();
     void setupProtonProcess();
     void setupUmuProcess();
-    void setupProcessLogging();
+    void setupExeProcessLogging();
     void runWinetricksUtility(const Prefix* prefix, const QString& utilName);
     void showError(const QString& errorText, RunningError error, bool emitText = false);
 

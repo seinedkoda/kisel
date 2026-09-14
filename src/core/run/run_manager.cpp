@@ -2,7 +2,6 @@
 
 #include "core/appsettings/app_settings.hpp"
 #include "core/executablefile/executable_file.hpp"
-#include "core/logging/logging.hpp"
 #include "run_config.hpp"
 
 using namespace Qt::StringLiterals;
@@ -40,7 +39,7 @@ void RunManager::run(RunConfig* runConfig)
     }
 
     if (APP_SETTINGS->loggingEnabled()) {
-        setupProcessLogging();
+        setupExeProcessLogging();
     }
 
     m_process.setProcessEnvironment(runConfig->env());
@@ -191,13 +190,12 @@ void RunManager::setupUmuProcess()
     env.insert("UMU_LOG"_L1, APP_SETTINGS->loggingEnabled() ? Y : N);
 }
 
-void RunManager::setupProcessLogging()
+void RunManager::setupExeProcessLogging()
 {
-    const QString& logFilePath = APP_SETTINGS->logFilePath();
     m_process.setProcessChannelMode(QProcess::MergedChannels);
-    m_process.setStandardOutputFile(logFilePath, QIODevice::Append);
+    m_process.setStandardOutputFile(APP_SETTINGS->logFilePath(), QIODevice::Append);
 
-    qDebug() << "=== START PROCESS LOGGING" << QDateTime::currentDateTime().toString(Qt::ISODate) << "===";
+    qDebug() << "=== START EXECUTABLE PROCESS LOGGING" << QDateTime::currentDateTime().toString(Qt::ISODate) << "===";
     qDebug() << "EXECUTABLE:" << m_runConfig->exePath();
     qDebug() << "USE STEAM:" << static_cast<int>(m_runConfig->isUsingSteam());
     if (!m_runConfig->isUsingSteam()) {
@@ -258,7 +256,13 @@ void RunManager::runWinetricksUtility(const Prefix* prefix, const QString& utilN
     m_process.setArguments({ "winetricks", utilName });
 
     m_currentTaskName = utilName;
-    qInfo() << "START WINETRICKS UTILITY:" << m_currentTaskName;
+
+    if (APP_SETTINGS->loggingEnabled()) {
+        m_process.setProcessChannelMode(QProcess::MergedChannels);
+        m_process.setStandardOutputFile(APP_SETTINGS->logFilePath(), QIODevice::Append);
+        qDebug() << "START WINETRICKS UTILITY:" << m_currentTaskName;
+    }
+
     m_process.start();
 }
 

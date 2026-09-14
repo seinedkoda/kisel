@@ -87,6 +87,11 @@ PrefixComponentsDialog::PrefixComponentsDialog(const Prefix* prefix, QWidget* pa
     m_installProcess->setProgram(APP_SETTINGS->umuPath());
     connect(m_installProcess, &QProcess::finished, this, &PrefixComponentsDialog::onInstallFinished);
 
+    if (APP_SETTINGS->loggingEnabled()) {
+        m_installProcess->setProcessChannelMode(QProcess::MergedChannels);
+        m_installProcess->setStandardOutputFile(APP_SETTINGS->logFilePath(), QIODevice::Append);
+    }
+
     loadComponents();
 }
 
@@ -224,6 +229,8 @@ void PrefixComponentsDialog::installSelected()
     m_progressBar->show();
 
     m_installProcess->setArguments(QStringList() << "winetricks"_L1 << "-q"_L1 << m_selectedComponents); // Don't use pure winetricks!
+
+    qDebug() << "START WINETRICKS INSTALL PROCESS";
     m_installProcess->start();
 }
 

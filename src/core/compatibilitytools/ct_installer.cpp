@@ -22,6 +22,11 @@ CtInstallProcess::CtInstallProcess(Ct* ct, QNetworkReply* reply, QObject* parent
         CT_MODEL->setCtDownloadProgress(ct, bytesReceived, bytesTotal);
     });
     connect(reply, &QNetworkReply::finished, this, &CtInstallProcess::onDownloadFinished);
+
+    if (APP_SETTINGS->loggingEnabled()) {
+        tarProcess->setProcessChannelMode(QProcess::MergedChannels);
+        tarProcess->setStandardOutputFile(APP_SETTINGS->logFilePath(), QIODevice::Append);
+    }
 }
 
 void CtInstallProcess::onDownloadFinished()
@@ -75,8 +80,8 @@ void CtInstallProcess::extractCt()
         }
     });
 
-    // Extract without subfolder
-    tarProcess->start("tar"_L1, { "-xf"_L1, tempArchivePath, "--strip-components=1" });
+    qDebug() << "START TAR PROCESS";
+    tarProcess->start("tar"_L1, { "-xf"_L1, tempArchivePath, "--strip-components=1" }); // Extract without subfolder
 }
 
 CtInstallProcess::~CtInstallProcess()
