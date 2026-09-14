@@ -72,7 +72,7 @@ const QDir& AppSettings::appDataDir()
 
 const QString& AppSettings::logFilePath()
 {
-    static QString logFilePath = appDataDir().filePath("run.log"_L1);
+    static QString logFilePath = appDataDir().filePath("kisel.log"_L1);
     return logFilePath;
 }
 
@@ -121,7 +121,8 @@ void AppSettings::installLocale(QString localeName)
     }
 }
 
-void AppSettings::saveLocale(const QString& localeName) {
+void AppSettings::saveLocale(const QString& localeName)
+{
     setValue("locale"_L1, localeName);
 }
 

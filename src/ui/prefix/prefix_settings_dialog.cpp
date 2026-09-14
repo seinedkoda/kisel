@@ -46,7 +46,7 @@ PrefixSettingsDialog::PrefixSettingsDialog(Prefix* prefix, QWidget* parent)
 
     auto* platformPage = new PrefixPlatformPage(m_settings, this);
     platformPage->layout()->setContentsMargins(0, 0, 0, 0);
-    new QListWidgetItem(QIcon::fromTheme("computer"), tr("Platform"), pageListView);
+    new QListWidgetItem(QIcon::fromTheme("computer-symbolic"), tr("Platform"), pageListView);
     stackedPages->addWidget(platformPage);
 
     auto* compatibilityPage = new PrefixCompatibilityPage(m_settings, this);

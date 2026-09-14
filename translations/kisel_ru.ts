@@ -4,12 +4,12 @@
 <context>
     <name>cli</name>
     <message>
-        <location filename="../src/main.cpp" line="20"/>
+        <location filename="../src/main.cpp" line="26"/>
         <source>Efficient launch of Windows programs</source>
         <translation>Эффективный запуск Windows программ</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="24"/>
+        <location filename="../src/main.cpp" line="30"/>
         <source>Run immediately in &lt;PrefixName&gt;</source>
         <translation>Запустить немедленно в &lt;ИмяПрефикса&gt;</translation>
     </message>
@@ -54,66 +54,84 @@
     </message>
 </context>
 <context>
-    <name>kisel::AppSettingsWindow</name>
+    <name>kisel::AppSettingsGeneralPage</name>
     <message>
-        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="22"/>
-        <source>Kisel — Settings</source>
-        <translation>Кисель — Настройки</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="32"/>
-        <source>&lt;h3&gt;Global settings&lt;/h3&gt;</source>
-        <translation>&lt;h3&gt;Глобальные настройки&lt;/h3&gt;</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="35"/>
-        <source>&lt;i&gt;To configure the executable launch settings in detail, go to the context menu of the selected prefix&lt;/i&gt;</source>
-        <translation>&lt;i&gt;Для детальной настройки запуска исполняемого файла перейдите в контекстное меню выбранного префикса&lt;/i&gt;</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="57"/>
-        <source>General</source>
-        <translation>Основное</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="93"/>
-        <source>System</source>
-        <translation>Системная</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="108"/>
-        <source>Prefixes</source>
-        <translation>Префиксы</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="112"/>
-        <source>Compatibility</source>
-        <translation>Совместимость</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="63"/>
+        <location filename="../src/ui/appsettings/app_settings_general_page.cpp" line="23"/>
         <source>Language</source>
         <translation>Язык</translation>
     </message>
     <message>
-        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="89"/>
-        <source>Icon theme type</source>
-        <translation>Тип темы значков</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="74"/>
+        <location filename="../src/ui/appsettings/app_settings_general_page.cpp" line="34"/>
         <source>Style</source>
         <translation>Стиль</translation>
     </message>
     <message>
-        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="117"/>
-        <source>Shortcuts</source>
-        <translation>Ярлыки</translation>
+        <location filename="../src/ui/appsettings/app_settings_general_page.cpp" line="51"/>
+        <source>Icon theme type</source>
+        <translation>Тип темы значков</translation>
     </message>
     <message>
-        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="100"/>
+        <location filename="../src/ui/appsettings/app_settings_general_page.cpp" line="55"/>
+        <source>System</source>
+        <translation>Система</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/appsettings/app_settings_general_page.cpp" line="66"/>
         <source>Logging</source>
-        <translation>Сохранение журнала запуска</translation>
+        <translation>Логирование</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/appsettings/app_settings_general_page.cpp" line="70"/>
+        <source>Open log file</source>
+        <translation>Открыть журнал запуска</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/appsettings/app_settings_general_page.cpp" line="83"/>
+        <source>Unable to open</source>
+        <translation>Невозможно открыть</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/appsettings/app_settings_general_page.cpp" line="83"/>
+        <source>The log file does not exist</source>
+        <translation>Файла журнала запуска не существует</translation>
+    </message>
+</context>
+<context>
+    <name>kisel::AppSettingsWindow</name>
+    <message>
+        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="19"/>
+        <source>Kisel — Settings</source>
+        <translation>Кисель — Настройки</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="29"/>
+        <source>&lt;h3&gt;Global settings&lt;/h3&gt;</source>
+        <translation>&lt;h3&gt;Глобальные настройки&lt;/h3&gt;</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="33"/>
+        <source>&lt;i&gt;To configure the executable launch settings in detail, go to the context menu of the selected prefix&lt;/i&gt;</source>
+        <translation>&lt;i&gt;Для детальной настройки запуска исполняемого файла перейдите в контекстное меню выбранного префикса&lt;/i&gt;</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="55"/>
+        <source>General</source>
+        <translation>Основное</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="59"/>
+        <source>Prefixes</source>
+        <translation>Префиксы</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="63"/>
+        <source>Compatibility</source>
+        <translation>Совместимость</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/appsettings/app_settings_window.cpp" line="68"/>
+        <source>Shortcuts</source>
+        <translation>Ярлыки</translation>
     </message>
 </context>
 <context>
@@ -408,7 +426,7 @@
     </message>
     <message>
         <location filename="../src/ui/mainwindow/main_window.cpp" line="32"/>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="234"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="228"/>
         <source>The program is not selected</source>
         <translation>Программа не выбрана</translation>
     </message>
@@ -444,7 +462,7 @@
     </message>
     <message>
         <location filename="../src/ui/mainwindow/main_window.cpp" line="33"/>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="445"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="439"/>
         <source>Run</source>
         <translation>Запустить</translation>
     </message>
@@ -509,33 +527,22 @@
         <translation>Настройки приложения</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="452"/>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="456"/>
-        <source>Unable to open</source>
-        <translation>Невозможно открыть</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="452"/>
-        <source>Logging is disabled in the settings</source>
-        <translation>Журнал запуска отключен в настройках</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="203"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="197"/>
         <source>Version: %1</source>
         <translation>Версия: %1</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="367"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="361"/>
         <source>Select the executable file</source>
         <translation>Выберите исполняемый файл</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="409"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="403"/>
         <source>The required compatibility tool is missing, open window to manage?</source>
         <translation>Отсутствует необходимое средство совместимости, открыть окно для управления?</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="394"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="388"/>
         <source>Running error</source>
         <translation>Ошибка запуска</translation>
     </message>
@@ -560,84 +567,74 @@
         <translation>Открыть в файлах</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="190"/>
-        <source>Open log file</source>
-        <translation>Открыть журнал запуска</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="252"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="246"/>
         <source>&lt;Select a program&gt;</source>
         <translation>&lt;Выберите программу&gt;</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="369"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="363"/>
         <source>Executable files (*.exe *.msi *.bat);;All files (*.*)</source>
         <translation>Исполняемыеф файлы (*.exe *.msi *.bat);;Все файлы (*.*)</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="397"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="391"/>
         <source>The executable file is currently running</source>
         <translation>Исполняемый файл уже запущен</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="400"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="394"/>
         <source>The executable file is not valid</source>
         <translation>Не подходящий исполняемый файл</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="403"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="397"/>
         <source>Failed to write prefix</source>
         <translation>Не удалось записать префикс</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="415"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="409"/>
         <source>&quot;umu-run&quot; not found</source>
         <translation>Не найден &quot;umu-run&quot;</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="418"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="412"/>
         <source>&quot;winetricks&quot; not found</source>
         <translation>Не найден &quot;winetricks&quot;</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="421"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="415"/>
         <source>Failed to start process: %1</source>
         <translation>Не удалось запустить процесс: %1</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="424"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="418"/>
         <source>Process error: %1</source>
         <translation>Ошибка процесса: %1</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="427"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="421"/>
         <source>Process timeout: %1</source>
         <translation>Истекло время ожидания процесса: %1</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="430"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="424"/>
         <source>Process read error: %1</source>
         <translation>Ошибка чтения процесса: %1</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="433"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="427"/>
         <source>Process write error: %1</source>
         <translation>Ошибка записи процесса: %1</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="436"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="430"/>
         <source>Unknown error: %1</source>
         <translation>Неизвестная ошибка: %1</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="445"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="439"/>
         <source>Stop</source>
         <translation>Остановить</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="456"/>
-        <source>There is no run log, please run the executable file first</source>
-        <translation>Нет журнала запуска, сначала запустите исполняемый файл</translation>
     </message>
 </context>
 <context>
@@ -1072,17 +1069,17 @@
     <message>
         <location filename="../src/ui/prefix/prefix_services_page.cpp" line="20"/>
         <source>Enable Performance Monitor (requires mangohud to be installed)</source>
-        <translation type="unfinished">Включить монитор производительности (требуется установленный mangohud)</translation>
+        <translation>Включить монитор производительности (требуется установленный mangohud)</translation>
     </message>
     <message>
         <location filename="../src/ui/prefix/prefix_services_page.cpp" line="29"/>
         <source>Enable Vulkan app screen capture for OBS (requires obs-vkcapture to be installed)</source>
-        <translation type="unfinished">Включить захват экрана приложений на Vulkan для OBS (требуется установленный obs-vkcapture)</translation>
+        <translation>Включить захват экрана приложений на Vulkan для OBS (требуется установленный obs-vkcapture)</translation>
     </message>
     <message>
         <location filename="../src/ui/prefix/prefix_services_page.cpp" line="37"/>
         <source>Enable accessibility controls, such as controlling the application interface with a gamepad</source>
-        <translation type="unfinished">Включить специальные возможности управления, такие как управление интерфейсом с помощью геймпада</translation>
+        <translation>Включить специальные возможности управления, такие как управление интерфейсом с помощью геймпада</translation>
     </message>
 </context>
 <context>

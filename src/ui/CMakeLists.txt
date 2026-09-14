@@ -1,5 +1,6 @@
 target_sources(kisel PRIVATE
     mainwindow/main_window.hpp mainwindow/main_window.cpp
+    appsettings/app_settings_general_page.hpp appsettings/app_settings_general_page.cpp
     appsettings/app_settings_window.hpp appsettings/app_settings_window.cpp
     aboutapp/about_app_dialog.hpp aboutapp/about_app_dialog.cpp
     prefix/new_prefix_dialog.hpp prefix/new_prefix_dialog.cpp

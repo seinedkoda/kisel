@@ -27,7 +27,6 @@ private slots:
     void onCurrentPrefixTextChanged(const QString& prefixName);
     void onCurrentCtIndexChanged(int index);
     void individualPrefixStateChanged(bool checked);
-    void openLogFile();
 
 private:
 

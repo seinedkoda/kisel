@@ -2,6 +2,7 @@
 
 #include "core/appsettings/app_settings.hpp"
 #include "core/executablefile/executable_file.hpp"
+#include "core/logging/logging.hpp"
 #include "run_config.hpp"
 
 using namespace Qt::StringLiterals;
@@ -39,7 +40,7 @@ void RunManager::run(RunConfig* runConfig)
     }
 
     if (APP_SETTINGS->loggingEnabled()) {
-        setupLogging();
+        setupProcessLogging();
     }
 
     m_process.setProcessEnvironment(runConfig->env());
@@ -190,30 +191,22 @@ void RunManager::setupUmuProcess()
     env.insert("UMU_LOG"_L1, APP_SETTINGS->loggingEnabled() ? Y : N);
 }
 
-void RunManager::setupLogging()
+void RunManager::setupProcessLogging()
 {
-    QFile logFile(APP_SETTINGS->logFilePath());
-    if (logFile.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate)) {
-        QTextStream stream(&logFile);
-
-        stream << "=== kisel "_L1 << APP_VERSION << " ===\n"_L1;
-        stream << "OS: "_L1 << QSysInfo::prettyProductName() << u'\n';
-        stream << "TIME: " << QDateTime::currentDateTime().toString(Qt::ISODate) << u'\n';
-        stream << "USE STEAM: "_L1 << static_cast<int>(m_runConfig->isUsingSteam()) << u'\n';
-        if (!m_runConfig->isUsingSteam()) {
-            stream << "UMU: "_L1 << APP_SETTINGS->umuPath() << u'\n';
-        }
-        stream << "EXECUTABLE: "_L1 << m_runConfig->exePath() << u'\n';
-        stream << "PREFIX: "_L1 << m_runConfig->prefix()->path() << u'\n';
-        stream << "COMPATIBILITY TOOL: "_L1 << m_runConfig->ct()->path() << u'\n';
-        stream << "RUNTIME AUTO-UPDATE: " << APP_SETTINGS->runtimeAutoUpdate() << u'\n';
-        stream << "===================\n\n"_L1;
-
-        logFile.close();
-    }
-
+    const QString& logFilePath = APP_SETTINGS->logFilePath();
     m_process.setProcessChannelMode(QProcess::MergedChannels);
-    m_process.setStandardOutputFile(APP_SETTINGS->logFilePath(), QIODevice::Append);
+    m_process.setStandardOutputFile(logFilePath, QIODevice::Append);
+
+    qDebug() << "=== START PROCESS LOGGING" << QDateTime::currentDateTime().toString(Qt::ISODate) << "===";
+    qDebug() << "EXECUTABLE:" << m_runConfig->exePath();
+    qDebug() << "USE STEAM:" << static_cast<int>(m_runConfig->isUsingSteam());
+    if (!m_runConfig->isUsingSteam()) {
+        qDebug() << "UMU:" << APP_SETTINGS->umuPath();
+    }
+    qDebug() << "PREFIX:" << m_runConfig->prefix()->path();
+    qDebug() << "COMPATIBILITY TOOL:" << m_runConfig->ct()->path();
+    qDebug() << "RUNTIME AUTO-UPDATE:" << APP_SETTINGS->runtimeAutoUpdate();
+    qDebug() << "===================\n";
 }
 
 void RunManager::runWineCfg(const Prefix* prefix)
@@ -265,7 +258,7 @@ void RunManager::runWinetricksUtility(const Prefix* prefix, const QString& utilN
     m_process.setArguments({ "winetricks", utilName });
 
     m_currentTaskName = utilName;
-
+    qInfo() << "START WINETRICKS UTILITY:" << m_currentTaskName;
     m_process.start();
 }
 
@@ -275,7 +268,7 @@ void RunManager::stop()
         return;
     }
 
-    qDebug() << "Manual termination of the process";
+    qInfo() << "Manual termination of the process";
     m_process.terminate();
     if (!m_process.waitForFinished()) {
         qWarning() << "Killing the process after a long wait";
@@ -298,7 +291,7 @@ void RunManager::onProcessStarted()
 void RunManager::onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
     m_currentTaskName.clear();
-    qDebug() << "The process terminated with the code:" << exitCode;
+    qInfo() << "The process terminated with the code:" << exitCode;
     m_isRunning = false;
     emit runningChanged(false);
 }

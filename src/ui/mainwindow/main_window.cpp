@@ -186,12 +186,6 @@ MainWindow::MainWindow(const QString& exePath)
     connect(appSettingsWindowButton, &QToolButton::clicked, this, []() { openAppSettingsWindow(); });
     bottomLayout->addWidget(appSettingsWindowButton);
 
-    auto* openLogFileButton = new QToolButton(this);
-    openLogFileButton->setToolTip(tr("Open log file"));
-    openLogFileButton->setIcon(QIcon::fromTheme("text-x-log"));
-    connect(openLogFileButton, &QToolButton::clicked, this, &MainWindow::openLogFile);
-    bottomLayout->addWidget(openLogFileButton);
-
     auto* aboutAppButton = new QToolButton(this);
     aboutAppButton->setIcon(QIcon::fromTheme("help-about"));
     connect(aboutAppButton, &QToolButton::clicked, this, [this]() {
@@ -444,15 +438,4 @@ void MainWindow::onRunningChanged(bool isRunning)
     m_runStopButton->setIcon(isRunning ? QIcon::fromTheme("media-playback-stop") : QIcon::fromTheme("media-playback-start"));
     m_runStopAction->setText(isRunning ? tr("Stop") : tr("Run"));
     setHidden(isRunning);
-}
-
-void MainWindow::openLogFile()
-{
-    if (!APP_SETTINGS->loggingEnabled()) {
-        QMessageBox::information(this, tr("Unable to open"), tr("Logging is disabled in the settings"));
-    } else if (QFileInfo::exists(APP_SETTINGS->logFilePath())) {
-        QDesktopServices::openUrl(QUrl::fromLocalFile(APP_SETTINGS->logFilePath()));
-    } else {
-        QMessageBox::information(this, tr("Unable to open"), tr("There is no run log, please run the executable file first"));
-    }
 }

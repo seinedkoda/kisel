@@ -1,14 +1,11 @@
 #include "app_settings_window.hpp"
 
-#include <QCheckBox>
-#include <QComboBox>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QListWidget>
 #include <QStackedWidget>
-#include <QStyleFactory>
 
-#include "core/appsettings/app_settings.hpp"
+#include "app_settings_general_page.hpp"
 #include "ui/compatibilitytools/ct_page.hpp"
 #include "ui/prefix/prefix_page.hpp"
 #include "ui/shortcuts/shortcuts_list_widget.hpp"
@@ -32,8 +29,9 @@ AppSettingsWindow::AppSettingsWindow(QWidget* parent)
     auto* titleLabel = new QLabel(tr("<h3>Global settings</h3>"));
     layout->addWidget(titleLabel);
 
-    auto* helpLabel = new QLabel(tr("<i>To configure the executable launch settings in detail, "
-                                    "go to the context menu of the selected prefix</i>"),
+    auto* helpLabel = new QLabel(
+        tr("<i>To configure the executable launch settings in detail, "
+           "go to the context menu of the selected prefix</i>"),
         this);
     helpLabel->setWordWrap(true);
     layout->addWidget(helpLabel);
@@ -53,59 +51,12 @@ AppSettingsWindow::AppSettingsWindow(QWidget* parent)
     });
     contentLayout->addWidget(stackedPages);
 
-    auto* generalPage = new QWidget(this);
-    new QListWidgetItem(QIcon::fromTheme("user-home"), tr("General"), pageListView);
+    auto* generalPage = new AppSettingsGeneralPage(this);
+    new QListWidgetItem(QIcon::fromTheme("user-home-symbolic"), tr("General"), pageListView);
     stackedPages->addWidget(generalPage);
 
-    auto* generalPageLayout = new QVBoxLayout(generalPage);
-    generalPageLayout->setAlignment(Qt::AlignTop);
-
-    auto* languageLabel = new QLabel(tr("Language"), this);
-    generalPageLayout->addWidget(languageLabel);
-
-    auto* languageComboBox = new QComboBox(this);
-    languageComboBox->addItems(APP_SETTINGS->languagesList());
-    languageComboBox->setCurrentText(APP_SETTINGS->language());
-    connect(languageComboBox, &QComboBox::currentTextChanged, this, [](const QString& languageName) {
-        APP_SETTINGS->setLanguage(languageName);
-    });
-    generalPageLayout->addWidget(languageComboBox);
-
-    auto* styleLabel = new QLabel(tr("Style"), this);
-    generalPageLayout->addWidget(styleLabel);
-
-    auto* styleComboBox = new QComboBox(this);
-    static QStringList styles = QStyleFactory::keys();
-    styleComboBox->addItems(styles);
-    const QString savedStyle = APP_SETTINGS->styleName();
-    if (styles.contains(savedStyle)) {
-        styleComboBox->setCurrentText(savedStyle);
-    } else {
-        styleComboBox->setCurrentText(QStringLiteral("Fusion"));
-    }
-    connect(styleComboBox, &QComboBox::currentTextChanged, this, [](const QString& styleName) { APP_SETTINGS->setStyleName(styleName); });
-    generalPageLayout->addWidget(styleComboBox);
-
-    auto* iconThemeTypeLabel = new QLabel(tr("Icon theme type"), this);
-    generalPageLayout->addWidget(iconThemeTypeLabel);
-
-    auto* iconThemeTypeComboBox = new QComboBox(this);
-    iconThemeTypeComboBox->addItems({ tr("System"), "Kisel-Papirus-Light"_L1, "Kisel-Papirus-Dark"_L1 });
-    iconThemeTypeComboBox->setCurrentIndex(APP_SETTINGS->iconThemeType());
-    connect(iconThemeTypeComboBox, &QComboBox::currentIndexChanged, this, [](int index) {
-        APP_SETTINGS->setIconThemeType(index);
-    });
-    generalPageLayout->addWidget(iconThemeTypeComboBox);
-
-    auto* loggingCheckBox = new QCheckBox(tr("Logging"), this);
-    loggingCheckBox->setChecked(APP_SETTINGS->loggingEnabled());
-    connect(loggingCheckBox, &QCheckBox::clicked, this, [](bool checked) {
-        APP_SETTINGS->setLoggingEnabled(checked);
-    });
-    generalPageLayout->addWidget(loggingCheckBox);
-
     auto* prefixPage = new PrefixPage(this);
-    new QListWidgetItem(QIcon::fromTheme("drive-harddisk"), tr("Prefixes"), pageListView);
+    new QListWidgetItem(QIcon::fromTheme("drive-harddisk-symbolic"), tr("Prefixes"), pageListView);
     stackedPages->addWidget(prefixPage);
 
     auto* ctPage = new CtPage(this);
