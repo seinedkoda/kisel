@@ -1,11 +1,11 @@
 #include <QApplication>
 #include <QCommandLineParser>
 
-#include "app_settings.hpp"
-#include "main_window.hpp"
-#include "run_manager.hpp"
-#include "translator.hpp"
-#include "tray_icon.hpp"
+#include "core/app/app.hpp"
+#include "core/appsettings/app_settings.hpp"
+#include "core/logging/logging.hpp"
+#include "ui/mainwindow/main_window.hpp"
+#include "ui/trayicon/tray_icon.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -13,8 +13,14 @@ int main(int argc, char* argv[])
     QApplication::setApplicationName("kisel");
     QApplication::setApplicationVersion(APP_VERSION);
 
+    kisel::APP_SETTINGS->createAppDirectories();
+
+    if (kisel::APP_SETTINGS->loggingEnabled()) {
+        kisel::setupLogging();
+    }
+
+    kisel::APP_SETTINGS->installLocale();
     kisel::APP_SETTINGS->applyCurrentStyle();
-    kisel::TRANSLATOR->setLocaleFromSettings();
 
     QCommandLineParser parser;
     parser.setApplicationDescription(QCoreApplication::translate("cli", "Efficient launch of Windows programs"));
@@ -34,7 +40,7 @@ int main(int argc, char* argv[])
     } else if (parser.isSet(prefixOption)) {
         kisel::RunConfig runConfig;
         runConfig.setExecutablePath(positionalArgs.first());
-        runConfig.setPrefixName(parser.value(prefixOption));
+        runConfig.setPrefix(kisel::PREFIX_MODEL->forName(parser.value(prefixOption)));
         kisel::RUN_MANAGER->run(&runConfig);
     } else {
         auto* mainWindow = new kisel::MainWindow(positionalArgs.first());
