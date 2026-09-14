@@ -1,6 +1,6 @@
 # Maintainer: Seined Koda <seinedk@gmail.com>
 pkgname=kisel
-pkgver=1.3.5
+pkgver=1.4.0
 pkgrel=1
 pkgdesc="Efficient launch of Windows programs"
 arch=('x86_64')
@@ -24,10 +24,11 @@ makedepends=(
   'cmake'
   'ninja'
   'qt6-tools'
+  'vulkan-headers'
 )
 
 source=("${pkgname}-${pkgver}.tar.gz::${url}/archive/v${pkgver}.tar.gz")
-sha256sums=('40f00927f744691b005c8c34c43f60c10b99cf5ebac00d98252fb6acd4fb826c')
+sha256sums=('60bffac0722570dac5935b9b7b0027b5b8966432344f5aec3efea13b148d53c7')
 
 build() {
   cmake -B build -S "${pkgname}-${pkgver}" \
