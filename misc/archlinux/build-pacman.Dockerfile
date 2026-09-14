@@ -9,6 +9,7 @@ RUN pacman -Syu --noconfirm && \
     qt6-base \
     qt6-tools \
     qt6-declarative \
+    vulkan-headers \
     icoutils \
     git \
     sudo
