@@ -137,22 +137,22 @@
 <context>
     <name>kisel::Ct</name>
     <message>
-        <location filename="../src/core/compatibilitytools/ct.cpp" line="66"/>
+        <location filename="../src/core/compatibilitytools/ct.cpp" line="67"/>
         <source>Downloading</source>
         <translation>Загрузка</translation>
     </message>
     <message>
-        <location filename="../src/core/compatibilitytools/ct.cpp" line="67"/>
+        <location filename="../src/core/compatibilitytools/ct.cpp" line="68"/>
         <source>Unpacking</source>
         <translation>Распаковка</translation>
     </message>
     <message>
-        <location filename="../src/core/compatibilitytools/ct.cpp" line="68"/>
+        <location filename="../src/core/compatibilitytools/ct.cpp" line="69"/>
         <source>Installed</source>
         <translation>Установлено</translation>
     </message>
     <message>
-        <location filename="../src/core/compatibilitytools/ct.cpp" line="69"/>
+        <location filename="../src/core/compatibilitytools/ct.cpp" line="70"/>
         <source>Unknown</source>
         <translation>Неизвестно</translation>
     </message>

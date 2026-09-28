@@ -1,3 +1,5 @@
+# THIS IS A LOCAL BUILD FILE!
+# The file for the current release is here: https://github.com/flathub/io.github.seinedkoda.kisel
 app-id: io.github.seinedkoda.kisel
 runtime: org.kde.Platform
 runtime-version: '6.11'
@@ -48,7 +50,7 @@ modules:
   - name: umu-launcher
     buildsystem: simple
     build-commands:
-      - install -Dm755 umu-run /app/bin/umu-run
+      - install -Dm755 umu-run /app/lib/kisel/umu-run
       - install -Dm644 LICENSE /app/share/licenses/umu-launcher/LICENSE
     sources:
       - type: archive
@@ -64,6 +66,5 @@ modules:
       - -DCMAKE_BUILD_TYPE=Release
       - -DINSTALL_UMU=OFF
     sources:
-      - type: archive
-        url: https://github.com/seinedkoda/kisel/archive/refs/tags/v1.4.0.tar.gz
-        sha256: 60bffac0722570dac5935b9b7b0027b5b8966432344f5aec3efea13b148d53c7
+      - type: dir
+        path: ../..

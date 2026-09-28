@@ -18,7 +18,7 @@ using namespace kisel;
 Q_APPLICATION_STATIC(AppSettings, g_appSettings)
 
 AppSettings::AppSettings(QObject* parent)
-    : QSettings(QDir::homePath() % "/.config/kisel/kisel.conf"_L1, QSettings::IniFormat, parent)
+    : QSettings(appConfigPath(), QSettings::IniFormat, parent)
 {
     QIcon::setThemeSearchPaths(QIcon::themeSearchPaths() << ":/thirdparty");
 
@@ -64,9 +64,15 @@ void AppSettings::loadLanguageMap()
     }
 }
 
+const QString& AppSettings::appConfigPath()
+{
+    static QString appConfigFilePath = QDir::home().filePath(".config/kisel/kisel.conf"_L1);
+    return appConfigFilePath;
+}
+
 const QDir& AppSettings::appDataDir()
 {
-    static QDir dir(QDir::homePath() % "/.local/share/kisel/"_L1);
+    static QDir dir(QDir::home().filePath(".local/share/kisel/"_L1));
     return dir;
 }
 
@@ -86,7 +92,7 @@ const QList<QDir>& AppSettings::ctsDirList()
 {
     static QList<QDir> list {
         appDataDir().filePath("compatibilitytools.d/"_L1),
-        appDataDir().filePath(QDir::homePath() % "/.steam/steam/compatibilitytools.d/"_L1)
+        steamDir().filePath("compatibilitytools.d/"_L1)
     };
     return list;
 }
@@ -252,7 +258,7 @@ bool AppSettings::loggingEnabled() const
 
 const QDir& AppSettings::steamDir()
 {
-    static QDir steamDir(QDir::homePath() % "/.local/share/Steam"_L1);
+    static QDir steamDir(QDir::home().filePath(".local/share/Steam"_L1));
     return steamDir;
 }
 

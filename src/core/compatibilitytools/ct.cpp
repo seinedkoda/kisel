@@ -1,4 +1,5 @@
 #include "ct.hpp"
+#include "core/appsettings/app_settings.hpp"
 
 using namespace kisel;
 
@@ -8,7 +9,7 @@ Ct::Ct(const QString& path, QObject* parent)
     , m_status(m_dir.exists() ? Installed : Unknown)
     , m_progress(0)
 {
-    if (m_dir.absolutePath().contains(QStringLiteral("steam"))) {
+    if (m_dir.absolutePath().startsWith(APP_SETTINGS->steamDir().path())) {
         m_icon = QIcon::fromTheme("steam");
     } else {
         m_icon = QIcon(":/icons/kisel-256x256.png");

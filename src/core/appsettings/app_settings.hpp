@@ -18,6 +18,7 @@ public:
     explicit AppSettings(QObject* parent = nullptr);
     static AppSettings* instance();
 
+    static const QString& appConfigPath();
     static const QDir& appDataDir();
     static const QString& logFilePath();
     static const QDir& prefixesDir();
