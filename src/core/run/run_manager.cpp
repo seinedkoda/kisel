@@ -157,6 +157,19 @@ void RunManager::setupProtonProcess()
         const QString& steamOverlay32bit = steamDir.filePath("ubuntu12_32/gameoverlayrenderer.so"_L1);
         const QString& steamOverlay64bit = steamDir.filePath("ubuntu12_64/gameoverlayrenderer.so"_L1);
         env.insert("LD_PRELOAD"_L1, steamOverlay32bit % ":"_L1 % steamOverlay64bit);
+        
+        // The LD_PRELOAD does nothing if the vulkan layer is not enabled with this
+        env.insert("ENABLE_VK_LAYER_VALVE_steam_overlay_1"_L1, "1"_L1);
+        
+        // Steam overlay requires a non empty value on SteamGameId
+        // If steam_appid.txt exists use it otherwise 480 (Spacewar) 
+        QFileInfo exeFileInfo(m_runConfig->exePath());
+        QFile steamAppId(exeFileInfo.dir().filePath("steam_appid.txt"_L1));
+        if (steamAppId.open(QIODevice::ReadOnly)) {
+            env.insert("SteamGameId"_L1, steamAppId.readAll().trimmed());
+        } else {
+            env.insert("SteamGameId"_L1, "480"_L1);
+        } 
     }
 
     if (prefix->settings()->onlineFixEnabled()) {
