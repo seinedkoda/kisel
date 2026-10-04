@@ -118,12 +118,13 @@ Prefix* PrefixModel::getByName(QStringView name) const
 
 void PrefixModel::refreshList()
 {
-    const QStringList dirList = PREFIXES_DIR.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+    const QDir& prefixesDir = APP_SETTINGS->prefixesDir();
+    const QStringList dirList = prefixesDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
 
     // Add new prefixes from dir
     for (const QString& dirName : dirList) {
         if (!containsName(dirName)) {
-            add(dirName);
+            add(prefixesDir.filePath(dirName));
         }
     }
 
@@ -139,18 +140,14 @@ void PrefixModel::refreshList()
         }
     }
 
-    if (m_prefixes.count() == 0) {
-        add(APP_SETTINGS->defaultPrefixName());
+    if (m_prefixes.isEmpty()) {
+        add(prefixesDir.filePath(APP_SETTINGS->defaultPrefixName()));
     }
 }
 
-Prefix* PrefixModel::add(const QString& name)
+Prefix* PrefixModel::add(const QString& path)
 {
-    if (!isValidPrefixName(name)) {
-        return nullptr;
-    }
-
-    auto* prefix = new Prefix(PREFIXES_DIR.filePath(name), this);
+    auto* prefix = new Prefix(path, this);
 
     int insertPos = rowCount();
     beginInsertRows(QModelIndex(), insertPos, insertPos);
@@ -166,7 +163,7 @@ Prefix* PrefixModel::defaultPrefix()
 
     if (defaultPrefix == nullptr) {
         qWarning() << "The default prefix does not exist";
-        return add(defaultPrefixName);
+        return add(APP_SETTINGS->prefixesDir().filePath(defaultPrefixName));
     }
 
     return defaultPrefix;

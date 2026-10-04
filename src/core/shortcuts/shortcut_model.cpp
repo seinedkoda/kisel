@@ -165,7 +165,7 @@ void ShortcutModel::createShortcut(
     }
 
     QString escapedPrefixValue;
-    if (prefix->path().startsWith(PREFIXES_DIR.absolutePath())) {
+    if (prefix->path().startsWith(APP_SETTINGS->prefixesDir().absolutePath())) {
         escapedPrefixValue = escapeExecArg(prefix->name());
     } else {
         escapedPrefixValue = escapeExecArg(prefix->path());

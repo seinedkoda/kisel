@@ -100,7 +100,7 @@ void Shortcut::parseExecValue(QStringView value)
                 if (QFileInfo(prefixValue).isAbsolute()) {
                     m_prefixPath = prefixValue;
                 } else {
-                    m_prefixPath = PREFIXES_DIR.filePath(prefixValue);
+                    m_prefixPath = APP_SETTINGS->prefixesDir().filePath(prefixValue);
                 }
             }
         } else {

@@ -6,6 +6,7 @@
 #include <QDialogButtonBox>
 
 #include "core/app/app.hpp"
+#include "core/appsettings/app_settings.hpp"
 
 using namespace kisel;
 
@@ -42,7 +43,7 @@ NewPrefixDialog::NewPrefixDialog(QWidget* parent)
     });
 
     connect(m_saveButton, &QPushButton::clicked, this, [this]() {
-        Prefix* prefix = PREFIX_MODEL->add(m_nameInput->text());
+        Prefix* prefix = PREFIX_MODEL->add(APP_SETTINGS->prefixesDir().filePath(m_nameInput->text()));
         prefix->makePath();
         close();
     });

@@ -18,7 +18,7 @@ using namespace kisel;
 EditShortcutsDialog::EditShortcutsDialog(const QString& exeFilePath, Prefix* prefix, QWidget* parent)
     : QDialog(parent)
     , m_exeFile(new ExecutableFile(exeFilePath, this))
-    , m_individualPrefix(new Prefix(PREFIXES_DIR.filePath(m_exeFile->id()), this))
+    , m_individualPrefix(new Prefix(APP_SETTINGS->prefixesDir().filePath(m_exeFile->id()), this))
     , m_portablePrefix(new Prefix(QFileInfo(exeFilePath).dir().filePath(APP_SETTINGS->portablePrefixName())))
     , m_menuCheckBox(new QCheckBox(tr("Menu"), this))
     , m_desktopCheckbox(new QCheckBox(tr("Desktop"), this))

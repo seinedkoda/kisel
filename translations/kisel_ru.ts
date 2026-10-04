@@ -709,27 +709,27 @@
 <context>
     <name>kisel::NewPrefixDialog</name>
     <message>
-        <location filename="../src/ui/prefix/new_prefix_dialog.cpp" line="15"/>
+        <location filename="../src/ui/prefix/new_prefix_dialog.cpp" line="16"/>
         <source>Save</source>
         <translation>Сохранить</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/new_prefix_dialog.cpp" line="17"/>
+        <location filename="../src/ui/prefix/new_prefix_dialog.cpp" line="18"/>
         <source>Add new prefix</source>
         <translation>Добавить новый префикс</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/new_prefix_dialog.cpp" line="24"/>
+        <location filename="../src/ui/prefix/new_prefix_dialog.cpp" line="25"/>
         <source>Enter the prefix name</source>
         <translation>Введите имя префикса</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/new_prefix_dialog.cpp" line="27"/>
+        <location filename="../src/ui/prefix/new_prefix_dialog.cpp" line="28"/>
         <source>Name</source>
         <translation>Название</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/new_prefix_dialog.cpp" line="32"/>
+        <location filename="../src/ui/prefix/new_prefix_dialog.cpp" line="33"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
@@ -1005,27 +1005,47 @@
 <context>
     <name>kisel::PrefixPage</name>
     <message>
-        <location filename="../src/ui/prefix/prefix_page.cpp" line="20"/>
+        <location filename="../src/ui/prefix/prefix_page.cpp" line="24"/>
         <source>Default prefix type</source>
         <translation>Тип префикса по умолчанию</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_page.cpp" line="24"/>
+        <location filename="../src/ui/prefix/prefix_page.cpp" line="28"/>
         <source>Shared</source>
         <translation>Общий</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_page.cpp" line="24"/>
+        <location filename="../src/ui/prefix/prefix_page.cpp" line="28"/>
         <source>Individual</source>
         <translation>Индивидуальный</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_page.cpp" line="24"/>
+        <location filename="../src/ui/prefix/prefix_page.cpp" line="28"/>
         <source>Portable</source>
         <translation>Портативный</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_page.cpp" line="32"/>
+        <location filename="../src/ui/prefix/prefix_page.cpp" line="36"/>
+        <source>Directory for shared prefixes</source>
+        <translation>Расположение общих префиксов</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/prefix/prefix_page.cpp" line="50"/>
+        <source>Select a new path for prefixes</source>
+        <translation>Выбрать новый путь для префиксов</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/prefix/prefix_page.cpp" line="55"/>
+        <source>Restore the original path to prefixes</source>
+        <translation>Восстановить оригинальный путь для префиксов</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/prefix/prefix_page.cpp" line="84"/>
+        <source>Select directory</source>
+        <translation>Выберите директорию</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/prefix/prefix_page.cpp" line="60"/>
         <source>Default shared prefix</source>
         <translation>Общий префикс по умолчанию</translation>
     </message>

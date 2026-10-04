@@ -270,7 +270,7 @@ void MainWindow::newIndividualPrefixFromExe()
 
     if (m_runConfig->exeIsValid()) {
         m_individualPrefixName = m_runConfig->exeFile()->id();
-        m_individualPrefix = new Prefix(PREFIXES_DIR.filePath(m_individualPrefixName), this);
+        m_individualPrefix = new Prefix(APP_SETTINGS->prefixesDir().filePath(m_individualPrefixName), this);
     }
 }
 

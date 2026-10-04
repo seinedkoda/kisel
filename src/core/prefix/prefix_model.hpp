@@ -28,7 +28,7 @@ public:
     [[nodiscard]] Prefix* getByName(QStringView name) const;
     [[nodiscard]] const QList<Prefix*>& list() const;
     void refreshList();
-    Prefix* add(const QString& name);
+    Prefix* add(const QString& path);
     Prefix* defaultPrefix();
     bool isValidPrefixName(QStringView name);
     bool containsName(QStringView name);
