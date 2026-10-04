@@ -23,17 +23,22 @@ private slots:
 private:
     static const QMap<QString, QString>& categoryMap();
 
-    void setDefaultParameters();
+    void setDefaultParameters(Prefix* prefix);
+    void setDefaultPrefixFromPath(QStringView prefixPath);
+    void setSharedPrefix(Prefix* prefix);
+    void setIndividualPrefix();
+    void setPortablePrefix();
     void setIconSizes(const QIcon& icon);
 
     const ExecutableFile* m_exeFile;
-    Prefix* m_currentPrefix;
-    Prefix* m_individualPrefix = nullptr;
+    Prefix* m_currentPrefix = nullptr;
+    Prefix* m_individualPrefix;
+    Prefix* m_portablePrefix;
     Shortcut* m_menuShortcut;
     Shortcut* m_desktopShortcut;
     QList<QSize> m_iconSizes;
     QSize m_currentIconSize;
-    QCheckBox* m_individualPrefixCheckBox;
+    QComboBox* m_prefixTypeComboBox;
     QComboBox* m_prefixComboBox;
     QLineEdit* m_nameEdit;
     QToolButton* m_iconToolButton;

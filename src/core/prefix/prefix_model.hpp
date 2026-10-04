@@ -23,12 +23,12 @@ public:
     [[nodiscard]] QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
     bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex()) override;
 
-    [[nodiscard]] Prefix* forIndex(int index) const;
-    [[nodiscard]] Prefix* forPath(QStringView path) const;
-    [[nodiscard]] Prefix* forName(QStringView name) const;
+    [[nodiscard]] Prefix* getByIndex(int index) const;
+    [[nodiscard]] Prefix* getByPath(QStringView path) const;
+    [[nodiscard]] Prefix* getByName(QStringView name) const;
     [[nodiscard]] const QList<Prefix*>& list() const;
     void refreshList();
-    Prefix* add(const QString& name);
+    Prefix* add(const QString& path);
     Prefix* defaultPrefix();
     bool isValidPrefixName(QStringView name);
     bool containsName(QStringView name);

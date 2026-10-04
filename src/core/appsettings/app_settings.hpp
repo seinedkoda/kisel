@@ -8,22 +8,31 @@
 namespace kisel {
 #define APP_SETTINGS AppSettings::instance()
 #define APP_DATA_DIR AppSettings::instance()->appDataDir()
-#define PREFIXES_DIR AppSettings::instance()->prefixesDir()
 #define CTS_DIR_LIST AppSettings::instance()->ctsDirList()
 
 class AppSettings : public QSettings {
     Q_OBJECT
 
 public:
+    enum PrefixType {
+        Shared = 0,
+        Individual = 1,
+        Portable = 2
+    };
+    Q_ENUM(PrefixType)
+
     explicit AppSettings(QObject* parent = nullptr);
     static AppSettings* instance();
 
     static const QString& appConfigPath();
     static const QDir& appDataDir();
     static const QString& logFilePath();
-    static const QDir& prefixesDir();
+    static const QDir& appPrefixesDir();
+    static QString appDefaultPrefixName();
+    static QString portablePrefixName();
     static const QList<QDir>& ctsDirList();
     void createAppDirectories();
+    void upgradeOldData();
 
     void setLanguage(const QString& languageName);
     [[nodiscard]] QString language() const;
@@ -45,11 +54,13 @@ public:
     QString styleName();
     void applyCurrentStyle();
 
-    void setUseIndividualPrefix(bool useIndividualPrefix);
-    [[nodiscard]] bool useIndividualPrefix() const;
+    void setPrefixType(PrefixType type);
+    [[nodiscard]] PrefixType prefixType() const;
 
-    void setDefaultPrefixPath(const QString& prefixPath);
-    [[nodiscard]] QString defaultPrefixPath() const;
+    void setPrefixesDir(const QString& dirPath);
+    [[nodiscard]] QDir prefixesDir() const;
+
+    void setDefaultPrefixName(const QString& prefixName);
     [[nodiscard]] QString defaultPrefixName() const;
 
     void setDefaultCtPath(const QString& ctPath);

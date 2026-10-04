@@ -88,12 +88,19 @@ void Shortcut::parseExecValue(QStringView value)
         if (!isFile) {
             if (token.startsWith("-p"_L1) || token.startsWith("--prefix"_L1)) {
                 qsizetype equalPos = token.indexOf(u'=');
+                QString prefixValue;
                 if (equalPos == -1 && i + 1 < tokens.size() && !tokens.at(i + 1).startsWith('-')) {
                     // --param value
-                    m_prefixName = tokens.at(i + 1);
+                    prefixValue = tokens.at(i + 1);
                 } else {
                     // --param=value
-                    m_prefixName = token.mid(equalPos + 1);
+                    prefixValue = token.mid(equalPos + 1);
+                }
+
+                if (QFileInfo(prefixValue).isAbsolute()) {
+                    m_prefixPath = prefixValue;
+                } else {
+                    m_prefixPath = APP_SETTINGS->prefixesDir().filePath(prefixValue);
                 }
             }
         } else {
@@ -117,9 +124,9 @@ QString Shortcut::name() const
     return m_name;
 }
 
-QString Shortcut::prefixName() const
+QString Shortcut::prefixPath() const
 {
-    return m_prefixName;
+    return m_prefixPath;
 }
 
 QString Shortcut::exeFilePath() const
@@ -160,7 +167,7 @@ QList<QDir> Shortcut::shortcutDirs(ShortcutLocations locations)
 QDir Shortcut::menuShortcutsDir()
 {
     if (APP_SETTINGS->isFlatpak()) {
-        return { QDir::homePath() % "/.local/share/applications"_L1 }; // or "--filesystem=xdg-data/applications"
+        return { QDir::home().filePath("/.local/share/applications"_L1) }; // or "--filesystem=xdg-data/applications"
     }
     return { QStandardPaths::writableLocation(QStandardPaths::ApplicationsLocation) };
 }

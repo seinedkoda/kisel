@@ -53,9 +53,9 @@ CtPage::CtPage(QWidget* parent)
     auto* ctInstalledProxyModel = new CtInstalledProxyModel(this);
     ctInstalledProxyModel->setSourceModel(CT_MODEL);
     defaultCtComboBox->setModel(ctInstalledProxyModel);
-    defaultCtComboBox->setCurrentIndex(CT_MODEL->ctIndex(CT_MODEL->defaultCt()));
+    defaultCtComboBox->setCurrentIndex(CT_MODEL->indexOf(CT_MODEL->defaultCt()));
     connect(defaultCtComboBox, &QComboBox::currentIndexChanged, this, [this, defaultCtComboBox](int index) {
-        APP_SETTINGS->setDefaultCtPath(CT_MODEL->forIndex(index)->path());
+        APP_SETTINGS->setDefaultCtPath(CT_MODEL->getByIndex(index)->path());
         m_oldDeviceInfoWidget->setHidden(OldDeviceInfoWidget::isCompatibleCt(defaultCtComboBox->currentText()));
     });
     layout->addWidget(defaultCtComboBox);

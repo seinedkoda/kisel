@@ -34,9 +34,9 @@ public:
     [[nodiscard]] QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
     bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex()) override;
 
-    [[nodiscard]] int ctIndex(Ct* ct) const;
-    [[nodiscard]] Ct* forIndex(int index) const;
-    [[nodiscard]] Ct* forPath(QStringView path) const;
+    [[nodiscard]] int indexOf(Ct* ct) const;
+    [[nodiscard]] Ct* getByIndex(int index) const;
+    [[nodiscard]] Ct* getByPath(QStringView path) const;
     void refreshList();
     Ct* add(const QString& path);
     Ct* defaultCt();

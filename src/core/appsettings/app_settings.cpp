@@ -20,6 +20,8 @@ Q_APPLICATION_STATIC(AppSettings, g_appSettings)
 AppSettings::AppSettings(QObject* parent)
     : QSettings(appConfigPath(), QSettings::IniFormat, parent)
 {
+    upgradeOldData();
+
     QIcon::setThemeSearchPaths(QIcon::themeSearchPaths() << ":/thirdparty");
 
     if (QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark) {
@@ -54,6 +56,24 @@ void AppSettings::createAppDirectories()
     }
 }
 
+void AppSettings::upgradeOldData()
+{
+    // 1.4 -> 1.5
+    if (contains("defaultPrefix"_L1)) {
+        qInfo() << "\"defaultPrefix\" upgrade";
+        QString defaultPrefix = value("defaultPrefix"_L1).toString();
+        setDefaultPrefixName(QFileInfo(defaultPrefix).fileName());
+        remove("defaultPrefix"_L1);
+    }
+
+    if (contains("individualPrefix"_L1)) {
+        qInfo() << "\"individualPrefix\" upgrade";
+        bool individualPrefix = value("individualPrefix"_L1).toBool();
+        setPrefixType(individualPrefix ? PrefixType::Individual : PrefixType::Shared);
+        remove("individualPrefix"_L1);
+    }
+}
+
 void AppSettings::loadLanguageMap()
 {
     const QStringList translationFiles = QDir(":/i18n"_L1).entryList({ "kisel_*.qm"_L1 });
@@ -82,10 +102,20 @@ const QString& AppSettings::logFilePath()
     return logFilePath;
 }
 
-const QDir& AppSettings::prefixesDir()
+const QDir& AppSettings::appPrefixesDir()
 {
     static QDir dir(appDataDir().filePath("prefixes/"_L1));
     return dir;
+}
+
+QString AppSettings::appDefaultPrefixName()
+{
+    return "Default"_L1;
+}
+
+QString AppSettings::portablePrefixName()
+{
+    return ".kisel-prefix"_L1;
 }
 
 const QList<QDir>& AppSettings::ctsDirList()
@@ -196,31 +226,34 @@ void AppSettings::applyCurrentStyle()
     QApplication::setStyle(QStyleFactory::create(styleName()));
 }
 
-void AppSettings::setUseIndividualPrefix(bool useIndividualPrefix)
+void AppSettings::setPrefixType(PrefixType type)
 {
-    setValue("individualPrefix"_L1, useIndividualPrefix);
+    setValue("prefixType"_L1, type);
 }
 
-bool AppSettings::useIndividualPrefix() const
+AppSettings::PrefixType AppSettings::prefixType() const
 {
-    return value("individualPrefix"_L1, false).toBool();
+    return value("prefixType"_L1, PrefixType::Shared).value<PrefixType>();
 }
 
-void AppSettings::setDefaultPrefixPath(const QString& prefixPath)
+void AppSettings::setPrefixesDir(const QString& dirPath)
 {
-    setValue("defaultPrefix"_L1, prefixPath);
+    setValue("prefixesDir"_L1, dirPath);
 }
 
-QString AppSettings::defaultPrefixPath() const
+QDir AppSettings::prefixesDir() const
 {
-    static QString defaultPrefixPath = appDataDir().filePath("prefixes/Default/"_L1);
-    return value("defaultPrefix"_L1, defaultPrefixPath).toString();
+    return { value("prefixesDir"_L1, appPrefixesDir().path()).toString() };
+}
+
+void AppSettings::setDefaultPrefixName(const QString& prefixName)
+{
+    setValue("defaultPrefixName"_L1, prefixName);
 }
 
 QString AppSettings::defaultPrefixName() const
 {
-    const QString defaultPrefixName = QFileInfo(defaultPrefixPath()).fileName();
-    return defaultPrefixName.isEmpty() ? "Default"_L1 : defaultPrefixName;
+    return value("defaultPrefixName"_L1, appDefaultPrefixName()).toString();
 }
 
 void AppSettings::setDefaultCtPath(const QString& ctPath)

@@ -14,7 +14,7 @@
 #include "core/app/app.hpp"
 #include "core/appsettings/app_settings.hpp"
 #include "core/compatibilitytools/ct_model.hpp"
-#include "core/prefix/prefix_settings.hpp"
+#include "core/prefix/prefix.hpp"
 #include "ui/aboutapp/about_app_dialog.hpp"
 #include "ui/appsettings/app_settings_window.hpp"
 #include "ui/compatibilitytools/ct_list_widget.hpp"
@@ -23,17 +23,18 @@
 #include "ui/prefix/prefix_settings_dialog.hpp"
 #include "ui/shortcuts/edit_shortcuts_dialog.hpp"
 
+using namespace Qt::StringLiterals;
 using namespace kisel;
 
 MainWindow::MainWindow(const QString& exePath)
     : QMainWindow(nullptr)
-    , m_runConfig(new RunConfig(this))
+    , m_runConfig(RUN_MANAGER->config())
     , m_exeIconLabel(new QLabel(this))
     , m_exeNameLabel(new QLabel(tr("The program is not selected"), this))
     , m_runStopAction(new QAction(QIcon::fromTheme("media-playback-start"), tr("Run"), this))
     , m_runStopButton(new QToolButton(this))
     , m_exeSelectionButton(new QToolButton(this))
-    , m_individualPrefixCheckBox(new QCheckBox(tr("Individual"), this))
+    , m_prefixTypeComboBox(new QComboBox(this))
     , m_prefixComboBox(new QComboBox(this))
     , m_prefixMenuButton(new QToolButton(this))
     , m_ctComboBox(new QComboBox(this))
@@ -104,8 +105,18 @@ MainWindow::MainWindow(const QString& exePath)
     auto* prefixLabel = new QLabel(tr("Prefix"), this);
     environmentBoxLayout->addWidget(prefixLabel, 0, 0);
 
-    m_individualPrefixCheckBox->setChecked(APP_SETTINGS->useIndividualPrefix());
-    environmentBoxLayout->addWidget(m_individualPrefixCheckBox, 1, 0);
+    auto* prefixTypeWidget = new QWidget(this);
+    environmentBoxLayout->addWidget(prefixTypeWidget, 1, 0);
+
+    auto* prefixTypeLayout = new QHBoxLayout(prefixTypeWidget);
+    prefixTypeLayout->setContentsMargins(0, 0, 0, 0);
+
+    auto* prefixTypeLabel = new QLabel(tr("Type"), this);
+    prefixTypeLayout->addWidget(prefixTypeLabel);
+
+    m_prefixTypeComboBox->addItems({ tr("Shared"), tr("Individual"), tr("Portable") });
+    m_prefixTypeComboBox->setCurrentIndex(APP_SETTINGS->prefixType());
+    prefixTypeLayout->addWidget(m_prefixTypeComboBox, 1);
 
     m_prefixComboBox->setModel(PREFIX_MODEL);
     environmentBoxLayout->addWidget(m_prefixComboBox, 2, 0);
@@ -156,8 +167,12 @@ MainWindow::MainWindow(const QString& exePath)
     m_prefixMenuButton->setPopupMode(QToolButton::InstantPopup);
     environmentBoxLayout->addWidget(m_prefixMenuButton, 2, 1);
 
+    auto* bottomPrefixLine = new QFrame(this);
+    bottomPrefixLine->setFrameShape(QFrame::HLine);
+    environmentBoxLayout->addWidget(bottomPrefixLine, 3, 0, 1, 2);
+
     auto* ctLabel = new QLabel(tr("Compatibility tool"), this);
-    environmentBoxLayout->addWidget(ctLabel, 3, 0);
+    environmentBoxLayout->addWidget(ctLabel, 4, 0);
 
     auto* ctInstalledProxyModel = new CtInstalledProxyModel(this);
     m_ctComboBox->setPlaceholderText(tr("Install a new one →"));
@@ -168,12 +183,12 @@ MainWindow::MainWindow(const QString& exePath)
             m_ctComboBox->setCurrentIndex(0);
         }
     });
-    environmentBoxLayout->addWidget(m_ctComboBox, 4, 0);
+    environmentBoxLayout->addWidget(m_ctComboBox, 5, 0);
 
     m_ctWindowButton->setToolTip(tr("Open the Compatibility Tools window"));
     m_ctWindowButton->setIcon(QIcon::fromTheme("view-list-details"));
     connect(m_ctWindowButton, &QToolButton::clicked, this, &MainWindow::onOpenCtListWidget);
-    environmentBoxLayout->addWidget(m_ctWindowButton, 4, 1);
+    environmentBoxLayout->addWidget(m_ctWindowButton, 5, 1);
 
     auto* bottomWidget = new QWidget(this);
     auto* bottomLayout = new QHBoxLayout(bottomWidget);
@@ -203,59 +218,86 @@ MainWindow::MainWindow(const QString& exePath)
 
     setExecutablePath(exePath);
 
-    connect(m_individualPrefixCheckBox, &QCheckBox::clicked, this, &MainWindow::individualPrefixStateChanged);
-    connect(m_prefixComboBox, &QComboBox::currentTextChanged, this, &MainWindow::onCurrentPrefixTextChanged);
+    connect(m_prefixTypeComboBox, &QComboBox::activated, this, &MainWindow::onPrefixTypeSelected);
+    connect(m_prefixComboBox, &QComboBox::textActivated, this, &MainWindow::onPrefixTextSelected);
     connect(m_ctComboBox, &QComboBox::currentIndexChanged, this, &MainWindow::onCurrentCtIndexChanged);
 }
 
-void MainWindow::individualPrefixStateChanged(bool checked)
+void MainWindow::onPrefixTypeSelected(int index)
 {
-    m_manuallyCheckedIndividual = checked;
-    if (checked) {
-        setPrefix(m_individualPrefix);
-    } else {
-        setPrefix(PREFIX_MODEL->defaultPrefix());
+    switch (index) {
+    case AppSettings::PrefixType::Individual:
+        setIndividualPrefix();
+        break;
+    case AppSettings::PrefixType::Portable:
+        setPortablePrefix();
+        break;
+    default:
+        setSharedPrefix(PREFIX_MODEL->defaultPrefix());
+        break;
     }
 }
 
 void MainWindow::setExecutablePath(const QString& exePath)
 {
     m_runConfig->setExecutablePath(exePath);
+    bool exeIsValid = m_runConfig->exeIsValid();
 
-    bool exeIsValid = m_runConfig->exeFile()->isValid();
     m_exeNameLabel->setEnabled(exeIsValid);
     m_runStopAction->setEnabled(exeIsValid);
     m_exeNameLabel->setText(exeIsValid ? m_runConfig->exeName() : tr("The program is not selected"));
+
+    // Set icon
     if (!exeIsValid || m_runConfig->exeIcon().isNull()) {
         m_exeIconLabel->setPixmap(m_unknownExePixmap);
     } else {
         m_exeIconLabel->setPixmap(m_runConfig->exeIcon().pixmap(m_exeIconSize));
     }
 
+    newIndividualPrefixFromExe();
+    newPortablePrefixFromExe();
+
+    setPreferredPrefix();
+}
+
+void MainWindow::newIndividualPrefixFromExe()
+{
     if (m_individualPrefix) {
         m_individualPrefixName.clear();
         m_individualPrefix->deleteLater();
         m_individualPrefix.clear(); // Clear pointer
     }
 
-    if (exeIsValid) {
+    if (m_runConfig->exeIsValid()) {
         m_individualPrefixName = m_runConfig->exeFile()->id();
-        m_individualPrefix = new Prefix(m_individualPrefixName, this);
-        m_prefixComboBox->setPlaceholderText(m_individualPrefixName);
-    } else {
-        m_prefixComboBox->setPlaceholderText(tr("<Select a program>"));
+        m_individualPrefix = new Prefix(APP_SETTINGS->prefixesDir().filePath(m_individualPrefixName), this);
+    }
+}
+
+void MainWindow::newPortablePrefixFromExe()
+{
+    if (m_portablePrefix) {
+        m_portablePrefix->deleteLater();
+        m_portablePrefix.clear();
     }
 
-    setPreferredPrefix();
+    if (m_runConfig->exeIsValid()) {
+        QString prefixPath = m_runConfig->exeFile()->dir().absoluteFilePath(APP_SETTINGS->portablePrefixName());
+        m_portablePrefix = new Prefix(prefixPath, this);
+    }
 }
 
 void MainWindow::setPreferredPrefix()
 {
-    if (m_runConfig->exeFile()->isValid()) {
+    if (m_runConfig->exeIsValid()) {
         // Prefer individual prefix if it exists
         if (PREFIX_MODEL->containsName(m_individualPrefixName)) {
-            m_manuallyCheckedIndividual = false;
-            setPrefix(m_individualPrefix);
+            setIndividualPrefix();
+            return;
+        }
+
+        if (m_portablePrefix && m_portablePrefix->exists()) {
+            setPortablePrefix();
             return;
         }
 
@@ -263,42 +305,81 @@ void MainWindow::setPreferredPrefix()
         const QString& exePath = m_runConfig->exePath();
         for (const auto& prefix : PREFIX_MODEL->list()) {
             if (exePath.startsWith(prefix->path())) {
-                setPrefix(prefix);
+                setSharedPrefix(prefix);
                 return;
             }
         }
     }
 
-    if (m_manuallyCheckedIndividual || APP_SETTINGS->useIndividualPrefix()) {
-        setPrefix(m_individualPrefix);
-    } else {
-        setPrefix(PREFIX_MODEL->defaultPrefix());
+    switch (APP_SETTINGS->prefixType()) {
+    case AppSettings::PrefixType::Individual:
+        setIndividualPrefix();
+        break;
+    case AppSettings::PrefixType::Portable:
+        setPortablePrefix();
+        break;
+    default:
+        setSharedPrefix(PREFIX_MODEL->defaultPrefix());
+        break;
     }
+}
+
+void MainWindow::setSharedPrefix(Prefix* prefix)
+{
+    setPrefix(prefix);
+
+    m_prefixComboBox->setCurrentText(prefix->name());
+    m_prefixComboBox->setEnabled(true);
+    m_prefixTypeComboBox->setCurrentIndex(AppSettings::PrefixType::Shared);
+}
+
+void MainWindow::setIndividualPrefix()
+{
+    setPrefix(m_individualPrefix);
+
+    if (m_runConfig->exeIsValid()) {
+        m_prefixComboBox->setPlaceholderText(m_individualPrefixName);
+    } else {
+        m_prefixComboBox->setPlaceholderText(tr("<Select a program>"));
+    }
+
+    m_prefixComboBox->setCurrentIndex(-1);
+    m_prefixComboBox->setDisabled(true);
+    m_prefixTypeComboBox->setCurrentIndex(AppSettings::PrefixType::Individual);
+}
+
+void MainWindow::setPortablePrefix()
+{
+    setPrefix(m_portablePrefix);
+
+    if (m_runConfig->exeIsValid()) {
+        m_prefixComboBox->setPlaceholderText(APP_SETTINGS->portablePrefixName());
+    } else {
+        m_prefixComboBox->setPlaceholderText(tr("<Select a program>"));
+    }
+
+    m_prefixComboBox->setCurrentIndex(-1);
+    m_prefixComboBox->setDisabled(true);
+    m_prefixTypeComboBox->setCurrentIndex(AppSettings::PrefixType::Portable);
 }
 
 void MainWindow::setPrefix(Prefix* prefix)
 {
-    if (prefix == m_runConfig->prefix()) {
-        return;
+    if (prefix != m_runConfig->prefix()) {
+        m_runConfig->setPrefix(prefix);
     }
 
-    m_runConfig->setPrefix(prefix);
+    bool prefixNotNull = prefix != nullptr;
 
-    bool prefixExists = prefix != nullptr;
-    bool isIndividualPrefix = prefix == m_individualPrefix;
+    m_prefixSettingsAction->setEnabled(prefixNotNull);
+    m_prefixToolsMenu->setEnabled(prefixNotNull);
+    m_prefixOpenAction->setEnabled(prefixNotNull);
 
-    if (isIndividualPrefix) {
-        m_prefixComboBox->setCurrentIndex(-1);
-    } else if (prefixExists) {
+    if (prefixNotNull) {
         m_prefixComboBox->setCurrentText(prefix->name());
+    } else {
+        m_prefixComboBox->setCurrentIndex(-1);
     }
-
-    m_prefixSettingsAction->setEnabled(prefixExists);
-    m_prefixToolsMenu->setEnabled(prefixExists);
-    m_prefixOpenAction->setEnabled(prefixExists);
-
-    m_individualPrefixCheckBox->setChecked(isIndividualPrefix);
-    m_prefixComboBox->setDisabled(isIndividualPrefix);
 
     setPreferredCt();
 }
@@ -307,31 +388,31 @@ void MainWindow::setPreferredCt()
 {
     Ct* ct = nullptr;
     if (m_runConfig->prefix() != nullptr) {
-        ct = CT_MODEL->forPath(m_runConfig->prefix()->settings()->ctPath());
+        ct = CT_MODEL->getByPath(m_runConfig->prefix()->settings()->ctPath());
     }
 
     if (ct == nullptr) {
         Ct* defaultCt = CT_MODEL->defaultCt();
         m_runConfig->setCt(defaultCt);
         if (defaultCt != nullptr) {
-            m_ctComboBox->setCurrentIndex(CT_MODEL->ctIndex(defaultCt));
+            m_ctComboBox->setCurrentIndex(CT_MODEL->indexOf(defaultCt));
         }
     } else {
         m_runConfig->setCt(ct);
-        m_ctComboBox->setCurrentIndex(CT_MODEL->ctIndex(ct));
+        m_ctComboBox->setCurrentIndex(CT_MODEL->indexOf(ct));
     }
 }
 
-void MainWindow::onCurrentPrefixTextChanged(const QString& prefixName)
+void MainWindow::onPrefixTextSelected(const QString& prefixName)
 {
     if (!prefixName.isEmpty()) {
-        setPrefix(PREFIX_MODEL->forName(prefixName));
+        setPrefix(PREFIX_MODEL->getByName(prefixName));
     }
 }
 
 void MainWindow::onCurrentCtIndexChanged(int index)
 {
-    m_runConfig->setCt(CT_MODEL->forIndex(index));
+    m_runConfig->setCt(CT_MODEL->getByIndex(index));
 }
 
 void MainWindow::onOpenPrefixListWidget()
@@ -373,7 +454,7 @@ void MainWindow::onRunStopTriggered()
     if (RUN_MANAGER->isRunning()) {
         RUN_MANAGER->stop();
     } else {
-        RUN_MANAGER->run(m_runConfig);
+        RUN_MANAGER->run();
     }
 }
 

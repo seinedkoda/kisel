@@ -184,7 +184,7 @@ void CtInstaller::addToInstallation(const QString& name, const QUrl& url, const 
         if (success) {
             CT_MODEL->setCtStatus(ct, Ct::Installed);
         } else {
-            CT_MODEL->removeRow(CT_MODEL->ctIndex(ct));
+            CT_MODEL->removeRow(CT_MODEL->indexOf(ct));
             emit installationError(errorText);
         }
     });

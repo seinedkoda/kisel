@@ -64,7 +64,7 @@ void CtListWidget::onContextMenuRequested(const QPoint& pos)
         return;
     }
 
-    Ct* ct = CT_MODEL->forIndex(index.row());
+    Ct* ct = CT_MODEL->getByIndex(index.row());
 
     QMenu menu(this);
 

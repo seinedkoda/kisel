@@ -33,6 +33,11 @@ QString ExecutableFile::path() const
     return m_fileInfo.absoluteFilePath();
 }
 
+QDir ExecutableFile::dir() const
+{
+    return m_fileInfo.dir();
+}
+
 QString ExecutableFile::dirPath() const
 {
     return m_fileInfo.dir().absolutePath();

@@ -77,7 +77,7 @@ bool PrefixModel::removeRows(int row, int count, const QModelIndex& parent)
     return true;
 }
 
-Prefix* PrefixModel::forIndex(int index) const
+Prefix* PrefixModel::getByIndex(int index) const
 {
     if (index >= 0 && index < m_prefixes.count()) {
         return m_prefixes.at(index);
@@ -86,7 +86,7 @@ Prefix* PrefixModel::forIndex(int index) const
     return nullptr;
 }
 
-Prefix* PrefixModel::forPath(QStringView path) const
+Prefix* PrefixModel::getByPath(QStringView path) const
 {
     if (path.isEmpty()) {
         return nullptr;
@@ -101,7 +101,7 @@ Prefix* PrefixModel::forPath(QStringView path) const
     return nullptr;
 }
 
-Prefix* PrefixModel::forName(QStringView name) const
+Prefix* PrefixModel::getByName(QStringView name) const
 {
     if (name.isEmpty()) {
         return nullptr;
@@ -118,12 +118,13 @@ Prefix* PrefixModel::forName(QStringView name) const
 
 void PrefixModel::refreshList()
 {
-    const QStringList dirList = PREFIXES_DIR.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+    const QDir& prefixesDir = APP_SETTINGS->prefixesDir();
+    const QStringList dirList = prefixesDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
 
     // Add new prefixes from dir
     for (const QString& dirName : dirList) {
         if (!containsName(dirName)) {
-            add(dirName);
+            add(prefixesDir.filePath(dirName));
         }
     }
 
@@ -139,18 +140,14 @@ void PrefixModel::refreshList()
         }
     }
 
-    if (m_prefixes.count() == 0) {
-        add(APP_SETTINGS->defaultPrefixName());
+    if (m_prefixes.isEmpty()) {
+        add(prefixesDir.filePath(APP_SETTINGS->defaultPrefixName()));
     }
 }
 
-Prefix* PrefixModel::add(const QString& name)
+Prefix* PrefixModel::add(const QString& path)
 {
-    if (!isValidPrefixName(name)) {
-        return nullptr;
-    }
-
-    auto* prefix = new Prefix(name, this);
+    auto* prefix = new Prefix(path, this);
 
     int insertPos = rowCount();
     beginInsertRows(QModelIndex(), insertPos, insertPos);
@@ -162,11 +159,11 @@ Prefix* PrefixModel::add(const QString& name)
 Prefix* PrefixModel::defaultPrefix()
 {
     QString defaultPrefixName = APP_SETTINGS->defaultPrefixName();
-    Prefix* defaultPrefix = forName(defaultPrefixName);
+    Prefix* defaultPrefix = getByName(defaultPrefixName);
 
     if (defaultPrefix == nullptr) {
         qWarning() << "The default prefix does not exist";
-        return add(defaultPrefixName);
+        return add(APP_SETTINGS->prefixesDir().filePath(defaultPrefixName));
     }
 
     return defaultPrefix;

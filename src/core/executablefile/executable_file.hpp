@@ -13,6 +13,7 @@ public:
     void setPath(const QString& newPath);
     [[nodiscard]] QString id() const;
     [[nodiscard]] QString path() const;
+    [[nodiscard]] QDir dir() const;
     [[nodiscard]] QString dirPath() const;
     [[nodiscard]] QString name() const;
     [[nodiscard]] QString baseName() const;

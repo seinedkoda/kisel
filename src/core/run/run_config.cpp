@@ -37,6 +37,10 @@ const QIcon& RunConfig::exeIcon() const
     return m_exeFile->icon();
 }
 
+bool RunConfig::exeIsValid() const {
+    return m_exeFile->isValid();
+}
+
 void RunConfig::setPrefix(Prefix* prefix)
 {
     m_prefix = prefix;
@@ -47,6 +51,10 @@ Prefix* RunConfig::prefix() const
     return m_prefix;
 }
 
+bool RunConfig::prefixIsValid() const {
+    return !m_prefix.isNull();
+}
+
 void RunConfig::setCt(Ct* ct)
 {
     m_ct = ct;
@@ -55,6 +63,10 @@ void RunConfig::setCt(Ct* ct)
 Ct* RunConfig::ct() const
 {
     return m_ct;
+}
+
+QString RunConfig::workingDirPath() const {
+    return m_exeFile->dirPath();
 }
 
 QProcessEnvironment& RunConfig::env()

@@ -19,27 +19,30 @@ public:
 private slots:
     static void onOpenPrefixListWidget();
     static void onOpenCtListWidget();
+    static void onRunStopTriggered();
     void onExeSelectionClicked();
-    void onRunStopTriggered();
     void onEditShortcutsTriggered();
     void onRunningError(kisel::RunManager::RunningError error, const QString& errorText);
     void onRunningChanged(bool isRunning);
-    void onCurrentPrefixTextChanged(const QString& prefixName);
+    void onPrefixTextSelected(const QString& prefixName);
     void onCurrentCtIndexChanged(int index);
-    void individualPrefixStateChanged(bool checked);
+    void onPrefixTypeSelected(int index);
 
 private:
-
     static void openAppSettingsWindow();
     void setExecutablePath(const QString& exePath);
     void setPreferredPrefix();
+    void newIndividualPrefixFromExe();
+    void newPortablePrefixFromExe();
     void setPrefix(Prefix* prefix);
+    void setSharedPrefix(Prefix* prefix);
+    void setIndividualPrefix();
+    void setPortablePrefix();
     void setPreferredCt();
 
     const QSize m_exeIconSize { 64, 64 };
     const QPixmap m_unknownExePixmap { QIcon::fromTheme("unknown").pixmap(m_exeIconSize) };
     QString m_lastSearchPath = QDir::homePath();
-    bool m_manuallyCheckedIndividual = false;
     RunConfig* m_runConfig;
     QString m_individualPrefixName;
     QLabel* m_exeIconLabel;
@@ -49,7 +52,8 @@ private:
     QToolButton* m_runStopButton;
     QToolButton* m_exeSelectionButton;
     QPointer<Prefix> m_individualPrefix;
-    QCheckBox* m_individualPrefixCheckBox;
+    QPointer<Prefix> m_portablePrefix;
+    QComboBox* m_prefixTypeComboBox;
     QComboBox* m_prefixComboBox;
     QAction* m_prefixSettingsAction;
     QAction* m_prefixComponentsAction;

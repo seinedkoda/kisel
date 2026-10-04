@@ -14,25 +14,30 @@ RunManager::RunManager(PrefixModel* prefixModel, CtModel* ctModel, QObject* pare
     : QObject(parent)
     , m_prefixModel(prefixModel)
     , m_ctModel(ctModel)
-    , m_runConfig(nullptr)
+    , m_runConfig(new RunConfig(this))
 {
     connect(&m_process, &QProcess::started, this, &RunManager::onProcessStarted);
     connect(&m_process, &QProcess::finished, this, &RunManager::onProcessFinished);
     connect(&m_process, &QProcess::errorOccurred, this, &RunManager::onProcessError);
 }
 
-void RunManager::run(RunConfig* runConfig)
+RunConfig* RunManager::config()
+{
+    return m_runConfig;
+}
+
+void RunManager::run()
 {
     if (m_process.state() == QProcess::Running) {
         showError("The executable file is currently running", AlreadyRunning);
         return;
     }
 
-    if (!setupConfig(runConfig)) {
+    if (!setupConfig()) {
         return;
     }
 
-    if (runConfig->isUsingSteam()) {
+    if (m_runConfig->isUsingSteam()) {
         setupProtonProcess();
     } else {
         setupUmuProcess();
@@ -42,17 +47,15 @@ void RunManager::run(RunConfig* runConfig)
         setupExeProcessLogging();
     }
 
-    m_process.setProcessEnvironment(runConfig->env());
-    m_process.setWorkingDirectory(runConfig->exeFile()->dirPath());
-    m_currentTaskName = runConfig->exeName();
+    m_process.setProcessEnvironment(m_runConfig->env());
+    m_process.setWorkingDirectory(m_runConfig->workingDirPath());
+    m_currentTaskName = m_runConfig->exeName();
     m_process.start();
 }
 
-bool RunManager::setupConfig(RunConfig* runConfig)
+bool RunManager::setupConfig()
 {
-    m_runConfig = runConfig;
-
-    if (!runConfig->exeFile()->isValid()) {
+    if (!m_runConfig->exeIsValid()) {
         showError("The executable file is not valid", InvalidExecutable);
         return false;
     }
@@ -70,10 +73,10 @@ bool RunManager::setupConfig(RunConfig* runConfig)
         return false;
     }
 
-    QProcessEnvironment& env = runConfig->setNewEnv();
-    const PrefixSettings* prefixSettings = runConfig->prefix()->settings();
+    QProcessEnvironment& env = m_runConfig->setNewEnv();
+    const PrefixSettings* prefixSettings = m_runConfig->prefix()->settings();
 
-    env.insert("WINEPREFIX"_L1, runConfig->prefix()->path());
+    env.insert("WINEPREFIX"_L1, m_runConfig->prefix()->path());
     env.insert("MANGOHUD"_L1, prefixSettings->mangoHudEnabled() ? Y : N);
     env.insert("OBS_VKCAPTURE"_L1, prefixSettings->obsVkCaptureEnabled() ? Y : N);
     env.insert("PROTON_USE_XALIA"_L1, prefixSettings->xaliaEnabled() ? Y : N);
@@ -115,7 +118,7 @@ bool RunManager::setupCt()
     const QString prefixCtPath = prefixSettings->ctPath();
 
     if (ct == nullptr || ct->path().isEmpty()) {
-        Ct* prefixCt = m_ctModel->forPath(prefixCtPath);
+        Ct* prefixCt = m_ctModel->getByPath(prefixCtPath);
         if (prefixCt != nullptr) {
             m_runConfig->setCt(prefixCt);
         } else {
@@ -157,6 +160,19 @@ void RunManager::setupProtonProcess()
         const QString& steamOverlay32bit = steamDir.filePath("ubuntu12_32/gameoverlayrenderer.so"_L1);
         const QString& steamOverlay64bit = steamDir.filePath("ubuntu12_64/gameoverlayrenderer.so"_L1);
         env.insert("LD_PRELOAD"_L1, steamOverlay32bit % ":"_L1 % steamOverlay64bit);
+
+        // The LD_PRELOAD does nothing if the vulkan layer is not enabled with this
+        env.insert("ENABLE_VK_LAYER_VALVE_steam_overlay_1"_L1, "1"_L1);
+
+        // Steam overlay requires a non empty value on SteamGameId
+        // If steam_appid.txt exists use it otherwise 480 (Spacewar)
+        QFileInfo exeFileInfo(m_runConfig->exePath());
+        QFile steamAppId(exeFileInfo.dir().filePath("steam_appid.txt"_L1));
+        if (steamAppId.open(QIODevice::ReadOnly)) {
+            env.insert("SteamGameId"_L1, steamAppId.readAll().trimmed());
+        } else {
+            env.insert("SteamGameId"_L1, "480"_L1);
+        }
     }
 
     if (prefix->settings()->onlineFixEnabled()) {
