@@ -17,26 +17,28 @@ PrefixPage::PrefixPage(QWidget* parent)
     auto* layout = new QVBoxLayout(this);
     layout->setAlignment(Qt::AlignTop);
 
-    auto* defaultPrefixLabel = new QLabel(tr("Default prefix"), this);
-    layout->addWidget(defaultPrefixLabel);
+    auto* defaultPrefixTypeLabel = new QLabel(tr("Default prefix type"), this);
+    layout->addWidget(defaultPrefixTypeLabel);
 
-    auto* individualPrefixCheckBox = new QCheckBox(tr("Individual"), this);
-    individualPrefixCheckBox->setChecked(APP_SETTINGS->useIndividualPrefix());
-    layout->addWidget(individualPrefixCheckBox);
+    auto* prefixTypeComboBox = new QComboBox(this);
+    prefixTypeComboBox->addItems({ tr("Shared"), tr("Individual"), tr("Portable") });
+    prefixTypeComboBox->setCurrentIndex(APP_SETTINGS->prefixType());
+    layout->addWidget(prefixTypeComboBox);
+
+    connect(prefixTypeComboBox, &QComboBox::currentIndexChanged, this, [](int type) {
+        APP_SETTINGS->setPrefixType(static_cast<AppSettings::PrefixType>(type));
+    });
+
+    auto* defaultPrefixLabel = new QLabel(tr("Default shared prefix"), this);
+    layout->addWidget(defaultPrefixLabel);
 
     auto* prefixComboBox = new QComboBox(this);
     prefixComboBox->setModel(PREFIX_MODEL);
     prefixComboBox->setCurrentText(PREFIX_MODEL->defaultPrefix()->name());
-    prefixComboBox->setDisabled(APP_SETTINGS->useIndividualPrefix());
     connect(prefixComboBox, &QComboBox::currentIndexChanged, this, [](int index) {
-        APP_SETTINGS->setDefaultPrefixPath(PREFIX_MODEL->forIndex(index)->path());
+        APP_SETTINGS->setDefaultPrefixPath(PREFIX_MODEL->getByIndex(index)->path());
     });
     layout->addWidget(prefixComboBox);
-
-    connect(individualPrefixCheckBox, &QCheckBox::clicked, this, [prefixComboBox](bool checked) {
-        APP_SETTINGS->setUseIndividualPrefix(checked);
-        prefixComboBox->setDisabled(checked);
-    });
 
     auto* bottomDefaultPrefixLine = new QFrame(this);
     bottomDefaultPrefixLine->setFrameShape(QFrame::HLine);

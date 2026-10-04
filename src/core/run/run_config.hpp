@@ -20,10 +20,13 @@ public:
     [[nodiscard]] QString exePath() const;
     [[nodiscard]] QString exeName() const;
     [[nodiscard]] const QIcon& exeIcon() const;
+    [[nodiscard]] bool exeIsValid() const;
     void setPrefix(Prefix* prefix);
     [[nodiscard]] Prefix* prefix() const;
+    [[nodiscard]] bool prefixIsValid() const;
     void setCt(Ct* ct);
     [[nodiscard]] Ct* ct() const;
+    [[nodiscard]] QString workingDirPath() const;
     QProcessEnvironment& setNewEnv();
     QProcessEnvironment& env();
     [[nodiscard]] bool isUsingSteam() const;

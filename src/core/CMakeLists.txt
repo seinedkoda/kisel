@@ -1,6 +1,7 @@
 target_sources(kisel PRIVATE
     app/app.hpp app/app.cpp
     appsettings/app_settings.hpp appsettings/app_settings.cpp
+    commandline/command_line_utils.hpp commandline/command_line_utils.cpp
     logging/logging.hpp logging/logging.cpp
     executablefile/executable_file.hpp executablefile/executable_file.cpp
     prefix/prefix.hpp prefix/prefix.cpp

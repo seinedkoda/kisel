@@ -77,7 +77,7 @@ bool PrefixModel::removeRows(int row, int count, const QModelIndex& parent)
     return true;
 }
 
-Prefix* PrefixModel::forIndex(int index) const
+Prefix* PrefixModel::getByIndex(int index) const
 {
     if (index >= 0 && index < m_prefixes.count()) {
         return m_prefixes.at(index);
@@ -86,7 +86,7 @@ Prefix* PrefixModel::forIndex(int index) const
     return nullptr;
 }
 
-Prefix* PrefixModel::forPath(QStringView path) const
+Prefix* PrefixModel::getByPath(QStringView path) const
 {
     if (path.isEmpty()) {
         return nullptr;
@@ -101,7 +101,7 @@ Prefix* PrefixModel::forPath(QStringView path) const
     return nullptr;
 }
 
-Prefix* PrefixModel::forName(QStringView name) const
+Prefix* PrefixModel::getByName(QStringView name) const
 {
     if (name.isEmpty()) {
         return nullptr;
@@ -150,7 +150,7 @@ Prefix* PrefixModel::add(const QString& name)
         return nullptr;
     }
 
-    auto* prefix = new Prefix(name, this);
+    auto* prefix = new Prefix(PREFIXES_DIR.filePath(name), this);
 
     int insertPos = rowCount();
     beginInsertRows(QModelIndex(), insertPos, insertPos);
@@ -162,7 +162,7 @@ Prefix* PrefixModel::add(const QString& name)
 Prefix* PrefixModel::defaultPrefix()
 {
     QString defaultPrefixName = APP_SETTINGS->defaultPrefixName();
-    Prefix* defaultPrefix = forName(defaultPrefixName);
+    Prefix* defaultPrefix = getByName(defaultPrefixName);
 
     if (defaultPrefix == nullptr) {
         qWarning() << "The default prefix does not exist";

@@ -10,7 +10,7 @@ class Prefix : public QObject {
     Q_OBJECT
 
 public:
-    explicit Prefix(const QString& name, QObject* parent = nullptr);
+    explicit Prefix(const QString& path, QObject* parent = nullptr);
 
     [[nodiscard]] QString path() const;
     [[nodiscard]] QDir dir() const;

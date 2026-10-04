@@ -57,7 +57,8 @@ void ShortcutsListWidget::contextMenuEvent(QContextMenuEvent* event)
     QAction* editAction = menu.addAction(QIcon::fromTheme("edit"), tr("Edit"));
     connect(editAction, &QAction::triggered, this, [this, currentIndex]() {
         QString exeFilePath = currentIndex.data(ShortcutModel::ExeFileRole).toString();
-        Prefix* prefix = PREFIX_MODEL->forName(currentIndex.data(ShortcutModel::PrefixRole).toString());
+        QString prefixPath = currentIndex.data(ShortcutModel::PrefixRole).toString();
+        Prefix* prefix = PREFIX_MODEL->getByPath(prefixPath);
         auto* editShortcutsDialog = new EditShortcutsDialog(exeFilePath, prefix, this);
         editShortcutsDialog->show();
     });
@@ -78,12 +79,11 @@ void ShortcutsListWidget::contextMenuEvent(QContextMenuEvent* event)
 
     QAction* openPrefixAction = openMenu->addAction(tr("Prefix"));
     connect(openPrefixAction, &QAction::triggered, this, [this, currentIndex]() {
-        QString prefixName = currentIndex.data(ShortcutModel::PrefixRole).toString();
-        Prefix* prefix = PREFIX_MODEL->forName(prefixName);
-        if (prefix != nullptr) {
-            QDesktopServices::openUrl(QUrl::fromLocalFile(prefix->path()));
+        const QString prefixPath = currentIndex.data(ShortcutModel::PrefixRole).toString();
+        if (prefixPath.isEmpty()) {
+            QMessageBox::critical(this, tr("Error"), tr("The \"%1\" prefix does not exist").arg(prefixPath));
         } else {
-            QMessageBox::critical(this, tr("Error"), tr("The \"%1\" prefix does not exist").arg(prefixName));
+            QDesktopServices::openUrl(QUrl::fromLocalFile(prefixPath));
         }
     });
 

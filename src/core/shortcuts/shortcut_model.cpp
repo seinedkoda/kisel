@@ -100,7 +100,7 @@ QVariant ShortcutModel::data(const QModelIndex& index, int role) const
     case ExeFileRole:
         return shortcut->exeFilePath();
     case PrefixRole:
-        return shortcut->prefixName();
+        return shortcut->prefixPath();
     case LocationRole:
         return shortcut->location();
     default:
@@ -164,7 +164,13 @@ void ShortcutModel::createShortcut(
         shortcutName = exeFile->baseName();
     }
 
-    const QString escapedPrefixName = escapeExecArg(prefix->name());
+    QString escapedPrefixValue;
+    if (prefix->path().startsWith(PREFIXES_DIR.absolutePath())) {
+        escapedPrefixValue = escapeExecArg(prefix->name());
+    } else {
+        escapedPrefixValue = escapeExecArg(prefix->path());
+    }
+
     const QString escapedExePath = escapeExecArg(exeFile->path());
 
     QByteArray data;
@@ -173,10 +179,10 @@ void ShortcutModel::createShortcut(
     data += "Name="_ba % shortcutName.toUtf8() % u'\n';
     if (APP_SETTINGS->isFlatpak()) {
         data += "Exec=flatpak run --file-forwarding io.github.seinedkoda.kisel -p \""_ba
-            % escapedPrefixName.toUtf8() % "\" @@ \""_ba
+            % escapedPrefixValue.toUtf8() % "\" @@ \""_ba
             % escapedExePath.toUtf8() % "\" @@\n"_ba;
     } else {
-        data += "Exec=kisel -p \""_ba % escapedPrefixName.toUtf8() % "\" \""_ba % escapedExePath.toUtf8() % "\"\n"_ba;
+        data += "Exec=kisel -p \""_ba % escapedPrefixValue.toUtf8() % "\" \""_ba % escapedExePath.toUtf8() % "\"\n"_ba;
     }
     data += "Icon="_ba % iconPath.toUtf8() % u'\n';
     data += "Categories="_ba % category.toUtf8() % ";\n"_ba;

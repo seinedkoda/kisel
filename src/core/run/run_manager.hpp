@@ -29,7 +29,8 @@ public:
 
     explicit RunManager(PrefixModel* prefixModel, CtModel* ctModel, QObject* parent = nullptr);
 
-    void run(RunConfig* runConfig);
+    RunConfig* config();
+    void run();
     void runWineCfg(const Prefix* prefix);
     void runExplorer(const Prefix* prefix);
     void runRegedit(const Prefix* prefix);
@@ -48,7 +49,7 @@ private slots:
     void onProcessError(QProcess::ProcessError error);
 
 private:
-    bool setupConfig(RunConfig* runConfig);
+    bool setupConfig();
     bool setupPrefix();
     bool setupCt();
     void setupProtonProcess();
@@ -60,8 +61,8 @@ private:
     QProcess m_process;
     QString m_currentTaskName;
     bool m_isRunning = false;
+    RunConfig* m_runConfig;
     PrefixModel* m_prefixModel;
     CtModel* m_ctModel;
-    RunConfig* m_runConfig;
 };
 }

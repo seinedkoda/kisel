@@ -196,14 +196,14 @@ void AppSettings::applyCurrentStyle()
     QApplication::setStyle(QStyleFactory::create(styleName()));
 }
 
-void AppSettings::setUseIndividualPrefix(bool useIndividualPrefix)
+void AppSettings::setPrefixType(PrefixType type)
 {
-    setValue("individualPrefix"_L1, useIndividualPrefix);
+    setValue("prefixType"_L1, type);
 }
 
-bool AppSettings::useIndividualPrefix() const
+AppSettings::PrefixType AppSettings::prefixType() const
 {
-    return value("individualPrefix"_L1, false).toBool();
+    return value("prefixType"_L1, PrefixType::Shared).value<PrefixType>();
 }
 
 void AppSettings::setDefaultPrefixPath(const QString& prefixPath)
@@ -221,6 +221,10 @@ QString AppSettings::defaultPrefixName() const
 {
     const QString defaultPrefixName = QFileInfo(defaultPrefixPath()).fileName();
     return defaultPrefixName.isEmpty() ? "Default"_L1 : defaultPrefixName;
+}
+
+QString AppSettings::portablePrefixName() {
+    return ".kisel-prefix"_L1;
 }
 
 void AppSettings::setDefaultCtPath(const QString& ctPath)

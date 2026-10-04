@@ -23,7 +23,7 @@ public:
     [[nodiscard]] QString id() const;
     [[nodiscard]] QString path() const;
     [[nodiscard]] QString name() const;
-    [[nodiscard]] QString prefixName() const;
+    [[nodiscard]] QString prefixPath() const;
     [[nodiscard]] QString exeFilePath() const;
     [[nodiscard]] QString category() const;
     [[nodiscard]] ShortcutLocation location() const;
@@ -35,7 +35,7 @@ private:
     QString m_id;
     QString m_path;
     QString m_name;
-    QString m_prefixName;
+    QString m_prefixPath;
     QString m_exeFilePath;
     QString m_category;
     QIcon m_icon;

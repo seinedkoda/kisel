@@ -49,7 +49,7 @@ void PrefixListWidget::onContextMenuRequested(const QPoint& pos)
         return;
     }
 
-    Prefix* prefix = PREFIX_MODEL->forIndex(index.row());
+    Prefix* prefix = PREFIX_MODEL->getByIndex(index.row());
 
     QMenu menu(this);
 

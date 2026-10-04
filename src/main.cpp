@@ -1,9 +1,10 @@
 #include <QApplication>
-#include <QCommandLineParser>
 
 #include "core/app/app.hpp"
 #include "core/appsettings/app_settings.hpp"
+#include "core/commandline/command_line_utils.hpp"
 #include "core/logging/logging.hpp"
+#include "core/run/run_config.hpp"
 #include "ui/mainwindow/main_window.hpp"
 #include "ui/trayicon/tray_icon.hpp"
 
@@ -22,28 +23,18 @@ int main(int argc, char* argv[])
     kisel::APP_SETTINGS->installLocale();
     kisel::APP_SETTINGS->applyCurrentStyle();
 
-    QCommandLineParser parser;
-    parser.setApplicationDescription(QCoreApplication::translate("cli", "Efficient launch of Windows programs"));
-    parser.addHelpOption();
-    parser.addVersionOption();
-    parser.addPositionalArgument("file", "Path to the Windows executable file (.exe)");
-    QCommandLineOption prefixOption({ "p", "prefix" }, QCoreApplication::translate("cli", "Run immediately in <PrefixName>"), "PrefixName", "");
-    parser.addOption(prefixOption);
-    parser.process(app);
+    kisel::RunConfig* runConfig = kisel::RUN_MANAGER->config();
+    kisel::parseCommandLine(QApplication::arguments(), runConfig);
 
     kisel::TrayIcon trayIcon(kisel::RUN_MANAGER);
 
-    const QStringList positionalArgs = parser.positionalArguments();
-    if (positionalArgs.isEmpty()) {
+    if (!runConfig->exeIsValid()) {
         auto* mainWindow = new kisel::MainWindow();
         mainWindow->show();
-    } else if (parser.isSet(prefixOption)) {
-        kisel::RunConfig runConfig;
-        runConfig.setExecutablePath(positionalArgs.first());
-        runConfig.setPrefix(kisel::PREFIX_MODEL->forName(parser.value(prefixOption)));
-        kisel::RUN_MANAGER->run(&runConfig);
+    } else if (runConfig->prefixIsValid()) {
+        kisel::RUN_MANAGER->run();
     } else {
-        auto* mainWindow = new kisel::MainWindow(positionalArgs.first());
+        auto* mainWindow = new kisel::MainWindow(runConfig->exePath());
         mainWindow->show();
     }
 

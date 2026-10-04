@@ -27,12 +27,12 @@ PrefixCompatibilityPage::PrefixCompatibilityPage(PrefixSettings* settings, QWidg
     auto* ctInstalledProxyModel = new CtInstalledProxyModel(this);
     ctInstalledProxyModel->setSourceModel(CT_MODEL);
     ctComboBox->setModel(ctInstalledProxyModel);
-    Ct* prefixCt = CT_MODEL->forPath(settings->ctPath());
+    Ct* prefixCt = CT_MODEL->getByPath(settings->ctPath());
     if (prefixCt != nullptr) {
-        ctComboBox->setCurrentIndex(CT_MODEL->ctIndex(prefixCt));
+        ctComboBox->setCurrentIndex(CT_MODEL->indexOf(prefixCt));
     }
     connect(ctComboBox, &QComboBox::currentIndexChanged, this, [this, ctComboBox](int index) {
-        m_settings->setCtPath(CT_MODEL->forIndex(index)->path());
+        m_settings->setCtPath(CT_MODEL->getByIndex(index)->path());
         m_oldDeviceInfoWidget->setHidden(OldDeviceInfoWidget::isCompatibleCt(ctComboBox->currentText()));
     });
     layout->addWidget(ctComboBox);

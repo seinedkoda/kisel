@@ -4,16 +4,15 @@
 #include <QRegularExpression>
 #include <QSaveFile>
 
-#include "core/appsettings/app_settings.hpp"
 #include "prefix_settings.hpp"
 
 using namespace Qt::StringLiterals;
 using namespace kisel;
 
-Prefix::Prefix(const QString& name, QObject* parent)
+Prefix::Prefix(const QString& path, QObject* parent)
     : QObject(parent)
-    , m_dir(name.isEmpty() ? "" : PREFIXES_DIR.filePath(name))
-    , m_name(name)
+    , m_dir(path)
+    , m_name(m_dir.dirName())
 {
     m_settings = new PrefixSettings(m_dir.filePath(".kisel/prefix.conf"_L1), this);
 }

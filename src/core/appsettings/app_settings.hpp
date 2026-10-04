@@ -15,6 +15,13 @@ class AppSettings : public QSettings {
     Q_OBJECT
 
 public:
+    enum PrefixType {
+        Shared = 0,
+        Individual = 1,
+        Portable = 2
+    };
+    Q_ENUM(PrefixType)
+
     explicit AppSettings(QObject* parent = nullptr);
     static AppSettings* instance();
 
@@ -45,12 +52,13 @@ public:
     QString styleName();
     void applyCurrentStyle();
 
-    void setUseIndividualPrefix(bool useIndividualPrefix);
-    [[nodiscard]] bool useIndividualPrefix() const;
+    void setPrefixType(PrefixType type);
+    [[nodiscard]] PrefixType prefixType() const;
 
     void setDefaultPrefixPath(const QString& prefixPath);
     [[nodiscard]] QString defaultPrefixPath() const;
     [[nodiscard]] QString defaultPrefixName() const;
+    static QString portablePrefixName();
 
     void setDefaultCtPath(const QString& ctPath);
     [[nodiscard]] QString defaultCtPath() const;

@@ -18,11 +18,12 @@ using namespace kisel;
 EditShortcutsDialog::EditShortcutsDialog(const QString& exeFilePath, Prefix* prefix, QWidget* parent)
     : QDialog(parent)
     , m_exeFile(new ExecutableFile(exeFilePath, this))
-    , m_currentPrefix(prefix)
+    , m_individualPrefix(new Prefix(PREFIXES_DIR.filePath(m_exeFile->id()), this))
+    , m_portablePrefix(new Prefix(QFileInfo(exeFilePath).dir().filePath(APP_SETTINGS->portablePrefixName())))
     , m_menuCheckBox(new QCheckBox(tr("Menu"), this))
     , m_desktopCheckbox(new QCheckBox(tr("Desktop"), this))
     , m_iconToolButton(new QToolButton(this))
-    , m_individualPrefixCheckBox(new QCheckBox(tr("Individual"), this))
+    , m_prefixTypeComboBox(new QComboBox(this))
     , m_prefixComboBox(new QComboBox(this))
     , m_categoryComboBox(new QComboBox(this))
     , m_iconMenu(new QMenu(this))
@@ -117,18 +118,30 @@ EditShortcutsDialog::EditShortcutsDialog(const QString& exeFilePath, Prefix* pre
     auto* prefixLabel = new QLabel(tr("Prefix"), this);
     parametersLayout->addWidget(prefixLabel);
 
-    parametersLayout->addWidget(m_individualPrefixCheckBox);
+    m_prefixTypeComboBox->addItems({ tr("Shared"), tr("Individual"), tr("Portable") });
+    parametersLayout->addWidget(m_prefixTypeComboBox);
 
     m_prefixComboBox->setPlaceholderText(m_exeFile->id());
     m_prefixComboBox->setModel(PREFIX_MODEL);
     parametersLayout->addWidget(m_prefixComboBox);
 
-    connect(m_prefixComboBox, &QComboBox::currentIndexChanged, this, [this](int index) {
-        if (index == -1) {
-            m_currentPrefix = m_individualPrefix;
-        } else {
-            m_currentPrefix = PREFIX_MODEL->forIndex(index);
+    connect(m_prefixTypeComboBox, &QComboBox::activated, this, [this](int index) {
+        switch (index) {
+        case AppSettings::PrefixType::Individual:
+            setIndividualPrefix();
+            break;
+        case AppSettings::PrefixType::Portable:
+            setPortablePrefix();
+            break;
+        default:
+            setSharedPrefix(PREFIX_MODEL->defaultPrefix());
+            break;
         }
+    });
+
+    connect(m_prefixComboBox, &QComboBox::textActivated, this, [this](const QString& prefixName) {
+        Prefix* prefix = PREFIX_MODEL->getByName(prefixName);
+        setSharedPrefix(prefix);
     });
 
     auto* buttonBox = new QDialogButtonBox(this);
@@ -138,29 +151,14 @@ EditShortcutsDialog::EditShortcutsDialog(const QString& exeFilePath, Prefix* pre
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::close);
     connect(buttonBox, &QDialogButtonBox::accepted, this, &EditShortcutsDialog::onAccepted);
 
-    setDefaultParameters();
-
-    connect(m_individualPrefixCheckBox, &QCheckBox::clicked, this, [this](bool checked) {
-        m_prefixComboBox->setDisabled(checked);
-        if (checked) {
-            m_prefixComboBox->setCurrentIndex(-1);
-        } else {
-            m_prefixComboBox->setCurrentText(PREFIX_MODEL->defaultPrefix()->name());
-        }
-    });
+    setDefaultParameters(prefix);
 
     adjustSize();
     setFixedSize(size());
 }
 
-void EditShortcutsDialog::setDefaultParameters()
+void EditShortcutsDialog::setDefaultParameters(Prefix* prefix)
 {
-    const QString individualPrefixName = m_exeFile->id();
-    m_individualPrefix = PREFIX_MODEL->forName(individualPrefixName);
-    if (m_individualPrefix == nullptr) {
-        m_individualPrefix = new Prefix(individualPrefixName, this);
-    }
-
     Shortcut* shortcut = nullptr;
     if (m_menuShortcut != nullptr) {
         shortcut = m_menuShortcut;
@@ -171,10 +169,11 @@ void EditShortcutsDialog::setDefaultParameters()
     if (shortcut == nullptr) {
         m_nameEdit->setText(m_exeFile->baseName());
         m_categoryComboBox->setCurrentText(tr("Game"));
+        setDefaultPrefixFromPath(prefix == nullptr ? QString() : prefix->path());
     } else {
         m_nameEdit->setText(shortcut->name());
-        m_currentPrefix = PREFIX_MODEL->forName(shortcut->prefixName());
         m_categoryComboBox->setCurrentText(categoryMap().value(shortcut->category()));
+        setDefaultPrefixFromPath(shortcut->prefixPath());
         QList<QSize> shortcutIconSizes = shortcut->icon().availableSizes();
         if (!shortcutIconSizes.isEmpty()) {
             m_currentIconSize = shortcut->icon().availableSizes().constFirst();
@@ -183,27 +182,49 @@ void EditShortcutsDialog::setDefaultParameters()
         }
     }
 
-    if (m_currentPrefix == nullptr) {
-        if (APP_SETTINGS->useIndividualPrefix()) {
-            m_prefixComboBox->setCurrentIndex(-1);
-        } else {
-            m_prefixComboBox->setCurrentText(PREFIX_MODEL->defaultPrefix()->name());
-        }
-    }
-
-    bool isIndividualPrefix = m_currentPrefix->name() == individualPrefixName;
-    if (isIndividualPrefix) {
-        m_prefixComboBox->setCurrentIndex(-1);
-    } else {
-        m_prefixComboBox->setCurrentText(m_currentPrefix->name());
-    }
-
-    m_prefixComboBox->setDisabled(isIndividualPrefix);
-    m_individualPrefixCheckBox->setChecked(isIndividualPrefix);
-
     if (!m_exeFile->icon().isNull()) {
         m_iconToolButton->setIcon(m_exeFile->icon().pixmap(m_currentIconSize).scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     }
+}
+
+void EditShortcutsDialog::setDefaultPrefixFromPath(QStringView prefixPath)
+{
+    Prefix* modelPrefix = PREFIX_MODEL->getByPath(prefixPath);
+    if (prefixPath == m_individualPrefix->path()) {
+        setIndividualPrefix();
+    } else if (prefixPath == m_portablePrefix->path()) {
+        setPortablePrefix();
+    } else if (modelPrefix != nullptr) {
+        setSharedPrefix(modelPrefix);
+    } else {
+        setSharedPrefix(PREFIX_MODEL->defaultPrefix());
+    }
+}
+
+void EditShortcutsDialog::setSharedPrefix(Prefix* prefix)
+{
+    m_currentPrefix = prefix;
+    m_prefixComboBox->setCurrentText(prefix->name());
+    m_prefixComboBox->setDisabled(false);
+    m_prefixTypeComboBox->setCurrentIndex(AppSettings::PrefixType::Shared);
+}
+
+void EditShortcutsDialog::setIndividualPrefix()
+{
+    m_currentPrefix = m_individualPrefix;
+    m_prefixComboBox->setPlaceholderText(m_exeFile->id());
+    m_prefixComboBox->setCurrentIndex(-1);
+    m_prefixComboBox->setDisabled(true);
+    m_prefixTypeComboBox->setCurrentIndex(AppSettings::PrefixType::Individual);
+}
+
+void EditShortcutsDialog::setPortablePrefix()
+{
+    m_currentPrefix = m_portablePrefix;
+    m_prefixComboBox->setPlaceholderText(APP_SETTINGS->portablePrefixName());
+    m_prefixComboBox->setCurrentIndex(-1);
+    m_prefixComboBox->setDisabled(true);
+    m_prefixTypeComboBox->setCurrentIndex(AppSettings::PrefixType::Portable);
 }
 
 void EditShortcutsDialog::setIconSizes(const QIcon& icon)
