@@ -23,7 +23,7 @@ public:
         Timedout,
         ReadError,
         WriteError,
-        UnknownError
+        UnknownError,
     };
     Q_ENUM(RunningError)
 
@@ -49,18 +49,19 @@ private slots:
     void onProcessError(QProcess::ProcessError error);
 
 private:
-    bool setupConfig();
+    bool setupConfigData();
     bool setupPrefix();
     bool setupCt();
-    void setupProtonProcess();
-    void setupUmuProcess();
+    bool setupProcess();
+    QStringList setupProtonCommand(QProcessEnvironment& env);
+    QStringList setupUmuCommand(QProcessEnvironment& env);
     void setupExeProcessLogging();
     void runWinetricksUtility(const Prefix* prefix, const QString& utilName);
     void showError(const QString& errorText, RunningError error, bool emitText = false);
 
-    QProcess m_process;
     QString m_currentTaskName;
-    bool m_isRunning = false;
+    bool m_isRunning;
+    QProcess* m_process;
     RunConfig* m_runConfig;
     PrefixModel* m_prefixModel;
     CtModel* m_ctModel;

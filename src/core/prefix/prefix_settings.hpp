@@ -13,6 +13,10 @@ public:
     // Services
     void setMangoHudEnabled(bool enabled);
     [[nodiscard]] bool mangoHudEnabled() const;
+    void setGamescopeEnabled(bool enabled);
+    [[nodiscard]] bool gamescopeEnabled() const;
+    void setGamescopeArgs(const QString& args);
+    [[nodiscard]] QString gamescopeArgs() const;
     void setObsVkCaptureEnabled(bool enabled);
     [[nodiscard]] bool obsVkCaptureEnabled() const;
     void setXaliaEnabled(bool enabled);

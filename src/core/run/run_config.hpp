@@ -2,7 +2,6 @@
 
 #include <QObject>
 #include <QPointer>
-#include <QProcessEnvironment>
 
 #include "core/compatibilitytools/ct.hpp"
 #include "core/executablefile/executable_file.hpp"
@@ -27,14 +26,11 @@ public:
     void setCt(Ct* ct);
     [[nodiscard]] Ct* ct() const;
     [[nodiscard]] QString workingDirPath() const;
-    QProcessEnvironment& setNewEnv();
-    QProcessEnvironment& env();
     [[nodiscard]] bool isUsingSteam() const;
 
 private:
     ExecutableFile* m_exeFile;
     QPointer<Prefix> m_prefix;
     QPointer<Ct> m_ct;
-    QProcessEnvironment m_env;
 };
 }

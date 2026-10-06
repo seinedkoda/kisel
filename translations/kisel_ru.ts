@@ -1128,17 +1128,32 @@
 <context>
     <name>kisel::PrefixServicesPage</name>
     <message>
-        <location filename="../src/ui/prefix/prefix_services_page.cpp" line="20"/>
+        <location filename="../src/ui/prefix/prefix_services_page.cpp" line="22"/>
         <source>Enable Performance Monitor (requires mangohud to be installed)</source>
         <translation>Включить монитор производительности (требуется установленный mangohud)</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_services_page.cpp" line="29"/>
+        <location filename="../src/ui/prefix/prefix_services_page.cpp" line="52"/>
+        <source>Enable Gamescope compositor (requires gamescope to be installed)</source>
+        <translation>Включить композитор Gamescope (требуется установленный gamescope)</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/prefix/prefix_services_page.cpp" line="57"/>
+        <source>Arguments</source>
+        <translation>Аргументы</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/prefix/prefix_services_page.cpp" line="58"/>
+        <source>example: -W 1920 -H 1080 -r 60</source>
+        <translation>пример: -W 1920 -H 1080 -r 60</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/prefix/prefix_services_page.cpp" line="31"/>
         <source>Enable Vulkan app screen capture for OBS (requires obs-vkcapture to be installed)</source>
         <translation>Включить захват экрана приложений на Vulkan для OBS (требуется установленный obs-vkcapture)</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_services_page.cpp" line="37"/>
+        <location filename="../src/ui/prefix/prefix_services_page.cpp" line="39"/>
         <source>Enable accessibility controls, such as controlling the application interface with a gamepad</source>
         <translation>Включить специальные возможности управления, такие как управление интерфейсом с помощью геймпада</translation>
     </message>

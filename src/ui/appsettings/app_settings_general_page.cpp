@@ -76,7 +76,7 @@ AppSettingsGeneralPage::AppSettingsGeneralPage(QWidget* parent)
         openLogFileButton->setEnabled(checked);
     });
 
-    connect(openLogFileButton, &QPushButton::clicked, this, [this]() {
+    connect(openLogFileButton, &QPushButton::clicked, this, [this] {
         if (QFileInfo::exists(APP_SETTINGS->logFilePath())) {
             QDesktopServices::openUrl(QUrl::fromLocalFile(APP_SETTINGS->logFilePath()));
         } else {

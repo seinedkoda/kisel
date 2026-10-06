@@ -69,20 +69,10 @@ QString RunConfig::workingDirPath() const {
     return m_exeFile->dirPath();
 }
 
-QProcessEnvironment& RunConfig::env()
-{
-    return m_env;
-}
-
-QProcessEnvironment& RunConfig::setNewEnv()
-{
-    return m_env = QProcessEnvironment::systemEnvironment();
-}
-
 bool RunConfig::isUsingSteam() const
 {
     if (m_prefix) {
-        return APP_SETTINGS->steamExists() && m_prefix->settings()->steamEnabled();
+        return APP_SETTINGS->steamDirExists() && m_prefix->settings()->steamEnabled();
     }
     return false;
 }

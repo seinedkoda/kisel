@@ -30,6 +30,26 @@ bool PrefixSettings::mangoHudEnabled() const
     return value("mangohud"_L1, false).toBool();
 }
 
+void PrefixSettings::setGamescopeEnabled(bool enabled)
+{
+    setValue("gamescope"_L1, enabled);
+}
+
+bool PrefixSettings::gamescopeEnabled() const
+{
+    return value("gamescope"_L1, false).toBool();
+}
+
+void PrefixSettings::setGamescopeArgs(const QString& args)
+{
+    setValue("gamescopeArgs"_L1, args);
+}
+
+QString PrefixSettings::gamescopeArgs() const
+{
+    return value("gamescopeArgs"_L1).toString();
+}
+
 void PrefixSettings::setObsVkCaptureEnabled(bool enabled)
 {
     setValue("obsvkcapture"_L1, enabled);
