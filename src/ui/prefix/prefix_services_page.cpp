@@ -1,6 +1,8 @@
 #include "prefix_services_page.hpp"
 
 #include <QCheckBox>
+#include <QLabel>
+#include <QLineEdit>
 #include <QVBoxLayout>
 
 #include "core/appsettings/app_settings.hpp"
@@ -40,4 +42,30 @@ PrefixServicesPage::PrefixServicesPage(PrefixSettings* settings, QWidget* parent
         m_settings->setXaliaEnabled(checked);
     });
     layout->addWidget(xaliaCheckBox);
+
+    auto* topGamescopeLine = new QFrame(this);
+    topGamescopeLine->setFrameShape(QFrame::HLine);
+    layout->addWidget(topGamescopeLine);
+
+    auto* gamescopeCheckBox = new QCheckBox("Gamescope"_L1, this);
+    gamescopeCheckBox->setDisabled(APP_SETTINGS->gamescopePath().isEmpty());
+    gamescopeCheckBox->setToolTip(tr("Enable Gamescope compositor (requires gamescope to be installed)"));
+    gamescopeCheckBox->setChecked(m_settings->gamescopeEnabled());
+    layout->addWidget(gamescopeCheckBox);
+
+    auto* gamescopeArgsLineEdit = new QLineEdit(this);
+    gamescopeArgsLineEdit->setToolTip(tr("Arguments"));
+    gamescopeArgsLineEdit->setPlaceholderText(tr("example: -W 1920 -H 1080 -r 60"));
+    gamescopeArgsLineEdit->setText(settings->gamescopeArgs());
+    gamescopeArgsLineEdit->setEnabled(gamescopeCheckBox->isEnabled() && settings->gamescopeEnabled());
+    layout->addWidget(gamescopeArgsLineEdit);
+
+    connect(gamescopeCheckBox, &QCheckBox::clicked, this, [this, gamescopeArgsLineEdit](bool checked) {
+        m_settings->setGamescopeEnabled(checked);
+        gamescopeArgsLineEdit->setEnabled(checked);
+    });
+
+    connect(gamescopeArgsLineEdit, &QLineEdit::textEdited, this, [this](const QString& args) {
+        m_settings->setGamescopeArgs(args);
+    });
 }

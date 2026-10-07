@@ -122,7 +122,7 @@ const QList<QDir>& AppSettings::ctsDirList()
 {
     static QList<QDir> list {
         appDataDir().filePath("compatibilitytools.d/"_L1),
-        steamDir().filePath("compatibilitytools.d/"_L1)
+        steamDir().filePath("compatibilitytools.d/"_L1),
     };
     return list;
 }
@@ -295,7 +295,7 @@ const QDir& AppSettings::steamDir()
     return steamDir;
 }
 
-bool AppSettings::steamExists()
+bool AppSettings::steamDirExists()
 {
     static bool steamExists = steamDir().exists();
     return steamExists;
@@ -335,6 +335,12 @@ const QString& AppSettings::mangoHudPath()
 {
     static QString mangoHudPath = QStandardPaths::findExecutable("mangohud"_L1);
     return mangoHudPath;
+}
+
+const QString& AppSettings::gamescopePath()
+{
+    static QString gamescopePath = QStandardPaths::findExecutable("gamescope"_L1);
+    return gamescopePath;
 }
 
 const QString& AppSettings::obsVkCapturePath()

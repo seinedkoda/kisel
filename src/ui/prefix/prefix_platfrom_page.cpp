@@ -73,19 +73,19 @@ PrefixPlatformPage::PrefixPlatformPage(PrefixSettings* settings, QWidget* parent
     storeComboBox->setCurrentText(settings->store());
     storeLayout->addWidget(storeComboBox);
 
-    connect(storeComboBox, &QComboBox::currentIndexChanged, this, [settings, storeComboBox]() {
+    connect(storeComboBox, &QComboBox::currentIndexChanged, this, [settings, storeComboBox] {
         settings->setStore(storeComboBox->currentText());
     });
 
     auto* clearStoreButton = new QToolButton(this);
     clearStoreButton->setIcon(QIcon::fromTheme("edit-clear"));
-    connect(clearStoreButton, &QToolButton::clicked, this, [storeComboBox]() {
+    connect(clearStoreButton, &QToolButton::clicked, this, [storeComboBox] {
         storeComboBox->setCurrentIndex(-1);
     });
     storeLayout->addWidget(clearStoreButton);
 
     auto* useSteamBox = new QGroupBox(tr("Use Steam"), this);
-    useSteamBox->setEnabled(APP_SETTINGS->steamExists());
+    useSteamBox->setEnabled(APP_SETTINGS->steamDirExists());
     useSteamBox->setCheckable(true);
     useSteamBox->setChecked(settings->steamEnabled());
     auto* steamLayout = new QVBoxLayout(useSteamBox);

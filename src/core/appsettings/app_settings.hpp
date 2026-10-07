@@ -73,7 +73,7 @@ public:
     [[nodiscard]] bool loggingEnabled() const;
 
     static const QDir& steamDir();
-    static bool steamExists();
+    static bool steamDirExists();
 
     void setUseSystemUMU(bool use);
     [[nodiscard]] bool useSystemUMU() const;
@@ -82,6 +82,8 @@ public:
     static const QString& winetricksPath();
 
     static const QString& mangoHudPath();
+
+    static const QString& gamescopePath();
 
     static const QString& obsVkCapturePath();
 

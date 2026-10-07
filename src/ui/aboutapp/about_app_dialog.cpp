@@ -67,20 +67,22 @@ AboutAppDialog::AboutAppDialog(QWidget* parent)
                                               "<dd>winetricks (<i>%4</i>)</dd>"
                                               "<dd>mangohud (<i>%5</i>)</dd>"
                                               "<dd>obs-vkcapture (<i>%6</i>)</dd>"
+                                              "<dd>gamescope (<i>%7</i>)</dd>"
                                               "</dl>"))
                                        .arg(QSysInfo::prettyProductName(),
                                            supportedVulkanVersion,
                                            APP_SETTINGS->umuPath(),
                                            APP_SETTINGS->winetricksPath(),
                                            APP_SETTINGS->mangoHudPath(),
-                                           APP_SETTINGS->obsVkCapturePath());
+                                           APP_SETTINGS->obsVkCapturePath(),
+                                           APP_SETTINGS->gamescopePath());
 
     auto* systemInfoLabel = new QLabel(systemInfoText, this);
     systemInfoLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
     systemInfoLayout->addWidget(systemInfoLabel);
 
     auto* aboutQtButton = new QPushButton(tr("About Qt"), this);
-    connect(aboutQtButton, &QPushButton::clicked, this, [this]() { QMessageBox::aboutQt(this, tr("About Qt")); });
+    connect(aboutQtButton, &QPushButton::clicked, this, [this] { QMessageBox::aboutQt(this, tr("About Qt")); });
 
     auto* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok, this);
     connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::close);
