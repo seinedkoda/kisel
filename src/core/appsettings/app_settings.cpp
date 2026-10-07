@@ -122,7 +122,7 @@ const QList<QDir>& AppSettings::ctsDirList()
 {
     static QList<QDir> list {
         appDataDir().filePath("compatibilitytools.d/"_L1),
-        steamDir().filePath("compatibilitytools.d/"_L1)
+        steamDir().filePath("compatibilitytools.d/"_L1),
     };
     return list;
 }

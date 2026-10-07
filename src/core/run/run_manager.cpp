@@ -1,8 +1,6 @@
 #include "run_manager.hpp"
 
 #include "core/appsettings/app_settings.hpp"
-#include "core/executablefile/executable_file.hpp"
-#include "run_config.hpp"
 
 using namespace Qt::StringLiterals;
 using namespace kisel;
@@ -16,62 +14,59 @@ RunManager::RunManager(PrefixModel* prefixModel, CtModel* ctModel, QObject* pare
     , m_ctModel(ctModel)
     , m_process(nullptr)
     , m_isRunning(false)
-    , m_runConfig(new RunConfig(this))
 {
 }
 
-RunConfig* RunManager::config()
-{
-    return m_runConfig;
-}
-
-void RunManager::run()
+void RunManager::runExe(RunConfig* config)
 {
     if (m_isRunning) {
-        showError("The executable file is currently running", AlreadyRunning);
+        showError("The process is currently running", AlreadyRunning);
         return;
     }
 
-    if (!setupConfigData()) {
+    if (!config->exeIsValid()) {
+        showError("The executable file is not valid", InvalidExecutable);
         return;
     }
 
-    if (!setupProcess()) {
+    if (!setupPrefix(config) || !setupCt(config)) {
+        return;
+    }
+
+    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+    QStringList runnerCommandParts;
+
+    if (config->prefixSettings()->steamEnabled()) {
+        runnerCommandParts = setupProtonCommand(config, env);
+    } else {
+        runnerCommandParts = setupUmuCommand(config, env);
+    }
+
+    if (!setupProcess(config, runnerCommandParts, env)) {
         return;
     }
 
     if (APP_SETTINGS->loggingEnabled()) {
-        setupExeProcessLogging();
+        setupExeProcessLogging(config);
     }
 
-    m_currentTaskName = m_runConfig->exeName();
+    connect(m_process, &QProcess::started, this, &RunManager::onExeProcessStarted);
+    connect(m_process, &QProcess::finished, this, &RunManager::onExeProcessFinished);
+    connect(m_process, &QProcess::errorOccurred, this, &RunManager::onExeProcessError);
+
+    m_currentTaskName = config->exeName();
     m_process->start();
 }
 
-bool RunManager::setupConfigData()
+bool RunManager::setupProcess(RunConfig* config, const QStringList& runnerCommandParts, QProcessEnvironment& env, const QStringList& args)
 {
-    if (!m_runConfig->exeIsValid()) {
-        showError("The executable file is not valid", InvalidExecutable);
+    if (runnerCommandParts.isEmpty()) {
         return false;
     }
 
-    if (!setupPrefix()) {
-        return false;
-    }
+    const PrefixSettings* prefixSettings = config->prefixSettings();
 
-    if (!setupCt()) {
-        return false;
-    }
-
-    return true;
-}
-
-bool RunManager::setupProcess()
-{
-    const PrefixSettings* prefixSettings = m_runConfig->prefix()->settings();
-
-    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-    env.insert("WINEPREFIX"_L1, m_runConfig->prefix()->path());
+    env.insert("WINEPREFIX"_L1, config->prefix()->path());
     env.insert("MANGOHUD"_L1, prefixSettings->mangoHudEnabled() ? Y : N);
     env.insert("OBS_VKCAPTURE"_L1, prefixSettings->obsVkCaptureEnabled() ? Y : N);
     env.insert("PROTON_USE_XALIA"_L1, prefixSettings->xaliaEnabled() ? Y : N);
@@ -89,41 +84,27 @@ bool RunManager::setupProcess()
         baseCommandParts << gamescopePath << QProcess::splitCommand(prefixSettings->gamescopeArgs()) << "--"_L1;
     }
 
-    QStringList runnerCommandParts;
-    if (m_runConfig->isUsingSteam()) {
-        runnerCommandParts << setupProtonCommand(env);
-    } else {
-        runnerCommandParts << setupUmuCommand(env);
-    }
-
-    if (runnerCommandParts.isEmpty()) {
-        return false;
-    }
-
-    baseCommandParts << runnerCommandParts;
+    baseCommandParts << runnerCommandParts << args;
+    m_fullCommandString = baseCommandParts.join(" ");
     QString program = baseCommandParts.takeFirst();
 
     m_process = new QProcess(this);
-    m_process->setWorkingDirectory(m_runConfig->workingDirPath());
+    m_process->setWorkingDirectory(config->workingDirPath());
     m_process->setProcessEnvironment(env);
     m_process->setProgram(program);
     m_process->setArguments(baseCommandParts);
 
-    connect(m_process, &QProcess::started, this, &RunManager::onProcessStarted);
-    connect(m_process, &QProcess::finished, this, &RunManager::onProcessFinished);
-    connect(m_process, &QProcess::errorOccurred, this, &RunManager::onProcessError);
-
     return true;
 }
 
-bool RunManager::setupPrefix()
+bool RunManager::setupPrefix(RunConfig* config)
 {
-    Prefix* prefix = m_runConfig->prefix();
+    Prefix* prefix = config->prefix();
 
     if (prefix == nullptr || prefix->name().isEmpty()) {
         qWarning() << "Prefix not found, default prefix used";
         prefix = m_prefixModel->defaultPrefix();
-        m_runConfig->setPrefix(prefix);
+        config->setPrefix(prefix);
     }
 
     if (!prefix->exists() && !prefix->makePath()) {
@@ -135,36 +116,40 @@ bool RunManager::setupPrefix()
     return true;
 }
 
-bool RunManager::setupCt()
+bool RunManager::setupCt(RunConfig* config)
 {
-    Ct* ct = m_runConfig->ct();
-    PrefixSettings* prefixSettings = m_runConfig->prefix()->settings();
+    Ct* ct = config->ct();
+    PrefixSettings* prefixSettings = config->prefixSettings();
     const QString prefixCtPath = prefixSettings->ctPath();
 
     if (ct == nullptr || ct->path().isEmpty()) {
         Ct* prefixCt = m_ctModel->getByPath(prefixCtPath);
         if (prefixCt != nullptr) {
-            m_runConfig->setCt(prefixCt);
+            config->setCt(prefixCt);
         } else {
             Ct* defaultCt = m_ctModel->defaultCt();
             if (defaultCt == nullptr || defaultCt->path().isEmpty()) {
                 showError("Cannot run with empty compatibility tool", InvalidCt);
                 return false;
             }
-            m_runConfig->setCt(defaultCt);
+            config->setCt(defaultCt);
         }
     }
 
-    QString runConfigCtPath = m_runConfig->ct()->path();
+    QString runConfigCtPath = config->ct()->path();
     if (prefixCtPath != runConfigCtPath) {
         prefixSettings->setCtPath(runConfigCtPath); // Save run settings
     }
     return true;
 }
 
-QStringList RunManager::setupProtonCommand(QProcessEnvironment& env)
+QStringList RunManager::setupProtonCommand(RunConfig* config, QProcessEnvironment& env)
 {
-    const Prefix* prefix = m_runConfig->prefix();
+    if (config->exePath().isEmpty()) {
+        return { };
+    }
+
+    const Prefix* prefix = config->prefix();
 
     // Set current language
     QString protonLocaleName = APP_SETTINGS->locale() % ".UTF-8"_L1;
@@ -186,7 +171,7 @@ QStringList RunManager::setupProtonCommand(QProcessEnvironment& env)
 
         // Steam overlay requires a non empty value on SteamGameId
         // If steam_appid.txt exists use it otherwise 480 (Spacewar)
-        QFileInfo exeFileInfo(m_runConfig->exePath());
+        QFileInfo exeFileInfo(config->exePath());
         QFile steamAppId(exeFileInfo.dir().filePath("steam_appid.txt"_L1));
         if (steamAppId.open(QIODevice::ReadOnly)) {
             env.insert("SteamGameId"_L1, steamAppId.readAll().trimmed());
@@ -200,10 +185,10 @@ QStringList RunManager::setupProtonCommand(QProcessEnvironment& env)
         env.insert("WINEDLLOVERRIDES"_L1, "steam_api64=n;onlinefix64=n;winpixeventruntime=n,b"_L1);
     }
 
-    return { m_runConfig->ct()->dir().filePath("/proton"_L1), "run"_L1, m_runConfig->exePath() };
+    return { config->ct()->dir().filePath("/proton"_L1), "run"_L1, config->exePath() };
 }
 
-QStringList RunManager::setupUmuCommand(QProcessEnvironment& env)
+QStringList RunManager::setupUmuCommand(RunConfig* config, QProcessEnvironment& env)
 {
     QString umuPath = APP_SETTINGS->umuPath();
     if (umuPath.isEmpty()) {
@@ -213,18 +198,19 @@ QStringList RunManager::setupUmuCommand(QProcessEnvironment& env)
 
     QStringList commandParts { umuPath };
 
-    const ExecutableFile* exeFile = m_runConfig->exeFile();
-    const PrefixSettings* prefixSettings = m_runConfig->prefix()->settings();
+    const ExecutableFile* exeFile = config->exeFile();
+    const PrefixSettings* prefixSettings = config->prefixSettings();
+    const QString& exePath = exeFile->path();
 
     if (exeFile->isMsi()) {
-        commandParts.append({ "msiexec", "/i", exeFile->path() });
+        commandParts.append({ "msiexec"_L1, "/i"_L1, exePath });
     } else if (exeFile->isCmd()) {
-        commandParts.append({ "cmd", "/c", exeFile->path() });
-    } else {
-        commandParts.append(exeFile->path());
+        commandParts.append({ "cmd"_L1, "/c"_L1, exePath });
+    } else if (!exePath.isEmpty()) {
+        commandParts.append(exePath);
     }
 
-    env.insert("PROTONPATH"_L1, m_runConfig->ct()->path());
+    env.insert("PROTONPATH"_L1, config->ct()->path());
     env.insert("GAMEID"_L1, prefixSettings->gameId());
     env.insert("STORE"_L1, prefixSettings->store());
     env.insert("UMU_RUNTIME_UPDATE"_L1, APP_SETTINGS->runtimeAutoUpdate() ? Y : N);
@@ -234,85 +220,122 @@ QStringList RunManager::setupUmuCommand(QProcessEnvironment& env)
     return commandParts;
 }
 
-void RunManager::setupExeProcessLogging()
+void RunManager::setupExeProcessLogging(RunConfig* config)
 {
     m_process->setProcessChannelMode(QProcess::MergedChannels);
     m_process->setStandardOutputFile(APP_SETTINGS->logFilePath(), QIODevice::Append);
 
     qDebug() << "=== START EXECUTABLE PROCESS LOGGING" << QDateTime::currentDateTime().toString(Qt::ISODate) << "===";
-    qDebug() << "EXECUTABLE:" << m_runConfig->exePath();
-    qDebug() << "USE STEAM:" << static_cast<int>(m_runConfig->isUsingSteam());
-    if (!m_runConfig->isUsingSteam()) {
+    qDebug() << "EXECUTABLE:" << config->exePath();
+    qDebug() << "PREFIX:" << config->prefix()->path();
+    qDebug() << "COMPATIBILITY TOOL:" << config->ct()->path();
+    qDebug() << "USE STEAM:" << static_cast<int>(config->isUsingSteam());
+    if (!config->isUsingSteam()) {
         qDebug() << "UMU:" << APP_SETTINGS->umuPath();
+        qDebug() << "RUNTIME AUTO-UPDATE:" << APP_SETTINGS->runtimeAutoUpdate();
     }
-    qDebug() << "PREFIX:" << m_runConfig->prefix()->path();
-    qDebug() << "COMPATIBILITY TOOL:" << m_runConfig->ct()->path();
-    qDebug() << "RUNTIME AUTO-UPDATE:" << APP_SETTINGS->runtimeAutoUpdate();
+    qDebug() << "COMMAND:" << m_fullCommandString;
     qDebug() << "===================\n";
 }
 
-void RunManager::runWineCfg(const Prefix* prefix)
+void RunManager::runWineCfg(Prefix* prefix)
 {
-    runWinetricksUtility(prefix, "winecfg"_L1);
+    runWinetricks(prefix, { "winecfg"_L1 }, "Winetricks - winecfg"_L1);
 }
 
-void RunManager::runExplorer(const Prefix* prefix)
+void RunManager::runExplorer(Prefix* prefix)
 {
-    runWinetricksUtility(prefix, "explorer"_L1);
+    runWinetricks(prefix, { "explorer"_L1 }, "Winetricks - explorer"_L1);
 }
 
-void RunManager::runRegedit(const Prefix* prefix)
+void RunManager::runRegedit(Prefix* prefix)
 {
-    runWinetricksUtility(prefix, "regedit"_L1);
+    runWinetricks(prefix, { "regedit"_L1 }, "Winetricks - regedit"_L1);
 }
 
-void RunManager::runUninstaller(const Prefix* prefix)
+void RunManager::runUninstaller(Prefix* prefix)
 {
-    runWinetricksUtility(prefix, "uninstaller"_L1);
+    runWinetricks(prefix, { "uninstaller"_L1 }, "Winetricks - uninstaller"_L1);
 }
 
-void RunManager::runWinetricksUtility(const Prefix* prefix, const QString& utilName)
+void RunManager::runComponentsList(Prefix* prefix, const QString& category, WinetricksCallback callback)
 {
+    runWinetricks(prefix, { category, "list"_L1 }, tr("Updating the component list"), callback);
+}
+
+void RunManager::runInstalledComponentsList(Prefix* prefix, const QString& category, WinetricksCallback callback)
+{
+    runWinetricks(prefix, { category, "list-installed"_L1 }, tr("Updating the list of installed components"), callback);
+}
+
+void RunManager::runComponentsInstallation(Prefix* prefix, const QStringList& components, WinetricksCallback callback)
+{
+    runWinetricks(prefix, QStringList() << "-q"_L1 << components, tr("Installing components"), callback);
+}
+
+void RunManager::runWinetricks(Prefix* prefix, const QStringList& args, const QString& taskName, WinetricksCallback callback)
+{
+    if (m_isRunning) {
+        showError("The process is currently running", AlreadyRunning);
+        return;
+    }
+
     if (APP_SETTINGS->winetricksPath().isEmpty()) {
         showError("\"winetricks\" not found", NoWinetricks);
         return;
     }
 
-    if (APP_SETTINGS->umuPath().isEmpty()) {
-        showError("\"umu-run\" not found", NoUmu);
-        return;
-    }
+    RunConfig config;
+    config.setPrefix(prefix);
 
-    static QStringList winetricksUtils { "winecfg"_L1, "explorer"_L1, "regedit"_L1, "uninstaller"_L1 };
-
-    if (!winetricksUtils.contains(utilName)) {
-        qCritical() << "Unknown winetricks utility";
+    if (!setupPrefix(&config) || !setupCt(&config)) {
         return;
     }
 
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-    env.insert("UMU_RUNTIME_UPDATE"_L1, APP_SETTINGS->runtimeAutoUpdate() ? Y : N);
-    env.insert("WINEPREFIX"_L1, prefix->path());
-    env.insert("PROTONPATH"_L1, prefix->settings()->ctPath());
+    QStringList umuCommandParts = setupUmuCommand(&config, env);
+    QStringList winetricksCommandParts = QStringList() << "winetricks"_L1 << args;
 
-    m_process->setProcessEnvironment(env);
-    m_process->setProgram(APP_SETTINGS->umuPath()); // Don't use pure winetricks!
-    m_process->setArguments({ "winetricks", utilName });
-
-    m_currentTaskName = utilName;
-
-    if (APP_SETTINGS->loggingEnabled()) {
-        m_process->setProcessChannelMode(QProcess::MergedChannels);
-        m_process->setStandardOutputFile(APP_SETTINGS->logFilePath(), QIODevice::Append);
-        qDebug() << "START WINETRICKS UTILITY:" << m_currentTaskName;
+    // Don't use pure winetricks!
+    if (!setupProcess(&config, umuCommandParts, env, winetricksCommandParts)) {
+        return;
     }
 
+    connect(m_process, &QProcess::started, this, [this] {
+        m_isRunning = true;
+        emit runningChanged(true);
+    });
+
+    QObject::connect(m_process, &QProcess::finished, this,
+        [this, callback](int exitCode, QProcess::ExitStatus exitStatus) {
+            qInfo() << "The process terminated with the code:" << exitCode;
+
+            QString output = QString::fromUtf8(m_process->readAllStandardOutput());
+
+            if (!output.isEmpty()) {
+                qDebug().noquote().nospace() << "=== WINETRICKS OUTPUT ===\n"
+                                             << output << "\n=== END OF OUTPUT ===";
+            }
+
+            m_currentTaskName.clear();
+            m_isRunning = false;
+            emit runningChanged(false);
+            m_process->deleteLater();
+            m_process = nullptr;
+
+            if (callback) {
+                callback(exitCode, exitStatus, output);
+            }
+        });
+
+    qDebug() << "=== START WINETRICKS ===\nCOMMAND:" << m_fullCommandString << "\nPREFIX:" << prefix->path() << "\n======";
+    m_currentTaskName = taskName.isEmpty() ? "Winetricks"_L1 : taskName;
     m_process->start();
 }
 
 void RunManager::stop()
 {
-    if (m_process->state() == QProcess::NotRunning) {
+    if (!m_isRunning) {
         return;
     }
 
@@ -330,23 +353,23 @@ bool RunManager::isRunning() const
     return m_isRunning;
 }
 
-void RunManager::onProcessStarted()
+void RunManager::onExeProcessStarted()
 {
     m_isRunning = true;
-    emit runningChanged(true);
+    emit runningChanged(true, true);
 }
 
-void RunManager::onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
+void RunManager::onExeProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
     m_currentTaskName.clear();
     qInfo() << "The process terminated with the code:" << exitCode;
     m_isRunning = false;
-    emit runningChanged(false);
+    emit runningChanged(false, true);
     m_process->deleteLater();
     m_process = nullptr;
 }
 
-void RunManager::onProcessError(QProcess::ProcessError error)
+void RunManager::onExeProcessError(QProcess::ProcessError error)
 {
     QString errorText = m_process->errorString();
     switch (error) {
@@ -373,8 +396,8 @@ void RunManager::onProcessError(QProcess::ProcessError error)
 
 void RunManager::showError(const QString& errorText, RunningError error, bool emitText)
 {
-    qCritical() << errorText;
-    emit runningError(error, emitText ? errorText : "");
+    qCritical().noquote() << errorText;
+    emit exeRunningError(error, emitText ? errorText : "");
 }
 
 QString RunManager::taskName() const

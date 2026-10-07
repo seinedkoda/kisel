@@ -43,12 +43,12 @@
     </message>
     <message>
         <location filename="../src/ui/aboutapp/about_app_dialog.cpp" line="61"/>
-        <source>&lt;dl&gt;&lt;dt&gt;&lt;b&gt;System Information:&lt;/b&gt;&lt;/dt&gt;&lt;dd&gt;OS: &lt;i&gt;%1&lt;/i&gt;&lt;/dd&gt;&lt;dd&gt;Supported Vulkan API: &lt;i&gt;%2&lt;/i&gt;&lt;/dd&gt;&lt;dt&gt;&lt;b&gt;Components:&lt;/b&gt;&lt;/dt&gt;&lt;dd&gt;umu-run (&lt;i&gt;%3&lt;/i&gt;)&lt;/dd&gt;&lt;dd&gt;winetricks (&lt;i&gt;%4&lt;/i&gt;)&lt;/dd&gt;&lt;dd&gt;mangohud (&lt;i&gt;%5&lt;/i&gt;)&lt;/dd&gt;&lt;dd&gt;obs-vkcapture (&lt;i&gt;%6&lt;/i&gt;)&lt;/dd&gt;&lt;/dl&gt;</source>
-        <translation>&lt;dl&gt;&lt;dt&gt;&lt;b&gt;Системная информация:&lt;/b&gt;&lt;/dt&gt;&lt;dd&gt;ОС: &lt;i&gt;%1&lt;/i&gt;&lt;/dd&gt;&lt;dd&gt;Поддерживаемый Vulkan API: &lt;i&gt;%2&lt;/i&gt;&lt;/dd&gt;&lt;dt&gt;&lt;b&gt;Компоненты:&lt;/b&gt;&lt;/dt&gt;&lt;dd&gt;umu-run (&lt;i&gt;%3&lt;/i&gt;)&lt;/dd&gt;&lt;dd&gt;winetricks (&lt;i&gt;%4&lt;/i&gt;)&lt;/dd&gt;&lt;dd&gt;mangohud (&lt;i&gt;%5&lt;/i&gt;)&lt;/dd&gt;&lt;dd&gt;obs-vkcapture (&lt;i&gt;%6&lt;/i&gt;)&lt;/dd&gt;&lt;/dl&gt;</translation>
+        <source>&lt;dl&gt;&lt;dt&gt;&lt;b&gt;System Information:&lt;/b&gt;&lt;/dt&gt;&lt;dd&gt;OS: &lt;i&gt;%1&lt;/i&gt;&lt;/dd&gt;&lt;dd&gt;Supported Vulkan API: &lt;i&gt;%2&lt;/i&gt;&lt;/dd&gt;&lt;dt&gt;&lt;b&gt;Components:&lt;/b&gt;&lt;/dt&gt;&lt;dd&gt;umu-run (&lt;i&gt;%3&lt;/i&gt;)&lt;/dd&gt;&lt;dd&gt;winetricks (&lt;i&gt;%4&lt;/i&gt;)&lt;/dd&gt;&lt;dd&gt;mangohud (&lt;i&gt;%5&lt;/i&gt;)&lt;/dd&gt;&lt;dd&gt;obs-vkcapture (&lt;i&gt;%6&lt;/i&gt;)&lt;/dd&gt;&lt;dd&gt;gamescope (&lt;i&gt;%7&lt;/i&gt;)&lt;/dd&gt;&lt;/dl&gt;</source>
+        <translation>&lt;dl&gt;&lt;dt&gt;&lt;b&gt;Системная информация:&lt;/b&gt;&lt;/dt&gt;&lt;dd&gt;OS: &lt;i&gt;%1&lt;/i&gt;&lt;/dd&gt;&lt;dd&gt;Поддерживаемый Vulkan API: &lt;i&gt;%2&lt;/i&gt;&lt;/dd&gt;&lt;dt&gt;&lt;b&gt;Компоненты:&lt;/b&gt;&lt;/dt&gt;&lt;dd&gt;umu-run (&lt;i&gt;%3&lt;/i&gt;)&lt;/dd&gt;&lt;dd&gt;winetricks (&lt;i&gt;%4&lt;/i&gt;)&lt;/dd&gt;&lt;dd&gt;mangohud (&lt;i&gt;%5&lt;/i&gt;)&lt;/dd&gt;&lt;dd&gt;obs-vkcapture (&lt;i&gt;%6&lt;/i&gt;)&lt;/dd&gt;&lt;dd&gt;gamescope (&lt;i&gt;%7&lt;/i&gt;)&lt;/dd&gt;&lt;/dl&gt;</translation>
     </message>
     <message>
-        <location filename="../src/ui/aboutapp/about_app_dialog.cpp" line="82"/>
-        <location filename="../src/ui/aboutapp/about_app_dialog.cpp" line="83"/>
+        <location filename="../src/ui/aboutapp/about_app_dialog.cpp" line="84"/>
+        <location filename="../src/ui/aboutapp/about_app_dialog.cpp" line="85"/>
         <source>About Qt</source>
         <translation>О Qt</translation>
     </message>
@@ -430,235 +430,235 @@
 <context>
     <name>kisel::MainWindow</name>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="45"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="47"/>
         <source>Kisel</source>
         <translation>Кисель</translation>
     </message>
     <message>
         <location filename="../src/ui/mainwindow/main_window.cpp" line="33"/>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="248"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="250"/>
         <source>The program is not selected</source>
         <translation>Программа не выбрана</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="94"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="96"/>
         <source>Select executable file</source>
         <translation>Выбрать исполняемый файл</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="105"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="107"/>
         <source>Prefix</source>
         <translation>Префикс</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="133"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="135"/>
         <source>Install components</source>
         <translation>Установить компоненты</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="153"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="155"/>
         <source>Remove programs</source>
         <translation>Удаление программ</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="164"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="166"/>
         <source>Open prefix menu</source>
         <translation>Открыть меню префикса</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="126"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="128"/>
         <source>Configure</source>
         <translation>Настроить</translation>
     </message>
     <message>
         <location filename="../src/ui/mainwindow/main_window.cpp" line="34"/>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="520"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="523"/>
         <source>Run</source>
         <translation>Запустить</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="80"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="82"/>
         <source>Shortcuts</source>
         <translation>Ярлыки</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="131"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="133"/>
         <source>Tools</source>
         <translation>Инструменты</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="136"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="138"/>
         <source>Opening error</source>
         <translation>Ошибка открытия</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="136"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="138"/>
         <source>&quot;winetricks&quot; not found! Please install this package to open this window</source>
         <translation>&quot;winetricks&quot; не найден! Пожалуйста установите этот пакет для открытия этого окна</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="144"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="146"/>
         <source>Wine settings</source>
         <translation>Настройки Wine</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="147"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="149"/>
         <source>Explorer</source>
         <translation>Проводник</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="150"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="152"/>
         <source>Registry</source>
         <translation>Реестр</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="161"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="163"/>
         <source>Manage</source>
         <translation>Управление</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="174"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="176"/>
         <source>Compatibility tool</source>
         <translation>Средство совместимости</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="178"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="180"/>
         <source>Install a new one →</source>
         <translation>Установите новый →</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="188"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="190"/>
         <source>Open the Compatibility Tools window</source>
         <translation>Открыть окно управления средствами совместимости</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="199"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="201"/>
         <source>Application settings</source>
         <translation>Настройки приложения</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="212"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="214"/>
         <source>Version: %1</source>
         <translation>Версия: %1</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="442"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="444"/>
         <source>Select the executable file</source>
         <translation>Выберите исполняемый файл</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="484"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="474"/>
+        <source>The process is currently running</source>
+        <translation>В данный момент уже есть рабочий процесс</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="486"/>
         <source>The required compatibility tool is missing, open window to manage?</source>
         <translation>Отсутствует необходимое средство совместимости, открыть окно для управления?</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="469"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="471"/>
         <source>Running error</source>
         <translation>Ошибка запуска</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="83"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="85"/>
         <source>Clear</source>
         <translation>Очистить</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="99"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="101"/>
         <source>Environment</source>
         <translation>Окружение</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="114"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="116"/>
         <source>Type</source>
         <translation>Тип</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="117"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="119"/>
         <source>Shared</source>
         <translation>Общий</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="117"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="119"/>
         <source>Individual</source>
         <translation>Индивидуальный</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="117"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="119"/>
         <source>Portable</source>
         <translation>Портативный</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="156"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="158"/>
         <source>Open in files</source>
         <translation>Открыть в файлах</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="343"/>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="358"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="345"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="360"/>
         <source>&lt;Select a program&gt;</source>
         <translation>&lt;Выберите программу&gt;</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="444"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="446"/>
         <source>Executable files (*.exe *.msi *.bat);;All files (*.*)</source>
         <translation>Исполняемыеф файлы (*.exe *.msi *.bat);;Все файлы (*.*)</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="472"/>
-        <source>The executable file is currently running</source>
-        <translation>Исполняемый файл уже запущен</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="475"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="477"/>
         <source>The executable file is not valid</source>
         <translation>Не подходящий исполняемый файл</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="478"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="480"/>
         <source>Failed to write prefix</source>
         <translation>Не удалось записать префикс</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="490"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="492"/>
         <source>&quot;umu-run&quot; not found</source>
         <translation>Не найден &quot;umu-run&quot;</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="493"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="495"/>
         <source>&quot;winetricks&quot; not found</source>
         <translation>Не найден &quot;winetricks&quot;</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="496"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="498"/>
         <source>Failed to start process: %1</source>
         <translation>Не удалось запустить процесс: %1</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="499"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="501"/>
         <source>Process error: %1</source>
         <translation>Ошибка процесса: %1</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="502"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="504"/>
         <source>Process timeout: %1</source>
         <translation>Истекло время ожидания процесса: %1</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="505"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="507"/>
         <source>Process read error: %1</source>
         <translation>Ошибка чтения процесса: %1</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="508"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="510"/>
         <source>Process write error: %1</source>
         <translation>Ошибка записи процесса: %1</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="511"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="513"/>
         <source>Unknown error: %1</source>
         <translation>Неизвестная ошибка: %1</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="520"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="523"/>
         <source>Stop</source>
         <translation>Остановить</translation>
     </message>
@@ -793,128 +793,140 @@
 <context>
     <name>kisel::PrefixComponentsDialog</name>
     <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="24"/>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="159"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="21"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="130"/>
         <source>Install selected</source>
         <translation>Установить выбранное</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="25"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="22"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="27"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="25"/>
         <source>Kisel — Prefix Components</source>
         <translation>Кисель — Компоненты префикса</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="33"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="31"/>
         <source>&lt;h3&gt;Prefix &quot;%1&quot;&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;Префикс &quot;%1&quot;&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="42"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="40"/>
         <source>Category</source>
         <translation>Категория</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="45"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="43"/>
         <source>dlls</source>
         <translation>dlls</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="46"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="44"/>
         <source>fonts</source>
         <translation>шрифты</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="36"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="34"/>
         <source>Available components for installation:</source>
         <translation>Доступные компоненты для установки:</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="50"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="48"/>
         <source>Search by name</source>
         <translation>Поиск по имени</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="115"/>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="134"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="84"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="105"/>
         <source>Update error</source>
         <translation>Ошибка обновления</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="116"/>
-        <source>Failed to get list of components available for installation: %1</source>
-        <translation>Не удалось получить список компонентов доступных для установки: %1</translation>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="85"/>
+        <source>Failed to get list of components available for installation, exit code: %1</source>
+        <translation>Не удалось получить список доступных компонентов для установки, код: %1</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="135"/>
-        <source>Failed to get list of installed components: %1</source>
-        <translation>Не удалось получить список уже установленных компонентов: %1</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="184"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="155"/>
         <source>&lt;b&gt;Description:&lt;/b&gt; %1</source>
         <translation>&lt;b&gt;Описание:&lt;/b&gt; %1</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="190"/>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="204"/>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="273"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="160"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="229"/>
+        <source>Installing components</source>
+        <translation>Установка компонентов</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="161"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="176"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="230"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="190"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="161"/>
         <source>Cancel the installation process?</source>
         <translation>Отменить процесс установки?</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="205"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="177"/>
         <source>Install selected components?
 %1</source>
         <translation>Установить выбранные компоненты?
 %1</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="200"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="209"/>
+        <source>Installation cancelled</source>
+        <translation>Установка отменена</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="212"/>
+        <source>Failed to install the selected components, exit code: %1</source>
+        <translation>Не удалось установить выбранные компоненты, код: %1</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="172"/>
         <source>There is nothing to install</source>
         <translation>Нечего устанавливать</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="200"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="106"/>
+        <source>Failed to get list of installed components, exit code: %1</source>
+        <translation>Не удалось получить список установленных компонентов, код: %1</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="172"/>
         <source>Mark the components to install in the prefix</source>
         <translation>Отметьте компоненты для установки в префикс</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="227"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="199"/>
         <source>Stop</source>
         <translation>Остановить</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="241"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="211"/>
         <source>Installation error</source>
         <translation>Ошибка установки</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="242"/>
-        <source>Failed to install the selected components: %1</source>
-        <translation>Не удалось установить выбранные компоненты: %1</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="252"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="209"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="222"/>
         <source>Completed</source>
         <translation>Завершено</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="252"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="222"/>
         <source>Successfully installed!</source>
         <translation>Успешно установлено</translation>
     </message>
     <message>
-        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="273"/>
+        <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="230"/>
         <source>Cancel the installation process and close the window?</source>
         <translation>Отменить процесс установки и закрыть окно?</translation>
     </message>
@@ -1189,6 +1201,24 @@
         <location filename="../src/ui/prefix/prefix_settings_dialog.cpp" line="19"/>
         <source>Kisel — Prefix Settings</source>
         <translation>Кисель — Настройки префикса</translation>
+    </message>
+</context>
+<context>
+    <name>kisel::RunManager</name>
+    <message>
+        <location filename="../src/core/run/run_manager.cpp" line="263"/>
+        <source>Updating the component list</source>
+        <translation>Обновление списка компонентов</translation>
+    </message>
+    <message>
+        <location filename="../src/core/run/run_manager.cpp" line="268"/>
+        <source>Updating the list of installed components</source>
+        <translation>Обновление списка установленных компонентов</translation>
+    </message>
+    <message>
+        <location filename="../src/core/run/run_manager.cpp" line="273"/>
+        <source>Installing components</source>
+        <translation>Установка компонентов</translation>
     </message>
 </context>
 <context>

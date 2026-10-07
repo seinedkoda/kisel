@@ -23,7 +23,7 @@ finish-args:
   - --filesystem=/mnt
   - --filesystem=/media
   - --filesystem=/run/media
-  - --env=PATH=/app/bin:/usr/bin:/usr/lib/extensions/vulkan/MangoHud/bin:/usr/lib/extensions/vulkan/OBSVkCapture/bin
+  - --env=PATH=/app/bin:/usr/bin:/usr/lib/extensions/vulkan/MangoHud/bin:/usr/lib/extensions/vulkan/OBSVkCapture/bin:/usr/lib/extensions/vulkan/gamescope/bin
 
 modules:
   - name: icoutils

@@ -22,6 +22,7 @@ public:
     [[nodiscard]] bool exeIsValid() const;
     void setPrefix(Prefix* prefix);
     [[nodiscard]] Prefix* prefix() const;
+    [[nodiscard]] PrefixSettings* prefixSettings() const;
     [[nodiscard]] bool prefixIsValid() const;
     void setCt(Ct* ct);
     [[nodiscard]] Ct* ct() const;

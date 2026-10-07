@@ -7,6 +7,8 @@
 #include "run_config.hpp"
 
 namespace kisel {
+using WinetricksCallback = const std::function<void(int, QProcess::ExitStatus, const QString& output)>&;
+
 class RunManager : public QObject {
     Q_OBJECT
 
@@ -29,40 +31,41 @@ public:
 
     explicit RunManager(PrefixModel* prefixModel, CtModel* ctModel, QObject* parent = nullptr);
 
-    RunConfig* config();
-    void run();
-    void runWineCfg(const Prefix* prefix);
-    void runExplorer(const Prefix* prefix);
-    void runRegedit(const Prefix* prefix);
-    void runUninstaller(const Prefix* prefix);
+    void runExe(RunConfig* config);
+    void runWineCfg(Prefix* prefix);
+    void runExplorer(Prefix* prefix);
+    void runRegedit(Prefix* prefix);
+    void runUninstaller(Prefix* prefix);
+    void runComponentsList(Prefix* prefix, const QString& category, WinetricksCallback callback);
+    void runInstalledComponentsList(Prefix* prefix, const QString& category, WinetricksCallback callback);
+    void runComponentsInstallation(Prefix* prefix, const QStringList& components, WinetricksCallback callback);
     void stop();
     [[nodiscard]] bool isRunning() const;
     [[nodiscard]] QString taskName() const;
 
 signals:
-    void runningChanged(bool isRunning);
-    void runningError(kisel::RunManager::RunningError error, const QString& errorText = "");
+    void runningChanged(bool isRunning, bool isExe = false);
+    void exeRunningError(kisel::RunManager::RunningError error, const QString& errorText = "");
 
 private slots:
-    void onProcessStarted();
-    void onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
-    void onProcessError(QProcess::ProcessError error);
+    void onExeProcessStarted();
+    void onExeProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
+    void onExeProcessError(QProcess::ProcessError error);
 
 private:
-    bool setupConfigData();
-    bool setupPrefix();
-    bool setupCt();
-    bool setupProcess();
-    QStringList setupProtonCommand(QProcessEnvironment& env);
-    QStringList setupUmuCommand(QProcessEnvironment& env);
-    void setupExeProcessLogging();
-    void runWinetricksUtility(const Prefix* prefix, const QString& utilName);
+    bool setupPrefix(RunConfig* config);
+    bool setupCt(RunConfig* config);
+    bool setupProcess(RunConfig* config, const QStringList& runnerCommandParts, QProcessEnvironment& env, const QStringList& args = { });
+    static QStringList setupProtonCommand(RunConfig* config, QProcessEnvironment& env);
+    QStringList setupUmuCommand(RunConfig* config, QProcessEnvironment& env);
+    void setupExeProcessLogging(RunConfig* config);
+    void runWinetricks(Prefix* prefix, const QStringList& args, const QString& taskName = { }, WinetricksCallback callback = { });
     void showError(const QString& errorText, RunningError error, bool emitText = false);
 
     QString m_currentTaskName;
+    QString m_fullCommandString;
     bool m_isRunning;
     QProcess* m_process;
-    RunConfig* m_runConfig;
     PrefixModel* m_prefixModel;
     CtModel* m_ctModel;
 };

@@ -37,7 +37,8 @@ const QIcon& RunConfig::exeIcon() const
     return m_exeFile->icon();
 }
 
-bool RunConfig::exeIsValid() const {
+bool RunConfig::exeIsValid() const
+{
     return m_exeFile->isValid();
 }
 
@@ -51,7 +52,13 @@ Prefix* RunConfig::prefix() const
     return m_prefix;
 }
 
-bool RunConfig::prefixIsValid() const {
+PrefixSettings* RunConfig::prefixSettings() const
+{
+    return m_prefix->settings();
+}
+
+bool RunConfig::prefixIsValid() const
+{
     return !m_prefix.isNull();
 }
 
@@ -65,7 +72,8 @@ Ct* RunConfig::ct() const
     return m_ct;
 }
 
-QString RunConfig::workingDirPath() const {
+QString RunConfig::workingDirPath() const
+{
     return m_exeFile->dirPath();
 }
 

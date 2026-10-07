@@ -23,18 +23,15 @@ int main(int argc, char* argv[])
     kisel::APP_SETTINGS->installLocale();
     kisel::APP_SETTINGS->applyCurrentStyle();
 
-    kisel::RunConfig* runConfig = kisel::RUN_MANAGER->config();
-    kisel::parseCommandLine(QApplication::arguments(), runConfig);
+    kisel::RunConfig runConfig;
+    kisel::parseCommandLine(QApplication::arguments(), &runConfig);
 
     kisel::TrayIcon trayIcon(kisel::RUN_MANAGER);
 
-    if (!runConfig->exeIsValid()) {
-        auto* mainWindow = new kisel::MainWindow();
-        mainWindow->show();
-    } else if (runConfig->prefixIsValid()) {
-        kisel::RUN_MANAGER->run();
+    if (runConfig.exeIsValid() && runConfig.prefixIsValid()) {
+        kisel::RUN_MANAGER->runExe(&runConfig);
     } else {
-        auto* mainWindow = new kisel::MainWindow(runConfig->exePath());
+        auto* mainWindow = new kisel::MainWindow(&runConfig);
         mainWindow->show();
     }
 

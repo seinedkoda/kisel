@@ -57,7 +57,7 @@ PrefixServicesPage::PrefixServicesPage(PrefixSettings* settings, QWidget* parent
     gamescopeArgsLineEdit->setToolTip(tr("Arguments"));
     gamescopeArgsLineEdit->setPlaceholderText(tr("example: -W 1920 -H 1080 -r 60"));
     gamescopeArgsLineEdit->setText(settings->gamescopeArgs());
-    gamescopeArgsLineEdit->setEnabled(settings->gamescopeEnabled());
+    gamescopeArgsLineEdit->setEnabled(gamescopeCheckBox->isEnabled() && settings->gamescopeEnabled());
     layout->addWidget(gamescopeArgsLineEdit);
 
     connect(gamescopeCheckBox, &QCheckBox::clicked, this, [this, gamescopeArgsLineEdit](bool checked) {

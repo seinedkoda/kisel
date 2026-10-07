@@ -14,16 +14,16 @@ class MainWindow : public QMainWindow {
     Q_OBJECT
 
 public:
-    explicit MainWindow(const QString& exePath = "");
+    explicit MainWindow(RunConfig* config = nullptr);
 
 private slots:
     static void onOpenPrefixListWidget();
     static void onOpenCtListWidget();
-    static void onRunStopTriggered();
+    void onRunStopTriggered();
     void onExeSelectionClicked();
     void onEditShortcutsTriggered();
     void onRunningError(kisel::RunManager::RunningError error, const QString& errorText);
-    void onRunningChanged(bool isRunning);
+    void onRunningChanged(bool isRunning, bool isExe);
     void onPrefixTextSelected(const QString& prefixName);
     void onCurrentCtIndexChanged(int index);
     void onPrefixTypeSelected(int index);
