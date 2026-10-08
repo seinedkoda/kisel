@@ -12,7 +12,7 @@ mkdir -p $PACKAGES_DIR
 
 echo "Building Pacman package..."
 docker build \
-    -f "./archlinux/build-pacman.Dockerfile" \
+    -f "./archlinux/local/build-pacman.Dockerfile" \
     -t kisel-pacman \
     "${PROJECT_DIR}"
 

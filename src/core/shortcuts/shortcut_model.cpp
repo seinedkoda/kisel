@@ -193,7 +193,7 @@ void ShortcutModel::createShortcut(
 
     static QMap<ShortcutLocation, QDir> dirMap {
         { ShortcutLocation::Desktop, Shortcut::desktopShortcutsDir() },
-        { ShortcutLocation::Menu, Shortcut::menuShortcutsDir() }
+        { ShortcutLocation::Menu, Shortcut::menuShortcutsDir() },
     };
 
     for (auto i = dirMap.cbegin(), end = dirMap.cend(); i != end; ++i) {

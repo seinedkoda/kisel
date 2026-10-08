@@ -54,6 +54,9 @@ public:
     QString styleName();
     void applyCurrentStyle();
 
+    void setInstantRunEnabled(bool enabled);
+    [[nodiscard]] bool instantRunEnabled();
+
     void setPrefixType(PrefixType type);
     [[nodiscard]] PrefixType prefixType() const;
 

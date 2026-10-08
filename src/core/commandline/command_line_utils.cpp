@@ -33,7 +33,12 @@ void kisel::parseCommandLine(const QStringList& args, RunConfig* config)
             }
             config->setPrefix(prefix);
         } else {
-            config->setPrefix(PREFIX_MODEL->getByName(value));
+            Prefix* prefix = PREFIX_MODEL->getByName(value);
+            if (prefix == nullptr) {
+                qWarning() << "Prefix" << value << "not found, using default prefix";
+                prefix = PREFIX_MODEL->defaultPrefix();
+            }
+            config->setPrefix(prefix);
         }
     }
 

@@ -25,10 +25,14 @@ int main(int argc, char* argv[])
 
     kisel::RunConfig runConfig;
     kisel::parseCommandLine(QApplication::arguments(), &runConfig);
+    bool exeIsValid = runConfig.exeIsValid();
 
     kisel::TrayIcon trayIcon(kisel::RUN_MANAGER);
 
-    if (runConfig.exeIsValid() && runConfig.prefixIsValid()) {
+    if (exeIsValid && runConfig.prefixIsValid()) {
+        kisel::RUN_MANAGER->runExe(&runConfig);
+    } else if (exeIsValid && kisel::APP_SETTINGS->instantRunEnabled()) {
+        runConfig.setPrefix(kisel::PREFIX_MODEL->defaultPrefix());
         kisel::RUN_MANAGER->runExe(&runConfig);
     } else {
         auto* mainWindow = new kisel::MainWindow(&runConfig);

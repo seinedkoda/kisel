@@ -59,6 +59,14 @@ AppSettingsGeneralPage::AppSettingsGeneralPage(QWidget* parent)
     });
     layout->addWidget(iconThemeTypeComboBox);
 
+    auto* instantRunCheckBox = new QCheckBox(tr("Instant run"), this);
+    instantRunCheckBox->setToolTip(tr("Instantly run an executable file in the default prefix if a path is specified at startup"));
+    instantRunCheckBox->setChecked(APP_SETTINGS->instantRunEnabled());
+    connect(instantRunCheckBox, &QCheckBox::clicked, this, [](bool checked) {
+        APP_SETTINGS->setInstantRunEnabled(checked);
+    });
+    layout->addWidget(instantRunCheckBox);
+
     auto* topLoggingLine = new QFrame(this);
     topLoggingLine->setFrameShape(QFrame::HLine);
     layout->addWidget(topLoggingLine);

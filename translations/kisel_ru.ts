@@ -76,22 +76,32 @@
         <translation>Система</translation>
     </message>
     <message>
-        <location filename="../src/ui/appsettings/app_settings_general_page.cpp" line="66"/>
+        <location filename="../src/ui/appsettings/app_settings_general_page.cpp" line="62"/>
+        <source>Instant run</source>
+        <translation>Мгновенный запуск</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/appsettings/app_settings_general_page.cpp" line="63"/>
+        <source>Instantly run an executable file in the default prefix if a path is specified at startup</source>
+        <translation>Мгновенно запускать исполняемый файл в префиксе по умолчанию если указан путь при запуске</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/appsettings/app_settings_general_page.cpp" line="74"/>
         <source>Logging</source>
         <translation>Логирование</translation>
     </message>
     <message>
-        <location filename="../src/ui/appsettings/app_settings_general_page.cpp" line="70"/>
+        <location filename="../src/ui/appsettings/app_settings_general_page.cpp" line="78"/>
         <source>Open log file</source>
         <translation>Открыть журнал запуска</translation>
     </message>
     <message>
-        <location filename="../src/ui/appsettings/app_settings_general_page.cpp" line="83"/>
+        <location filename="../src/ui/appsettings/app_settings_general_page.cpp" line="91"/>
         <source>Unable to open</source>
         <translation>Невозможно открыть</translation>
     </message>
     <message>
-        <location filename="../src/ui/appsettings/app_settings_general_page.cpp" line="83"/>
+        <location filename="../src/ui/appsettings/app_settings_general_page.cpp" line="91"/>
         <source>The log file does not exist</source>
         <translation>Файла журнала запуска не существует</translation>
     </message>

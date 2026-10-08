@@ -226,6 +226,14 @@ void AppSettings::applyCurrentStyle()
     QApplication::setStyle(QStyleFactory::create(styleName()));
 }
 
+void AppSettings::setInstantRunEnabled(bool enabled) {
+    setValue("instantRun"_L1, enabled);
+}
+
+bool AppSettings::instantRunEnabled() {
+    return value("instantRun"_L1, false).toBool();
+}
+
 void AppSettings::setPrefixType(PrefixType type)
 {
     setValue("prefixType"_L1, type);

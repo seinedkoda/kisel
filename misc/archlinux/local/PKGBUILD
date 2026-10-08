@@ -1,0 +1,45 @@
+# Maintainer: Seined Koda <seinedk@gmail.com>
+pkgname=kisel
+pkgver=1.5.0
+pkgrel=1
+pkgdesc="Efficient launch of Windows programs"
+arch=('x86_64')
+url="https://github.com/seinedkoda/kisel"
+license=('GPL-3.0-or-later')
+
+options=('!debug' 'strip')
+
+depends=(
+  'qt6-base'
+  'python'
+  'icoutils'
+)
+
+optdepends=(
+  'winetricks: Additional scripts for working with Wine prefix'
+  'mangohud: Overlay for monitoring FPS, temperature, CPU/GPU load'
+  'obs-vkcapture: Vulkan game capture plugin for OBS'
+)
+
+makedepends=(
+  'cmake'
+  'ninja'
+  'qt6-tools'
+  'vulkan-headers'
+)
+
+source=()
+sha256sums=()
+
+build() {
+  cmake -B build -S . \
+    -G Ninja \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=/usr
+
+  cmake --build build -j $(nproc)
+}
+
+package() {
+  DESTDIR="${pkgdir}" cmake --install build
+}
