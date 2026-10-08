@@ -86,30 +86,32 @@
 Priority:
 1. Existing individual prefix
 2. Existing portable prefix
-3. Default prefix type from settings</source>
-        <translation>Мгновенный запуск исполняемого файла в выбранном префиксе, если при запуске указан путь
+3. Prefix containing the executable file
+4. Default prefix type from settings</source>
+        <translation>Мгновенный запуск исполняемого файла в предпочитаемом префиксе, если при запуске указан путь
 Приоритет:
 1. Существующий индивидуальный префикс
-2. Существующий переносимый префикс
+2. Существующий портативный префикс
+3. Префикс содержащий исполняемый файл
 3. Тип префикса по умолчанию из настроек</translation>
     </message>
     <message>
-        <location filename="../src/ui/appsettings/app_settings_general_page.cpp" line="78"/>
+        <location filename="../src/ui/appsettings/app_settings_general_page.cpp" line="79"/>
         <source>Logging</source>
         <translation>Логирование</translation>
     </message>
     <message>
-        <location filename="../src/ui/appsettings/app_settings_general_page.cpp" line="82"/>
+        <location filename="../src/ui/appsettings/app_settings_general_page.cpp" line="83"/>
         <source>Open log file</source>
         <translation>Открыть журнал запуска</translation>
     </message>
     <message>
-        <location filename="../src/ui/appsettings/app_settings_general_page.cpp" line="95"/>
+        <location filename="../src/ui/appsettings/app_settings_general_page.cpp" line="96"/>
         <source>Unable to open</source>
         <translation>Невозможно открыть</translation>
     </message>
     <message>
-        <location filename="../src/ui/appsettings/app_settings_general_page.cpp" line="95"/>
+        <location filename="../src/ui/appsettings/app_settings_general_page.cpp" line="96"/>
         <source>The log file does not exist</source>
         <translation>Файла журнала запуска не существует</translation>
     </message>

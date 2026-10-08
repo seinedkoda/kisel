@@ -64,7 +64,8 @@ AppSettingsGeneralPage::AppSettingsGeneralPage(QWidget* parent)
                                       "Priority:\n"
                                       "1. Existing individual prefix\n"
                                       "2. Existing portable prefix\n"
-                                      "3. Default prefix type from settings"));
+                                      "3. Prefix containing the executable file\n"
+                                      "4. Default prefix type from settings"));
     instantRunCheckBox->setChecked(APP_SETTINGS->instantRunEnabled());
     connect(instantRunCheckBox, &QCheckBox::clicked, this, [](bool checked) {
         APP_SETTINGS->setInstantRunEnabled(checked);
