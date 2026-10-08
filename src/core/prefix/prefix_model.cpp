@@ -23,7 +23,7 @@ QHash<int, QByteArray> PrefixModel::roleNames() const
 {
     static const QHash<int, QByteArray> roles {
         { NameRole, "name" },
-        { PathRole, "path" }
+        { PathRole, "path" },
     };
 
     return roles;

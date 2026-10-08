@@ -284,7 +284,7 @@ void MainWindow::newPortablePrefixFromExe()
     }
 
     if (m_runConfig->exeIsValid()) {
-        QString prefixPath = m_runConfig->exeFile()->dir().absoluteFilePath(APP_SETTINGS->portablePrefixName());
+        QString prefixPath = m_runConfig->exeFile()->dir().absoluteFilePath(AppSettings::portablePrefixName());
         m_portablePrefix = new Prefix(prefixPath, this);
     }
 }
@@ -292,18 +292,19 @@ void MainWindow::newPortablePrefixFromExe()
 void MainWindow::setPreferredPrefix()
 {
     if (m_runConfig->exeIsValid()) {
-        // Prefer individual prefix if it exists
+        // 1. Check the individual prefix
         if (PREFIX_MODEL->containsName(m_individualPrefixName)) {
             setIndividualPrefix();
             return;
         }
 
+        // 2. Check the portable prefix
         if (m_portablePrefix && m_portablePrefix->exists()) {
             setPortablePrefix();
             return;
         }
 
-        // If the executable file is inside the prefix, then prefer it
+        // 3. If the executable file is inside the prefix, then prefer it
         const QString& exePath = m_runConfig->exePath();
         for (const auto& prefix : PREFIX_MODEL->list()) {
             if (exePath.startsWith(prefix->path())) {
@@ -313,6 +314,7 @@ void MainWindow::setPreferredPrefix()
         }
     }
 
+    // 4. Default prefix from settings
     switch (APP_SETTINGS->prefixType()) {
     case AppSettings::PrefixType::Individual:
         setIndividualPrefix();

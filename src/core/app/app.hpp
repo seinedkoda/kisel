@@ -18,7 +18,7 @@ namespace kisel {
 
 class App : public QObject {
 public:
-    App(QObject* parent = nullptr);
+    explicit App(QObject* parent = nullptr);
     static App* instance();
 
     RunManager* runManager();

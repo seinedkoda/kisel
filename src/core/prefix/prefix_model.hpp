@@ -11,7 +11,7 @@ class PrefixModel : public QAbstractListModel {
 public:
     enum Roles {
         NameRole = Qt::UserRole + 1,
-        PathRole
+        PathRole,
     };
     Q_ENUM(Roles)
 

@@ -60,13 +60,13 @@ PrefixPage::PrefixPage(QWidget* parent)
     auto* defaultPrefixLabel = new QLabel(tr("Default shared prefix"), this);
     layout->addWidget(defaultPrefixLabel);
 
-    auto* prefixComboBox = new QComboBox(this);
-    prefixComboBox->setModel(PREFIX_MODEL);
-    prefixComboBox->setCurrentText(PREFIX_MODEL->defaultPrefix()->name());
-    connect(prefixComboBox, &QComboBox::currentTextChanged, this, [](const QString& name) {
+    auto* sharedPrefixComboBox = new QComboBox(this);
+    sharedPrefixComboBox->setModel(PREFIX_MODEL);
+    sharedPrefixComboBox->setCurrentText(PREFIX_MODEL->defaultPrefix()->name());
+    connect(sharedPrefixComboBox, &QComboBox::currentTextChanged, this, [](const QString& name) {
         APP_SETTINGS->setDefaultPrefixName(name);
     });
-    layout->addWidget(prefixComboBox);
+    layout->addWidget(sharedPrefixComboBox);
 
     auto* bottomDefaultPrefixLine = new QFrame(this);
     bottomDefaultPrefixLine->setFrameShape(QFrame::HLine);

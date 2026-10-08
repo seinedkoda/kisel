@@ -60,7 +60,11 @@ AppSettingsGeneralPage::AppSettingsGeneralPage(QWidget* parent)
     layout->addWidget(iconThemeTypeComboBox);
 
     auto* instantRunCheckBox = new QCheckBox(tr("Instant run"), this);
-    instantRunCheckBox->setToolTip(tr("Instantly run an executable file in the default prefix if a path is specified at startup"));
+    instantRunCheckBox->setToolTip(tr("Instantly run an executable file in the preferred prefix if a path is specified at startup\n"
+                                      "Priority:\n"
+                                      "1. Existing individual prefix\n"
+                                      "2. Existing portable prefix\n"
+                                      "3. Default prefix type from settings"));
     instantRunCheckBox->setChecked(APP_SETTINGS->instantRunEnabled());
     connect(instantRunCheckBox, &QCheckBox::clicked, this, [](bool checked) {
         APP_SETTINGS->setInstantRunEnabled(checked);

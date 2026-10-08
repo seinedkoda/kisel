@@ -82,26 +82,34 @@
     </message>
     <message>
         <location filename="../src/ui/appsettings/app_settings_general_page.cpp" line="63"/>
-        <source>Instantly run an executable file in the default prefix if a path is specified at startup</source>
-        <translation>Мгновенно запускать исполняемый файл в префиксе по умолчанию если указан путь при запуске</translation>
+        <source>Instantly run an executable file in the preferred prefix if a path is specified at startup
+Priority:
+1. Existing individual prefix
+2. Existing portable prefix
+3. Default prefix type from settings</source>
+        <translation>Мгновенный запуск исполняемого файла в выбранном префиксе, если при запуске указан путь
+Приоритет:
+1. Существующий индивидуальный префикс
+2. Существующий переносимый префикс
+3. Тип префикса по умолчанию из настроек</translation>
     </message>
     <message>
-        <location filename="../src/ui/appsettings/app_settings_general_page.cpp" line="74"/>
+        <location filename="../src/ui/appsettings/app_settings_general_page.cpp" line="78"/>
         <source>Logging</source>
         <translation>Логирование</translation>
     </message>
     <message>
-        <location filename="../src/ui/appsettings/app_settings_general_page.cpp" line="78"/>
+        <location filename="../src/ui/appsettings/app_settings_general_page.cpp" line="82"/>
         <source>Open log file</source>
         <translation>Открыть журнал запуска</translation>
     </message>
     <message>
-        <location filename="../src/ui/appsettings/app_settings_general_page.cpp" line="91"/>
+        <location filename="../src/ui/appsettings/app_settings_general_page.cpp" line="95"/>
         <source>Unable to open</source>
         <translation>Невозможно открыть</translation>
     </message>
     <message>
-        <location filename="../src/ui/appsettings/app_settings_general_page.cpp" line="91"/>
+        <location filename="../src/ui/appsettings/app_settings_general_page.cpp" line="95"/>
         <source>The log file does not exist</source>
         <translation>Файла журнала запуска не существует</translation>
     </message>
@@ -482,7 +490,7 @@
     </message>
     <message>
         <location filename="../src/ui/mainwindow/main_window.cpp" line="34"/>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="523"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="525"/>
         <source>Run</source>
         <translation>Запустить</translation>
     </message>
@@ -552,22 +560,22 @@
         <translation>Версия: %1</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="444"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="446"/>
         <source>Select the executable file</source>
         <translation>Выберите исполняемый файл</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="474"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="476"/>
         <source>The process is currently running</source>
         <translation>В данный момент уже есть рабочий процесс</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="486"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="488"/>
         <source>The required compatibility tool is missing, open window to manage?</source>
         <translation>Отсутствует необходимое средство совместимости, открыть окно для управления?</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="471"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="473"/>
         <source>Running error</source>
         <translation>Ошибка запуска</translation>
     </message>
@@ -607,68 +615,68 @@
         <translation>Открыть в файлах</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="345"/>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="360"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="347"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="362"/>
         <source>&lt;Select a program&gt;</source>
         <translation>&lt;Выберите программу&gt;</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="446"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="448"/>
         <source>Executable files (*.exe *.msi *.bat);;All files (*.*)</source>
         <translation>Исполняемыеф файлы (*.exe *.msi *.bat);;Все файлы (*.*)</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="477"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="479"/>
         <source>The executable file is not valid</source>
         <translation>Не подходящий исполняемый файл</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="480"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="482"/>
         <source>Failed to write prefix</source>
         <translation>Не удалось записать префикс</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="492"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="494"/>
         <source>&quot;umu-run&quot; not found</source>
         <translation>Не найден &quot;umu-run&quot;</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="495"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="497"/>
         <source>&quot;winetricks&quot; not found</source>
         <translation>Не найден &quot;winetricks&quot;</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="498"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="500"/>
         <source>Failed to start process: %1</source>
         <translation>Не удалось запустить процесс: %1</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="501"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="503"/>
         <source>Process error: %1</source>
         <translation>Ошибка процесса: %1</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="504"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="506"/>
         <source>Process timeout: %1</source>
         <translation>Истекло время ожидания процесса: %1</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="507"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="509"/>
         <source>Process read error: %1</source>
         <translation>Ошибка чтения процесса: %1</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="510"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="512"/>
         <source>Process write error: %1</source>
         <translation>Ошибка записи процесса: %1</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="513"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="515"/>
         <source>Unknown error: %1</source>
         <translation>Неизвестная ошибка: %1</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow/main_window.cpp" line="523"/>
+        <location filename="../src/ui/mainwindow/main_window.cpp" line="525"/>
         <source>Stop</source>
         <translation>Остановить</translation>
     </message>
@@ -933,7 +941,7 @@
     <message>
         <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="222"/>
         <source>Successfully installed!</source>
-        <translation>Успешно установлено</translation>
+        <translation>Успешно установлено!</translation>
     </message>
     <message>
         <location filename="../src/ui/prefix/prefix_components_dialog.cpp" line="230"/>
