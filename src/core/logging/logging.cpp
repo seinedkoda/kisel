@@ -2,7 +2,7 @@
 
 #include <cstdio>
 
-#include "core/appsettings/app_settings.hpp"
+#include "core/settings/app_settings.hpp"
 
 // NOLINTBEGIN
 

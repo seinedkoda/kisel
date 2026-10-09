@@ -1,4 +1,4 @@
-#include "prefix_platfrom_page.hpp"
+#include "platform_settings_page.hpp"
 
 #include <QCheckBox>
 #include <QComboBox>
@@ -8,20 +8,20 @@
 #include <QToolButton>
 #include <QVBoxLayout>
 
-#include "core/appsettings/app_settings.hpp"
+#include "core/settings/app_settings.hpp"
 
 using namespace Qt::StringLiterals;
 using namespace kisel;
 
-PrefixPlatformPage::PrefixPlatformPage(PrefixSettings* settings, QWidget* parent)
-    : QWidget(parent)
+PlatformSettingsPage::PlatformSettingsPage(PrefixSettings* prefixSettings, QWidget* parent)
+    : QWidget(parent), m_settings(prefixSettings)
 {
     auto* layout = new QVBoxLayout(this);
 
     auto* umuBox = new QGroupBox(tr("Don't use Steam"), this);
     umuBox->setToolTip(tr("Use umu-launcher to launch"));
     umuBox->setCheckable(true);
-    umuBox->setChecked(!settings->steamEnabled());
+    umuBox->setChecked(!m_settings->steamEnabled());
     layout->addWidget(umuBox);
 
     auto* umuBoxLayout = new QVBoxLayout(umuBox);
@@ -29,9 +29,9 @@ PrefixPlatformPage::PrefixPlatformPage(PrefixSettings* settings, QWidget* parent
 
     auto* steamEnvCheckBox = new QCheckBox(tr("Steam Environment"), this);
     steamEnvCheckBox->setToolTip(tr("Using the Steam environment for better compatibility with some games"));
-    steamEnvCheckBox->setChecked(settings->steamEnvEnabled());
-    connect(steamEnvCheckBox, &QCheckBox::clicked, this, [settings](bool checked) {
-        settings->setSteamEnvEnabled(checked);
+    steamEnvCheckBox->setChecked(m_settings->steamEnvEnabled());
+    connect(steamEnvCheckBox, &QCheckBox::clicked, this, [this](bool checked) {
+        m_settings->setSteamEnvEnabled(checked);
     });
     umuBoxLayout->addWidget(steamEnvCheckBox);
 
@@ -50,11 +50,11 @@ PrefixPlatformPage::PrefixPlatformPage(PrefixSettings* settings, QWidget* parent
     auto* gameIdEdit = new QLineEdit(this);
     gameIdEdit->setPlaceholderText("umu-default");
     gameIdEdit->setToolTip(tr("Determines the umu-id from the umu databases for games requiring fixes"));
-    gameIdEdit->setText(settings->gameId());
+    gameIdEdit->setText(m_settings->gameId());
     umuBoxLayout->addWidget(gameIdEdit);
 
-    connect(gameIdEdit, &QLineEdit::textEdited, this, [settings](const QString& text) {
-        settings->setGameId(text);
+    connect(gameIdEdit, &QLineEdit::textEdited, this, [this](const QString& text) {
+        m_settings->setGameId(text);
     });
 
     auto* storeLabel = new QLabel(tr("Store"), this);
@@ -70,11 +70,11 @@ PrefixPlatformPage::PrefixPlatformPage(PrefixSettings* settings, QWidget* parent
     storeComboBox->setPlaceholderText(tr("None (Steam)"));
     storeComboBox->setToolTip(tr("Determines which store to use to search for UMU fixes"));
     storeComboBox->addItems(storeList());
-    storeComboBox->setCurrentText(settings->store());
+    storeComboBox->setCurrentText(m_settings->store());
     storeLayout->addWidget(storeComboBox);
 
-    connect(storeComboBox, &QComboBox::currentIndexChanged, this, [settings, storeComboBox] {
-        settings->setStore(storeComboBox->currentText());
+    connect(storeComboBox, &QComboBox::currentIndexChanged, this, [this, storeComboBox] {
+        m_settings->setStore(storeComboBox->currentText());
     });
 
     auto* clearStoreButton = new QToolButton(this);
@@ -87,37 +87,37 @@ PrefixPlatformPage::PrefixPlatformPage(PrefixSettings* settings, QWidget* parent
     auto* useSteamBox = new QGroupBox(tr("Use Steam"), this);
     useSteamBox->setEnabled(APP_SETTINGS->steamDirExists());
     useSteamBox->setCheckable(true);
-    useSteamBox->setChecked(settings->steamEnabled());
+    useSteamBox->setChecked(m_settings->steamEnabled());
     auto* steamLayout = new QVBoxLayout(useSteamBox);
     steamLayout->setAlignment(Qt::AlignTop);
     layout->addWidget(useSteamBox);
 
     auto* steamOverlayCheckBox = new QCheckBox(tr("Steam Overlay"));
-    steamOverlayCheckBox->setChecked(settings->steamOverlayEnabled());
-    connect(steamOverlayCheckBox, &QCheckBox::clicked, this, [settings](bool checked) {
-        settings->setSteamOverlayEnabled(checked);
+    steamOverlayCheckBox->setChecked(m_settings->steamOverlayEnabled());
+    connect(steamOverlayCheckBox, &QCheckBox::clicked, this, [this](bool checked) {
+        m_settings->setSteamOverlayEnabled(checked);
     });
     steamLayout->addWidget(steamOverlayCheckBox);
 
     auto* onlineFixCheckBox = new QCheckBox(tr("Enable OnlineFix"));
-    onlineFixCheckBox->setChecked(settings->onlineFixEnabled());
-    connect(onlineFixCheckBox, &QCheckBox::clicked, this, [settings](bool checked) {
-        settings->setOnlineFixEnabled(checked);
+    onlineFixCheckBox->setChecked(m_settings->onlineFixEnabled());
+    connect(onlineFixCheckBox, &QCheckBox::clicked, this, [this](bool checked) {
+        m_settings->setOnlineFixEnabled(checked);
     });
     steamLayout->addWidget(onlineFixCheckBox);
 
-    connect(umuBox, &QGroupBox::toggled, this, [settings, useSteamBox](bool checked) {
-        settings->setSteamEnabled(!checked);
+    connect(umuBox, &QGroupBox::toggled, this, [this, useSteamBox](bool checked) {
+        m_settings->setSteamEnabled(!checked);
         useSteamBox->setChecked(!checked);
     });
 
-    connect(useSteamBox, &QGroupBox::toggled, this, [settings, umuBox](bool checked) {
-        settings->setSteamEnabled(checked);
+    connect(useSteamBox, &QGroupBox::toggled, this, [this, umuBox](bool checked) {
+        m_settings->setSteamEnabled(checked);
         umuBox->setChecked(!checked);
     });
 }
 
-const QStringList& PrefixPlatformPage::storeList()
+const QStringList& PlatformSettingsPage::storeList()
 {
     static const QStringList list {
         "Amazon"_L1,

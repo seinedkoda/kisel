@@ -1,7 +1,7 @@
 #include <QApplication>
 
 #include "core/app/app.hpp"
-#include "core/appsettings/app_settings.hpp"
+#include "core/settings/app_settings.hpp"
 #include "core/commandline/command_line_utils.hpp"
 #include "core/logging/logging.hpp"
 #include "core/run/run_config.hpp"

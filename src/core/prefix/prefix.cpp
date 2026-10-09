@@ -4,7 +4,7 @@
 #include <QRegularExpression>
 #include <QSaveFile>
 
-#include "prefix_settings.hpp"
+#include "core/settings/prefix_settings.hpp"
 
 using namespace Qt::StringLiterals;
 using namespace kisel;

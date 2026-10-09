@@ -12,15 +12,15 @@
 #include <QVBoxLayout>
 
 #include "core/app/app.hpp"
-#include "core/appsettings/app_settings.hpp"
 #include "core/compatibilitytools/ct_model.hpp"
 #include "core/prefix/prefix.hpp"
+#include "core/settings/app_settings.hpp"
 #include "ui/aboutapp/about_app_dialog.hpp"
 #include "ui/appsettings/app_settings_window.hpp"
 #include "ui/compatibilitytools/ct_list_widget.hpp"
-#include "ui/prefix/prefix_components_dialog.hpp"
-#include "ui/prefix/prefix_list_widget.hpp"
-#include "ui/prefix/prefix_settings_dialog.hpp"
+#include "ui/prefixes/prefix_components_dialog.hpp"
+#include "ui/prefixes/prefix_list_widget.hpp"
+#include "ui/prefixes/prefix_settings_window.hpp"
 #include "ui/shortcuts/edit_shortcuts_dialog.hpp"
 
 using namespace Qt::StringLiterals;
@@ -127,8 +127,9 @@ MainWindow::MainWindow(RunConfig* config)
 
     m_prefixSettingsAction = prefixMenu->addAction(QIcon::fromTheme("configure"), tr("Configure"));
     connect(m_prefixSettingsAction, &QAction::triggered, this, [this] {
-        auto* prefixSettingsDialog = new PrefixSettingsDialog(m_runConfig->prefix(), this);
-        prefixSettingsDialog->exec(); });
+        auto* prefixSettingsDialog = new PrefixSettingsWindow(m_runConfig->prefix());
+        prefixSettingsDialog->show();
+    });
 
     m_prefixToolsMenu = prefixMenu->addMenu(QIcon::fromTheme("tools"), tr("Tools"));
 

@@ -1,6 +1,6 @@
 #include "run_config.hpp"
 
-#include "core/appsettings/app_settings.hpp"
+#include "core/settings/app_settings.hpp"
 #include "core/executablefile/executable_file.hpp"
 
 using namespace Qt::StringLiterals;

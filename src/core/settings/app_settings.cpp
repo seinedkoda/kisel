@@ -8,7 +8,6 @@
 #include <QStyle>
 #include <QStyleFactory>
 #include <QStyleHints>
-#include <QVulkanInstance>
 #include <utility>
 
 using namespace Qt::StringLiterals;
@@ -18,7 +17,7 @@ using namespace kisel;
 Q_APPLICATION_STATIC(AppSettings, g_appSettings)
 
 AppSettings::AppSettings(QObject* parent)
-    : QSettings(appConfigPath(), QSettings::IniFormat, parent)
+    : BaseSettings(appConfigPath(), parent)
 {
     upgradeOldData();
 
@@ -177,26 +176,6 @@ bool AppSettings::isFlatpak()
     return QProcessEnvironment::systemEnvironment().contains("FLATPAK_ID"_L1);
 }
 
-bool AppSettings::deviceSupportsVulkan()
-{
-    QVulkanInstance vulkanInstance;
-    static bool supportsVulkan = vulkanInstance.create();
-    return supportsVulkan;
-}
-
-QVersionNumber AppSettings::vulkanApiVersion()
-{
-    QVulkanInstance vulkanInstance;
-    static QVersionNumber vulkanApiVersion = vulkanInstance.supportedApiVersion();
-    return vulkanApiVersion;
-}
-
-bool AppSettings::deviceSupportsModernVulkan()
-{
-    static QVersionNumber modernApiVersion(1, 4);
-    return vulkanApiVersion() >= modernApiVersion;
-}
-
 void AppSettings::setIconThemeType(int iconThemeType)
 {
     setValue("iconThemeType"_L1, iconThemeType);
@@ -262,16 +241,6 @@ void AppSettings::setDefaultPrefixName(const QString& prefixName)
 QString AppSettings::defaultPrefixName() const
 {
     return value("defaultPrefixName"_L1, appDefaultPrefixName()).toString();
-}
-
-void AppSettings::setDefaultCtPath(const QString& ctPath)
-{
-    setValue("defaultCt"_L1, ctPath);
-}
-
-QString AppSettings::defaultCtPath() const
-{
-    return value("defaultCt"_L1).toString();
 }
 
 void AppSettings::setRuntimeAutoUpdate(bool enabled)

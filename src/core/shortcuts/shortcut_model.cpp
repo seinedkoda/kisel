@@ -7,7 +7,7 @@
 #include <QSaveFile>
 #include <utility>
 
-#include "core/appsettings/app_settings.hpp"
+#include "core/settings/app_settings.hpp"
 #include "core/shortcuts/shortcut.hpp"
 
 using namespace Qt::StringLiterals;

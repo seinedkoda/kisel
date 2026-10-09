@@ -8,10 +8,10 @@
 #include <QVBoxLayout>
 
 #include "core/app/app.hpp"
-#include "core/appsettings/app_settings.hpp"
-#include "ui/prefix/new_prefix_dialog.hpp"
-#include "ui/prefix/prefix_components_dialog.hpp"
-#include "ui/prefix/prefix_settings_dialog.hpp"
+#include "core/settings/app_settings.hpp"
+#include "ui/prefixes/new_prefix_dialog.hpp"
+#include "ui/prefixes/prefix_components_dialog.hpp"
+#include "ui/prefixes/prefix_settings_window.hpp"
 
 using namespace kisel;
 
@@ -34,7 +34,7 @@ PrefixListWidget::PrefixListWidget(QWidget* parent)
     layout->addWidget(m_prefixListView);
 
     auto* addNewButton = new QPushButton(QIcon::fromTheme("list-add"), tr("Add new"), this);
-    connect(addNewButton, &QPushButton::clicked, this, [this]() {
+    connect(addNewButton, &QPushButton::clicked, this, [this] {
         auto* dialog = new NewPrefixDialog(this);
         dialog->show();
     });
@@ -54,15 +54,15 @@ void PrefixListWidget::onContextMenuRequested(const QPoint& pos)
     QMenu menu(this);
 
     QAction* settingsAction = menu.addAction(QIcon::fromTheme("configure"), tr("Configure"));
-    connect(settingsAction, &QAction::triggered, this, [this, prefix]() {
-        auto* prefixSettingsDialog = new PrefixSettingsDialog(prefix, this);
-        prefixSettingsDialog->exec();
+    connect(settingsAction, &QAction::triggered, this, [this, prefix] {
+        auto* prefixSettingsDialog = new PrefixSettingsWindow(prefix);
+        prefixSettingsDialog->show();
     });
 
     QMenu* toolsMenu = menu.addMenu(QIcon::fromTheme("tools"), tr("Tools"));
 
     QAction* componentsAction = toolsMenu->addAction(QIcon::fromTheme("plugins"), tr("Install components"));
-    connect(componentsAction, &QAction::triggered, this, [this, prefix]() {
+    connect(componentsAction, &QAction::triggered, this, [this, prefix] {
         if (APP_SETTINGS->winetricksPath().isEmpty()) {
             QMessageBox::critical(this, tr("Opening error"), tr("\"winetricks\" not found! Please install this package to open this window"));
             return;
@@ -73,24 +73,24 @@ void PrefixListWidget::onContextMenuRequested(const QPoint& pos)
     });
 
     QAction* winecfgAction = toolsMenu->addAction(QIcon::fromTheme("wine-symbolic"), tr("Wine settings"));
-    connect(winecfgAction, &QAction::triggered, this, [prefix]() { RUN_MANAGER->runWineCfg(prefix); });
+    connect(winecfgAction, &QAction::triggered, this, [prefix] { RUN_MANAGER->runWineCfg(prefix); });
 
     QAction* explorerAction = toolsMenu->addAction(QIcon::fromTheme("document-open-folder"), tr("Explorer"));
-    connect(explorerAction, &QAction::triggered, this, [prefix]() { RUN_MANAGER->runExplorer(prefix); });
+    connect(explorerAction, &QAction::triggered, this, [prefix] { RUN_MANAGER->runExplorer(prefix); });
 
     QAction* regeditAction = toolsMenu->addAction(QIcon::fromTheme("view-list-text"), tr("Registry"));
-    connect(regeditAction, &QAction::triggered, this, [prefix]() { RUN_MANAGER->runRegedit(prefix); });
+    connect(regeditAction, &QAction::triggered, this, [prefix] { RUN_MANAGER->runRegedit(prefix); });
 
     QAction* uninstallerAction = toolsMenu->addAction(QIcon::fromTheme("entry-delete"), tr("Remove programs"));
-    connect(uninstallerAction, &QAction::triggered, this, [prefix]() { RUN_MANAGER->runUninstaller(prefix); });
+    connect(uninstallerAction, &QAction::triggered, this, [prefix] { RUN_MANAGER->runUninstaller(prefix); });
 
     QAction* openAction = menu.addAction(QIcon::fromTheme("document-open-folder"), tr("Open in files"));
-    connect(openAction, &QAction::triggered, this, [prefix]() { QDesktopServices::openUrl(QUrl::fromLocalFile(prefix->path())); });
+    connect(openAction, &QAction::triggered, this, [prefix] { QDesktopServices::openUrl(QUrl::fromLocalFile(prefix->path())); });
 
     menu.addSeparator();
 
     QAction* removeAction = menu.addAction(QIcon::fromTheme("entry-delete"), tr("Delete"));
-    connect(removeAction, &QAction::triggered, this, [this, prefix, index]() {
+    connect(removeAction, &QAction::triggered, this, [this, prefix, index] {
         if (QMessageBox::question(this, tr("Confirm"), tr("Remove the \"%1\" prefix?").arg(prefix->name())) == QMessageBox::Yes) {
             PREFIX_MODEL->removeRow(index.row());
         }

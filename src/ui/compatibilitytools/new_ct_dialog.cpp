@@ -6,7 +6,7 @@
 #include <QVBoxLayout>
 
 #include "core/app/app.hpp"
-#include "core/appsettings/app_settings.hpp"
+#include "core/settings/app_settings.hpp"
 
 using namespace kisel;
 

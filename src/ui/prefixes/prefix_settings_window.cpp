@@ -1,24 +1,24 @@
-#include "prefix_settings_dialog.hpp"
+#include "prefix_settings_window.hpp"
 
 #include <QLabel>
 #include <QListWidget>
 #include <QStackedWidget>
 #include <QVBoxLayout>
 
-#include "prefix_platfrom_page.hpp"
-#include "ui/prefix/prefix_compatibility_page.hpp"
-#include "ui/prefix/prefix_services_page.hpp"
+#include "ui/settingspages/compatibility_settings_page.hpp"
+#include "ui/settingspages/platform_settings_page.hpp"
+#include "ui/settingspages/services_settings_page.hpp"
 
 using namespace Qt::StringLiterals;
 using namespace kisel;
 
-PrefixSettingsDialog::PrefixSettingsDialog(Prefix* prefix, QWidget* parent)
-    : QDialog(parent)
+PrefixSettingsWindow::PrefixSettingsWindow(Prefix* prefix, QWidget* parent)
+    : QWidget(parent)
     , m_settings(prefix->settings())
 {
     setWindowTitle(tr("Kisel — Prefix Settings"));
+    setWindowIcon(QIcon(":/icons/kisel-256x256.png"));
     setAttribute(Qt::WA_DeleteOnClose);
-    setWindowModality(Qt::ApplicationModal);
 
     auto* layout = new QVBoxLayout(this);
     layout->setAlignment(Qt::AlignTop);
@@ -44,16 +44,16 @@ PrefixSettingsDialog::PrefixSettingsDialog(Prefix* prefix, QWidget* parent)
     });
     contentLayout->addWidget(stackedPages);
 
-    auto* platformPage = new PrefixPlatformPage(m_settings, this);
+    auto* platformPage = new PlatformSettingsPage(m_settings, this);
     platformPage->layout()->setContentsMargins(0, 0, 0, 0);
     new QListWidgetItem(QIcon::fromTheme("computer-symbolic"), tr("Platform"), pageListView);
     stackedPages->addWidget(platformPage);
 
-    auto* compatibilityPage = new PrefixCompatibilityPage(m_settings, this);
+    auto* compatibilityPage = new CompatibilitySettingsPage(m_settings, this);
     new QListWidgetItem(QIcon::fromTheme("tools-wizard"), tr("Compatibility"), pageListView);
     stackedPages->addWidget(compatibilityPage);
 
-    auto* servicesPage = new PrefixServicesPage(m_settings, this);
+    auto* servicesPage = new ServicesSettingsPage(m_settings, this);
     new QListWidgetItem(QIcon::fromTheme("flag"), tr("Services"), pageListView);
     stackedPages->addWidget(servicesPage);
 

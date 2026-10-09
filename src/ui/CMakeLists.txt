@@ -1,19 +1,19 @@
 target_sources(kisel PRIVATE
     mainwindow/main_window.hpp mainwindow/main_window.cpp
-    appsettings/app_settings_general_page.hpp appsettings/app_settings_general_page.cpp
+    settingspages/app_general_settings_page.hpp settingspages/app_general_settings_page.cpp
+    settingspages/app_platform_settings_page.hpp settingspages/app_platform_settings_page.cpp
+    settingspages/app_prefixes_settings_page.hpp settingspages/app_prefixes_settings_page.cpp
+    settingspages/platform_settings_page.hpp settingspages/platform_settings_page.cpp
+    settingspages/services_settings_page.hpp settingspages/services_settings_page.cpp
+    settingspages/compatibility_settings_page.hpp settingspages/compatibility_settings_page.cpp
     appsettings/app_settings_window.hpp appsettings/app_settings_window.cpp
     aboutapp/about_app_dialog.hpp aboutapp/about_app_dialog.cpp
-    prefix/new_prefix_dialog.hpp prefix/new_prefix_dialog.cpp
-    prefix/prefix_list_widget.hpp prefix/prefix_list_widget.cpp
-    prefix/prefix_page.hpp prefix/prefix_page.cpp
-    prefix/prefix_platfrom_page.hpp prefix/prefix_platfrom_page.cpp
-    prefix/prefix_compatibility_page.hpp prefix/prefix_compatibility_page.cpp
-    prefix/prefix_services_page.hpp prefix/prefix_services_page.cpp
-    prefix/prefix_settings_dialog.hpp prefix/prefix_settings_dialog.cpp
-    prefix/prefix_components_dialog.hpp prefix/prefix_components_dialog.cpp
+    prefixes/new_prefix_dialog.hpp prefixes/new_prefix_dialog.cpp
+    prefixes/prefix_list_widget.hpp prefixes/prefix_list_widget.cpp
+    prefixes/prefix_settings_window.hpp prefixes/prefix_settings_window.cpp
+    prefixes/prefix_components_dialog.hpp prefixes/prefix_components_dialog.cpp
     compatibilitytools/old_device_info_widget.hpp compatibilitytools/old_device_info_widget.cpp
     compatibilitytools/ct_list_widget.hpp compatibilitytools/ct_list_widget.cpp
-    compatibilitytools/ct_page.hpp compatibilitytools/ct_page.cpp
     compatibilitytools/new_ct_dialog.hpp compatibilitytools/new_ct_dialog.cpp
     shortcuts/edit_shortcuts_dialog.hpp shortcuts/edit_shortcuts_dialog.cpp
     shortcuts/shortcuts_list_widget.hpp shortcuts/shortcuts_list_widget.cpp

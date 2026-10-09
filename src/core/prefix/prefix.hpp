@@ -3,7 +3,7 @@
 #include <QDir>
 #include <QObject>
 
-#include "prefix_settings.hpp"
+#include "core/settings/prefix_settings.hpp"
 
 namespace kisel {
 class Prefix : public QObject {

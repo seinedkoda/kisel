@@ -2,7 +2,7 @@
 
 #include <QTemporaryFile>
 
-#include "core/appsettings/app_settings.hpp"
+#include "core/settings/app_settings.hpp"
 
 using namespace Qt::StringLiterals;
 using namespace kisel;
@@ -72,7 +72,7 @@ QHash<int, QByteArray> CtModel::roleNames() const
         { NameRole, "name" },
         { PathRole, "path" },
         { StatusRole, "status" },
-        { ProgressRole, "progress" }
+        { ProgressRole, "progress" },
     };
 
     return roles;
@@ -199,7 +199,7 @@ bool CtModel::containsPath(QStringView path)
 
 Ct* CtModel::defaultCt()
 {
-    const QString defaultCtPath = APP_SETTINGS->defaultCtPath();
+    const QString defaultCtPath = APP_SETTINGS->ctPath();
     if (!defaultCtPath.isEmpty() && QFileInfo::exists(defaultCtPath)) {
         return getByPath(defaultCtPath);
     }

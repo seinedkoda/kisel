@@ -1,4 +1,4 @@
-#include "app_settings_general_page.hpp"
+#include "app_general_settings_page.hpp"
 
 #include <QCheckBox>
 #include <QComboBox>
@@ -9,7 +9,7 @@
 #include <QPushButton>
 #include <QStyleFactory>
 
-#include "core/appsettings/app_settings.hpp"
+#include "core/settings/app_settings.hpp"
 
 using namespace Qt::StringLiterals;
 using namespace kisel;
@@ -71,6 +71,34 @@ AppSettingsGeneralPage::AppSettingsGeneralPage(QWidget* parent)
         APP_SETTINGS->setInstantRunEnabled(checked);
     });
     layout->addWidget(instantRunCheckBox);
+
+    auto* topUmuLine = new QFrame(this);
+    topUmuLine->setFrameShape(QFrame::HLine);
+    layout->addWidget(topUmuLine);
+
+    auto* umuLabel = new QLabel("UMU"_L1, this);
+    layout->addWidget(umuLabel);
+
+    auto* umuPathComboBox = new QComboBox(this);
+    if (APP_SETTINGS->isFlatpak()) {
+        umuPathComboBox->addItem(tr("Built-in (Flatpak)"), false);
+        umuPathComboBox->setDisabled(true);
+    } else {
+        umuPathComboBox->addItem(tr("Built-in"), false);
+        umuPathComboBox->addItem(tr("System"), true);
+        umuPathComboBox->setCurrentIndex(APP_SETTINGS->useSystemUMU() ? 1 : 0);
+        connect(umuPathComboBox, &QComboBox::activated, this, [umuPathComboBox] {
+            APP_SETTINGS->setUseSystemUMU(umuPathComboBox->currentData().toBool());
+        });
+    }
+    layout->addWidget(umuPathComboBox);
+
+    auto* runtimeAutoUpdateCheckBox = new QCheckBox(tr("Runtime auto-update"), this);
+    runtimeAutoUpdateCheckBox->setChecked(APP_SETTINGS->runtimeAutoUpdate());
+    connect(runtimeAutoUpdateCheckBox, &QCheckBox::clicked, this, [](bool checked) {
+        APP_SETTINGS->setRuntimeAutoUpdate(checked);
+    });
+    layout->addWidget(runtimeAutoUpdateCheckBox);
 
     auto* topLoggingLine = new QFrame(this);
     topLoggingLine->setFrameShape(QFrame::HLine);

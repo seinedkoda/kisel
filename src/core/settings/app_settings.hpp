@@ -5,19 +5,21 @@
 #include <QTranslator>
 #include <QVersionNumber>
 
+#include "core/settings/base_settings.hpp"
+
 namespace kisel {
 #define APP_SETTINGS AppSettings::instance()
 #define APP_DATA_DIR AppSettings::instance()->appDataDir()
 #define CTS_DIR_LIST AppSettings::instance()->ctsDirList()
 
-class AppSettings : public QSettings {
+class AppSettings : public BaseSettings {
     Q_OBJECT
 
 public:
     enum PrefixType {
         Shared = 0,
         Individual = 1,
-        Portable = 2
+        Portable = 2,
     };
     Q_ENUM(PrefixType)
 
@@ -43,10 +45,6 @@ public:
 
     static bool isFlatpak();
 
-    static bool deviceSupportsVulkan();
-    static QVersionNumber vulkanApiVersion();
-    static bool deviceSupportsModernVulkan();
-
     void setIconThemeType(int iconThemeType);
     int iconThemeType();
 
@@ -65,9 +63,6 @@ public:
 
     void setDefaultPrefixName(const QString& prefixName);
     [[nodiscard]] QString defaultPrefixName() const;
-
-    void setDefaultCtPath(const QString& ctPath);
-    [[nodiscard]] QString defaultCtPath() const;
 
     void setRuntimeAutoUpdate(bool enabled);
     [[nodiscard]] bool runtimeAutoUpdate() const;

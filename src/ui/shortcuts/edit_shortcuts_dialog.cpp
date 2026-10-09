@@ -8,7 +8,7 @@
 #include <utility>
 
 #include "core/app/app.hpp"
-#include "core/appsettings/app_settings.hpp"
+#include "core/settings/app_settings.hpp"
 #include "core/executablefile/executable_file.hpp"
 #include "core/prefix/prefix_model.hpp"
 

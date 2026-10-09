@@ -1,18 +1,17 @@
-#include "prefix_services_page.hpp"
+#include "services_settings_page.hpp"
 
 #include <QCheckBox>
 #include <QLabel>
 #include <QLineEdit>
 #include <QVBoxLayout>
 
-#include "core/appsettings/app_settings.hpp"
+#include "core/settings/app_settings.hpp"
 
 using namespace Qt::StringLiterals;
 using namespace kisel;
 
-PrefixServicesPage::PrefixServicesPage(PrefixSettings* settings, QWidget* parent)
-    : QWidget(parent)
-    , m_settings(settings)
+ServicesSettingsPage::ServicesSettingsPage(BaseSettings* settings, QWidget* parent)
+    : QWidget(parent), m_settings(settings)
 {
     auto* layout = new QVBoxLayout(this);
     layout->setAlignment(Qt::AlignTop);
@@ -56,8 +55,8 @@ PrefixServicesPage::PrefixServicesPage(PrefixSettings* settings, QWidget* parent
     auto* gamescopeArgsLineEdit = new QLineEdit(this);
     gamescopeArgsLineEdit->setToolTip(tr("Arguments"));
     gamescopeArgsLineEdit->setPlaceholderText(tr("example: -W 1920 -H 1080 -r 60"));
-    gamescopeArgsLineEdit->setText(settings->gamescopeArgs());
-    gamescopeArgsLineEdit->setEnabled(gamescopeCheckBox->isEnabled() && settings->gamescopeEnabled());
+    gamescopeArgsLineEdit->setText(m_settings->gamescopeArgs());
+    gamescopeArgsLineEdit->setEnabled(gamescopeCheckBox->isEnabled() && m_settings->gamescopeEnabled());
     layout->addWidget(gamescopeArgsLineEdit);
 
     connect(gamescopeCheckBox, &QCheckBox::clicked, this, [this, gamescopeArgsLineEdit](bool checked) {
