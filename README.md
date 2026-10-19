@@ -57,6 +57,13 @@ Provide an instant-run exe file program in a compiled language with minimal depe
 </a>
 
 ### Arch Linux
+**[Install from the AUR](https://aur.archlinux.org/packages/kisel)**
+```bash
+yay -S kisel
+```
+
+or
+
 **[Download the latest version of .pacman](https://github.com/seinedkoda/kisel/releases/latest)**
 ```bash
 sudo pacman -U kisel-*.pacman
