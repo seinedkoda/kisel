@@ -61,6 +61,13 @@
 yay -S kisel
 ```
 
+или
+
+**[Загрузите последнюю версию .pacman](https://github.com/seinedkoda/kisel/releases/latest)**
+```bash
+sudo pacman -U kisel-*.pacman
+```
+
 ### Debian
 **[Загрузите последнюю версию .deb](https://github.com/seinedkoda/kisel/releases/latest)**
 ```bash
