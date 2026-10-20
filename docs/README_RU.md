@@ -56,9 +56,9 @@
 </a>
 
 ### Arch Linux
-**[Загрузите последнюю версию .pacman](https://github.com/seinedkoda/kisel/releases/latest)**
+**[Установка из AUR](https://aur.archlinux.org/packages/kisel)**
 ```bash
-sudo pacman -U kisel-*.pacman
+yay -S kisel
 ```
 
 ### Debian
