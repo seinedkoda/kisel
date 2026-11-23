@@ -167,7 +167,7 @@ QList<QDir> Shortcut::shortcutDirs(ShortcutLocations locations)
 QDir Shortcut::menuShortcutsDir()
 {
     if (APP_SETTINGS->isFlatpak()) {
-        return { QDir::home().filePath("/.local/share/applications"_L1) }; // or "--filesystem=xdg-data/applications"
+        return { QDir::home().filePath(".local/share/applications"_L1) }; // or "--filesystem=xdg-data/applications"
     }
     return { QStandardPaths::writableLocation(QStandardPaths::ApplicationsLocation) };
 }
