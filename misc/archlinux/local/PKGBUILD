@@ -1,6 +1,6 @@
 # Maintainer: Seined Koda <seinedk@gmail.com>
 pkgname=kisel
-pkgver=1.5.1
+pkgver=1.5.2
 pkgrel=1
 pkgdesc="Efficient launch of Windows programs"
 arch=('x86_64')
